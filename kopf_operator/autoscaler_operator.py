@@ -6,13 +6,13 @@ import random
 import time
 
 
-prom = PrometheusConnect(url ="http://127.0.0.1:9090", disable_ssl=True)
+prom = PrometheusConnect(url ="http://localhost:9090", disable_ssl=True)
 metric_dict = {"container_network_receive_bytes_total": "inc_tps",
                "container_network_transmit_packets_total": "out_tps",
                "container_cpu_usage_seconds_total": "cpu_usage",
                "container_memory_working_set_bytes": "memory_usage"}
 deployment_name = "teastore-webui"
-namespace = "default"
+namespace = "app2scale"
 metrics = {}
 @kopf.timer('kopfexamples', interval=30)
 def deneme(spec, logger, **_): # This function will be called once in 2 minutes and it will return state.
