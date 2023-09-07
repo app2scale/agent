@@ -88,13 +88,76 @@ The step function dictates the environment's behavior in response to an action. 
 app2scale_train.py, app2scale_test.py and app2scale_sample.py: These codes work in the same way as those in offline_training.
 
 
-
-
-
-
-
-
-
 ## server_client
+In many situations, it does not make sense for an environment to be “stepped” by RLlib. For example, if a policy is to be used in a web serving system, then it is more natural for an agent to query a service that serves policy decisions, and for that service to learn from experience over time. This case also naturally arises with external simulators that run independently outside the control of RLlib, but may still want to leverage RLlib for training.
+
+RLlib provides the ExternalEnv class for this purpose. Unlike other envs, ExternalEnv has its own thread of control. At any point, agents on that thread can query the current policy for decisions via self.get_action() and reports rewards, done-dicts, and infos via self.log_returns(). This can be done for multiple concurrent episodes as well.
+
+In this setup, after navigating to the directory where the script is located in a terminal, the server is started by calling the command below.
+```
+python3 app2scale_teastore_server_v2.py
+```
+
+In this implementation, it's assumed that our agent requires external data to support its learning process. This data is fetched via a policy server. In this code, it's assumed that this server operates on `localhost` at port 9900.
+
+A configuration is established for the PPO algorithm. Within this setup:
+
+- **Action and Observation Spaces**: Defined domains for actions the agent can take and observations it can perceive.
+- **Training Parameters**: Parameters for the training phase are laid out.
+- **Debug Information**: The level of debug information to be logged is set.
+- **Data Source**: The policy server is designated as the primary source of data for training the agent.
+
+Training Loop:
+
+The agent undergoes iterative training based on the given configuration. During this:
+
+- The agent trains in each iteration.
+- Results from each training phase are printed to the console.
+- The latest state of the trained model is saved for potential future use or evaluation.
 
 
+After the server is up and running, the client side is initiated by executing the code below from the terminal.
+```
+python3 app2scale_teastore_client_v2.py
+```
+The script interacts with a Kubernetes cluster, Prometheus for monitoring, and an RL agent. It adjusts the deployment's replica count, CPU limits, and JVM heap size based on metrics from Prometheus. The RL agent guides the scaling decisions by suggesting actions to maximize a reward based on system performance and cost.
+
+Configuration
+
+Various configurations and constants are defined:
+
+- **Actions**: Defines different types of actions the agent can take, e.g., increase replicas, decrease CPU, etc.
+- **Metrics**: Dictionary to map Prometheus metrics to more readable names.
+- **Observation Space**: Defines the space of observable states the agent can see. It includes metrics such as the number of replicas, CPU usage, RAM usage, etc.
+- **Action Space**: Defines the possible actions the agent can take.
+
+Functions
+
+1. `action_to_string`: Converts action IDs to string representations.
+2. `_get_deployment_info`: Fetches information about a Kubernetes deployment.
+3. `update_deployment_specs`: Modifies a deployment's specs based on the current state.
+4. `apply_deployment_changes`: Applies changes made to a deployment.
+5. `get_running_pods`: Lists all running pods of a deployment.
+6. `check_all_pods_running`: Checks if all pods of a deployment are running.
+7. `collect_metrics_by_pod_names`: Collects metrics for given pod names using Prometheus.
+8. `reset`: Resets the environment to its initial state.
+9. `step`: Defines how the environment responds to an action taken by the agent.
+
+Workflow
+
+1. A connection is made to the RLlib policy server and Prometheus.
+2. The locust environment is initialized and started with specified user load.
+3. The environment is reset to its initial state.
+4. In a loop, the agent decides an action based on the current state, the environment responds with a new state, reward, and additional info.
+5. The agent logs returns for the taken action.
+6. Information about actions taken and their results are stored in a Pandas DataFrame, which is printed to the console.
+7. After a certain number of steps (`MAX_STEPS`), the episode is terminated, the environment is reset, and results are saved to a CSV file.
+
+Notes
+
+- Ensure `websiteuser.py` (or its equivalent) is in the same directory or is importable.
+- Update the `DEPLOYMENT_NAME` and `NAMESPACE` variables to match your Kubernetes deployment.
+- Make sure Prometheus has access to the Kubernetes cluster metrics. To access the Prometheus dashboard and collect metrics, it is necessary to do port-forwarding. The code below can be run in a separate terminal for this purpose.
+```
+kubectl port-forward svc/rancher-monitoring-prometheus 9090:9090 -n cattle-monitoring-system
+```

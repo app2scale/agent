@@ -33,7 +33,6 @@ config.training(_enable_learner_api=False)
 
 checkpoint_path = CHECKPOINT_FILE.format("PPO")
 
-
 algo = config.build()
 time_steps = 0
 for _ in range(2):
