@@ -51,13 +51,11 @@ def _get_deployment_info():
     v1 = client.AppsV1Api()
     return v1.read_namespaced_deployment(DEPLOYMENT_NAME, NAMESPACE)
 
-def update_deployment_specs(deployment, state):
+def update_and_deploy_deployment_specs(deployment, state):
     deployment.spec.replicas = int(state["0replica"])
     deployment.spec.template.spec.containers[0].resources.limits["cpu"] = str(state["1cpu"]*100) + "m"
     deployment.spec.template.spec.containers[0].env[2].value = "-Xmx" + str(state["2heap"]*100) + "M"
 
-def apply_deployment_changes():
-    deployment = _get_deployment_info()
     config.load_kube_config()
     v1 = client.AppsV1Api()
     v1.patch_namespaced_deployment(DEPLOYMENT_NAME, NAMESPACE, deployment)
@@ -174,8 +172,8 @@ def step(action, state, env, prom):
     if OBSERVATION_SPACE.contains(updated_state):
         state = updated_state
         deployment = _get_deployment_info()
-        update_deployment_specs(deployment=deployment, state=state)
-        apply_deployment_changes()
+        update_and_deploy_deployment_specs(deployment=deployment, state=state)
+        #apply_deployment_changes()
         while not check_all_pods_running(deployment):
             print("Waiting for all pods to be running...")
             time.sleep(5)
