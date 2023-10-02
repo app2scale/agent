@@ -35,10 +35,11 @@ checkpoint_path = CHECKPOINT_FILE.format("PPO")
 
 algo = config.build()
 time_steps = 0
-for _ in range(2):
+for epoch in range(10000):
     results = algo.train() 
     print(pretty_print(results))
-    checkpoint = algo.save()
-    print("Last checkpoint", checkpoint)
+    if epoch % 1 == 0:
+      checkpoint = algo.save()
+      print("Last checkpoint", epoch, checkpoint)
 
 algo.stop()

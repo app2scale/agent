@@ -17,7 +17,7 @@ INCREASE_CPU = 3
 DECREASE_CPU = 4
 INCREASE_HEAP = 5
 DECREASE_HEAP = 6
-MAX_STEPS = 10
+MAX_STEPS = 100
 CPU_COST = 0.031611
 RAM_COST = 0.004237
 METRIC_DICT = {
@@ -26,7 +26,7 @@ METRIC_DICT = {
     "container_cpu_usage_seconds_total": "cpu_usage",
     "container_memory_working_set_bytes": "memory_usage"
 }
-COLLECT_METRIC_TIME = 120
+COLLECT_METRIC_TIME = 60
 DEPLOYMENT_NAME = "teastore-webui"
 NAMESPACE = "app2scale"
 
@@ -61,7 +61,7 @@ def update_and_deploy_deployment_specs(deployment, state):
     v1.patch_namespaced_deployment(DEPLOYMENT_NAME, NAMESPACE, deployment)
 
 def get_running_pods():
-    time.sleep(3)
+    time.sleep(1)
     config.load_kube_config()
     v1 = client.CoreV1Api()
     pods = v1.list_namespaced_pod(NAMESPACE, label_selector=f"run={DEPLOYMENT_NAME}")
@@ -119,7 +119,7 @@ def reset():
                                           int(int(deployment.spec.template.spec.containers[0].env[2].value[4:-1])/100)])
     while not check_all_pods_running(deployment):
         print("Waiting for all pods to be running...")
-        time.sleep(5)
+        time.sleep(1)
         deployment = _get_deployment_info()
     
     running_pods = get_running_pods()
@@ -176,7 +176,7 @@ def step(action, state, env, prom):
         #apply_deployment_changes()
         while not check_all_pods_running(deployment):
             print("Waiting for all pods to be running...")
-            time.sleep(5)
+            time.sleep(1)
             deployment = _get_deployment_info()
         print("All pods are available!")
         print("Collecting metrics...")
@@ -246,6 +246,7 @@ while True:
     output.loc[ct,:] = temp
     print(output)
 
+    output.to_csv("output.csv", index=False)
     if truncated:
         print("Total reward:", sum_reward)
         sum_reward = 0.0
@@ -253,7 +254,6 @@ while True:
         obs, info = reset()
         episode_id = policy_client.start_episode(training_enabled=True)
         truncated = False
-        output.to_csv("output.csv", index=False)
 
 
     ct += 1
