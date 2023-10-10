@@ -212,9 +212,21 @@ def step(action, state, env, prom):
 
 policy_client = PolicyClient("http://localhost:9900", inference_mode="local") 
 prom = PrometheusConnect(url=PROMETHEUS_HOST_URL, disable_ssl=True)
-env = Environment(user_classes=[WebsiteUser])
+
+# Locust settings
+expected_tps = 10
+users = 1
+class TeaStoreLocust(HttpUser):
+    wait_time = constant_throughput(expected_tps)
+    host = "http://10.27.41.24:30080"
+
+    @task
+    def my_task(self):
+        response = self.client.get("/tools.descartes.teastore.webui/")
+
+env = Environment(user_classes=[TeaStoreLocust])
 env.create_local_runner()
-env.runner.start(50, spawn_rate=25) 
+env.runner.start(users, spawn_rate=1) 
 
 
 obs, info = reset()
