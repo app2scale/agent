@@ -8,7 +8,7 @@ import time
 import numpy as np
 from collections import OrderedDict
 from gymnasium.spaces import Discrete, Dict, MultiDiscrete, Tuple, Box
-
+from locust import HttpUser, task, constant, constant_throughput, events
 
 DO_NOTHING = 0
 INCREASE_REPLICA = 1
@@ -26,7 +26,7 @@ METRIC_DICT = {
     "container_cpu_usage_seconds_total": "cpu_usage",
     "container_memory_working_set_bytes": "memory_usage"
 }
-COLLECT_METRIC_TIME = 60
+COLLECT_METRIC_TIME = 5
 DEPLOYMENT_NAME = "teastore-webui"
 NAMESPACE = "app2scale"
 
@@ -38,6 +38,18 @@ OBSERVATION_SPACE = Dict({"0replica": Discrete(9, start=1),
 ACTION_SPACE = Discrete(7)
 
 PROMETHEUS_HOST_URL = "http://localhost:9090"
+
+
+# Locust settings
+expected_tps = 5
+users = 1
+class TeaStoreLocust(HttpUser):
+    wait_time = constant_throughput(expected_tps)
+    host = "http://10.27.41.24:30080"
+
+    @task
+    def my_task(self):
+        response = self.client.get("/tools.descartes.teastore.webui/")
 
 
 def action_to_string(action):
@@ -132,10 +144,10 @@ def reset():
     cost = round((metrics["cpu_usage"]*CPU_COST + metrics["memory_usage"]*RAM_COST)*deployment.spec.replicas,2)
 
     info = {"inc_tps": metrics["inc_tps"], 
-                     "out_tps": metrics["out_tps"], 
-                     "cpu_usage": metrics["cpu_usage"], 
-                     "memory_usage": metrics["memory_usage"],
-                     "cost": cost}
+            "out_tps": metrics["out_tps"], 
+            "cpu_usage": metrics["cpu_usage"], 
+            "memory_usage": metrics["memory_usage"],
+            "cost": cost}
 
     return state, info
 
@@ -165,15 +177,15 @@ def step(action, state, env, prom):
     
     dummy_metrics = np.array([np.random.uniform(-2, 2), np.random.uniform(-2, 2)])
     updated_state = OrderedDict({"0replica": temp_state[0],
-                                      "1cpu": temp_state[1],
-                                      "2heap": temp_state[2]})
-    updated_state.update({"3used_cpu": np.array([dummy_metrics[0]], dtype=np.float32), "4used_ram": np.array([dummy_metrics[1]],dtype=np.float32)})
-
+                                    "1cpu": temp_state[1],
+                                    "2heap": temp_state[2]})
+    updated_state.update({"3used_cpu": np.array([dummy_metrics[0]], dtype=np.float32), 
+                          "4used_ram": np.array([dummy_metrics[1]],dtype=np.float32)})
+    alpha = 0.9 # It indicates the importance of the performance
     if OBSERVATION_SPACE.contains(updated_state):
         state = updated_state
         deployment = _get_deployment_info()
         update_and_deploy_deployment_specs(deployment=deployment, state=state)
-        #apply_deployment_changes()
         while not check_all_pods_running(deployment):
             print("Waiting for all pods to be running...")
             time.sleep(1)
@@ -182,21 +194,28 @@ def step(action, state, env, prom):
         print("Collecting metrics...")
         env.runner.stats.reset_all()
         time.sleep(COLLECT_METRIC_TIME)
+        num_requests_locust = env.runner.stats.total.num_requests
+        response_time = env.runner.stats.total.avg_response_time 
         running_pods = get_running_pods()
         metrics = collect_metrics_by_pod_names(running_pods, prom)
         state.update({"3used_cpu": np.array([metrics["cpu_usage"]],dtype=np.float32), "4used_ram": np.array([metrics["memory_usage"]],dtype=np.float32)})
         cost = round((metrics["cpu_usage"]*CPU_COST + metrics["memory_usage"]*RAM_COST)*deployment.spec.replicas,2)
-        response_time = env.runner.stats.total.avg_response_time 
-        reward = (1-response_time/100)/(metrics["cpu_usage"] + 0.0001)
+        performance = num_requests_locust/(COLLECT_METRIC_TIME*users*expected_tps)
+        # print("perfomance:", performance)
+        utilization = (state["3used_cpu"][0]/(state["1cpu"]/10)+state["4used_ram"][0]/(state["2heap"]/10))/2 # it returns as an array
+        # print("utilization:", utilization, state["3used_cpu"][0],state["1cpu"]/10, state["4used_ram"][0],state["2heap"]/10)
+        reward = alpha*performance + (1-alpha)*utilization
+        # reward = (1-response_time/100)/(metrics["cpu_usage"] + 0.0001)
     else:
         print("Updated state is outside the observation space.")
         running_pods = get_running_pods()
         deployment = _get_deployment_info()
         metrics = collect_metrics_by_pod_names(running_pods, prom)
         response_time = env.runner.stats.total.avg_response_time 
+        num_requests_locust = env.runner.stats.total.num_requests
         state.update({"3used_cpu": np.array([metrics["cpu_usage"]],dtype=np.float32), "4used_ram": np.array([metrics["memory_usage"]],dtype=np.float32)})
-        cost = round((metrics["cpu_usage"]*CPU_COST + metrics["memory_usage"]*RAM_COST)*deployment.spec.replicas/0.27,2)
-        reward = -100
+        cost = round((metrics["cpu_usage"]*CPU_COST + metrics["memory_usage"]*RAM_COST)*deployment.spec.replicas,2)
+        reward = -1
 
     info = {"inc_tps": metrics["inc_tps"], 
                 "out_tps": metrics["out_tps"], 
@@ -204,8 +223,9 @@ def step(action, state, env, prom):
                 "memory_usage": metrics["memory_usage"],
                 "cost": cost,
                 "response_time": response_time,
-                "number_of_request": env.runner.stats.total.num_requests,
-                "number_of_failures": env.runner.stats.total.num_failures}
+                "number_of_request": num_requests_locust,
+                "number_of_failures": env.runner.stats.total.num_failures,
+                "expected_tps": users * expected_tps*COLLECT_METRIC_TIME}
 
     return state, reward, info
 
@@ -213,16 +233,6 @@ def step(action, state, env, prom):
 policy_client = PolicyClient("http://localhost:9900", inference_mode="local") 
 prom = PrometheusConnect(url=PROMETHEUS_HOST_URL, disable_ssl=True)
 
-# Locust settings
-expected_tps = 10
-users = 1
-class TeaStoreLocust(HttpUser):
-    wait_time = constant_throughput(expected_tps)
-    host = "http://10.27.41.24:30080"
-
-    @task
-    def my_task(self):
-        response = self.client.get("/tools.descartes.teastore.webui/")
 
 env = Environment(user_classes=[TeaStoreLocust])
 env.create_local_runner()
@@ -235,7 +245,7 @@ episode_id = policy_client.start_episode(training_enabled=True)
 sum_reward = 0
 columns = ["action", "replica", "cpu", "heap", "inc_tps", "out_tps", 
            "cpu_usage", "memory_usage", "cost", "reward", "sum_reward", 
-           "response_time", "num_request", "num_failures"]
+           "response_time", "num_request", "num_failures","expected_tps"]
 output = pd.DataFrame(columns=columns)
 step_count = 0
 ct = 0
@@ -254,7 +264,7 @@ while True:
     temp = [str_action, obs["0replica"], obs["1cpu"], obs["2heap"], 
             info["inc_tps"], info["out_tps"], info["cpu_usage"], 
             info["memory_usage"], info["cost"], reward, sum_reward, info["response_time"],
-            info["number_of_request"], info["number_of_failures"]]
+            info["number_of_request"], info["number_of_failures"],info["expected_tps"]]
     output.loc[ct,:] = temp
     print(output)
 
