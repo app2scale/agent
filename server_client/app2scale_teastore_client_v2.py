@@ -26,7 +26,7 @@ METRIC_DICT = {
     "container_cpu_usage_seconds_total": "cpu_usage",
     "container_memory_working_set_bytes": "memory_usage"
 }
-COLLECT_METRIC_TIME = 5
+COLLECT_METRIC_TIME = 60
 DEPLOYMENT_NAME = "teastore-webui"
 NAMESPACE = "app2scale"
 
@@ -41,7 +41,7 @@ PROMETHEUS_HOST_URL = "http://localhost:9090"
 
 
 # Locust settings
-expected_tps = 5
+expected_tps = 50
 users = 1
 class TeaStoreLocust(HttpUser):
     wait_time = constant_throughput(expected_tps)
