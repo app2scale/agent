@@ -9,7 +9,9 @@ import numpy as np
 from collections import OrderedDict
 from gymnasium.spaces import Discrete, Dict, MultiDiscrete, Tuple, Box
 from locust import HttpUser, task, constant, constant_throughput, events
+import ssl
 
+ssl._create_default_https_context = ssl._create_unverified_context
 DO_NOTHING = 0
 INCREASE_REPLICA = 1
 DECREASE_REPLICA = 2
@@ -45,7 +47,7 @@ expected_tps = 50
 users = 1
 class TeaStoreLocust(HttpUser):
     wait_time = constant_throughput(expected_tps)
-    host = "http://10.27.41.24:30080"
+    host = "http://teastore.local.payten.com.tr"
 
     @task
     def my_task(self):
@@ -64,6 +66,7 @@ def _get_deployment_info():
     return v1.read_namespaced_deployment(DEPLOYMENT_NAME, NAMESPACE)
 
 def update_and_deploy_deployment_specs(deployment, state):
+    print("update_and_deployment")
     deployment.spec.replicas = int(state["0replica"])
     deployment.spec.template.spec.containers[0].resources.limits["cpu"] = str(state["1cpu"]*100) + "m"
     deployment.spec.template.spec.containers[0].env[2].value = "-Xmx" + str(state["2heap"]*100) + "M"
@@ -97,7 +100,6 @@ def collect_metrics_by_pod_names(running_pods, prom):
     memory_usage = 0
     for pod in running_pods:
         while True:
-            
             temp_inc_tps = prom.custom_query(query=f'sum(irate(container_network_receive_packets_total{{pod="{pod}", namespace="{NAMESPACE}"}}[2m]))')
             temp_out_tps = prom.custom_query(query=f'sum(irate(container_network_transmit_packets_total{{pod="{pod}", namespace="{NAMESPACE}"}}[2m]))')
             temp_cpu_usage = prom.custom_query(query=f'sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{{pod="{pod}", namespace="{NAMESPACE}"}})')
@@ -111,8 +113,8 @@ def collect_metrics_by_pod_names(running_pods, prom):
                 break
             else:
                 time.sleep(3)
-                # print(running_pods)
-                # print("Empty prometheus query... (Trying again)")
+                print(running_pods)
+                print("Empty prometheus query... (Trying again)")
                 continue
 
     metrics["inc_tps"] = round(inc_tps/len(running_pods))

@@ -2,11 +2,11 @@ from locust.env import Environment
 from locust import HttpUser, task, constant, constant_throughput, events
 import time
 
-expected_tps = 30
-users = 2
+expected_tps = 50
+users = 1
 class TeaStoreLocust(HttpUser):
     wait_time = constant_throughput(expected_tps)
-    host = "http://10.27.41.24:30080"
+    host = "http://teastore.local.payten.com.tr"
 
     @task
     def my_task(self):
@@ -21,7 +21,7 @@ env.runner.start(users,spawn_rate=1)
 
 step = 0
 while True:
-  time.sleep(2)
+  time.sleep(1)
   s = dict()
   s['avg_response_time'] = env.runner.stats.total.avg_response_time 
   s['med_response_time'] = env.runner.stats.total.median_response_time
