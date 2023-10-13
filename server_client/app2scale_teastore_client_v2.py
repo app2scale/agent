@@ -75,19 +75,25 @@ def update_and_deploy_deployment_specs(deployment, state):
     v1 = client.AppsV1Api()
     v1.patch_namespaced_deployment(DEPLOYMENT_NAME, NAMESPACE, deployment)
 
-def get_running_pods():
+def get_running_pods(deployment):
     time.sleep(1)
     config.load_kube_config()
     v1 = client.CoreV1Api()
-    pods = v1.list_namespaced_pod(NAMESPACE, label_selector=f"run={DEPLOYMENT_NAME}")
 
-    running_pods = []
+    while True:
+        pods = v1.list_namespaced_pod(NAMESPACE, label_selector=f"run={DEPLOYMENT_NAME}")
+        running_pods = []
+        for pod in pods.items:
+            if pod.status.phase.lower() == "running":
+                for container_status in pod.status.container_statuses:
+                    if container_status.ready:
+                        running_pods.append(pod.metadata.name)
+                        break
+        if deployment.spec.replicas == len(running_pods):
+            print(running_pods)
+            return running_pods
 
-    for pod in pods.items:
-        if pod.status.phase.lower() == "running":
-            running_pods.append(pod.metadata.name)
-
-    return running_pods
+        time.sleep(5)
 
 def check_all_pods_running(deployment):
     return deployment.spec.replicas == len(get_running_pods())
@@ -198,7 +204,7 @@ def step(action, state, env, prom):
         time.sleep(COLLECT_METRIC_TIME)
         num_requests_locust = env.runner.stats.total.num_requests
         response_time = env.runner.stats.total.avg_response_time 
-        running_pods = get_running_pods()
+        running_pods = get_running_pods(deployment)
         metrics = collect_metrics_by_pod_names(running_pods, prom)
         state.update({"3used_cpu": np.array([metrics["cpu_usage"]],dtype=np.float32), "4used_ram": np.array([metrics["memory_usage"]],dtype=np.float32)})
         cost = round((metrics["cpu_usage"]*CPU_COST + metrics["memory_usage"]*RAM_COST)*deployment.spec.replicas,2)
