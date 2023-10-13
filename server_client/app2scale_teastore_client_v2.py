@@ -75,11 +75,11 @@ def update_and_deploy_deployment_specs(deployment, state):
     v1 = client.AppsV1Api()
     v1.patch_namespaced_deployment(DEPLOYMENT_NAME, NAMESPACE, deployment)
 
-def get_running_pods(deployment):
+def get_running_pods():
     time.sleep(1)
     config.load_kube_config()
     v1 = client.CoreV1Api()
-
+    deployment = _get_deployment_info()
     while True:
         pods = v1.list_namespaced_pod(NAMESPACE, label_selector=f"run={DEPLOYMENT_NAME}")
         running_pods = []
@@ -94,9 +94,24 @@ def get_running_pods(deployment):
             return running_pods
 
         time.sleep(5)
+        deployment = _get_deployment_info()
 
-def check_all_pods_running(deployment):
-    return deployment.spec.replicas == len(get_running_pods())
+# def check_all_pods_running(deployment):
+#     time.sleep(1)
+#     config.load_kube_config()
+#     v1 = client.CoreV1Api()
+#     while True:
+#         pods = v1.list_namespaced_pod(NAMESPACE, label_selector=f"run={DEPLOYMENT_NAME}")
+#         running_pods = []
+#         for pod in pods.items:
+#             if pod.status.phase.lower() == "running":
+#                 for container_status in pod.status.container_statuses:
+#                     if container_status.ready:
+#                         running_pods.append(pod.metadata.name)
+#                         break
+#         if deployment.spec.replicas == len(running_pods):
+#             return True
+    
 
 def collect_metrics_by_pod_names(running_pods, prom):
     metrics = {}
@@ -137,10 +152,10 @@ def reset():
     last_values_deployment = np.array([deployment.spec.replicas,
                                           int(int(deployment.spec.template.spec.containers[0].resources.limits["cpu"][:-1])/100), # Eskisine göre daha farklı. cpu stringi yok.
                                           int(int(deployment.spec.template.spec.containers[0].env[2].value[4:-1])/100)])
-    while not check_all_pods_running(deployment):
-        print("Waiting for all pods to be running...")
-        time.sleep(1)
-        deployment = _get_deployment_info()
+    # while not check_all_pods_running(deployment):
+    #     print("Waiting for all pods to be running...")
+    #     time.sleep(1)
+    #     deployment = _get_deployment_info()
     
     running_pods = get_running_pods()
     metrics = collect_metrics_by_pod_names(running_pods,prom)
@@ -194,10 +209,10 @@ def step(action, state, env, prom):
         state = updated_state
         deployment = _get_deployment_info()
         update_and_deploy_deployment_specs(deployment=deployment, state=state)
-        while not check_all_pods_running(deployment):
-            print("Waiting for all pods to be running...")
-            time.sleep(1)
-            deployment = _get_deployment_info()
+        # while not check_all_pods_running(deployment):
+        #     print("Waiting for all pods to be running...")
+        #     time.sleep(1)
+        #     deployment = _get_deployment_info()
         print("All pods are available!")
         print("Collecting metrics...")
         env.runner.stats.reset_all()
