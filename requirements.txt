@@ -1,0 +1,5 @@
+ray[rllib]
+kubernetes
+prometheus_api_client
+gym
+torch
