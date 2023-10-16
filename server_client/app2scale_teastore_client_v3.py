@@ -29,11 +29,11 @@ METRIC_DICT = {
     "container_memory_working_set_bytes": "memory_usage"
 }
 # How many seconds to wait for transition
-COOLDOWN_PERIOD = 30
+COOLDOWN_PERIOD = 45
 # How many seconds to wait for metric collection
 COLLECT_METRIC_TIME = 15
 # Maximum number of metric collection attempt
-COLLECT_METRIC_MAX_TRIAL = 100
+COLLECT_METRIC_MAX_TRIAL = 200
 # How many seconds to wait when metric collection fails
 COLLECT_METRIC_WAIT_ON_ERROR = 1
 # Episode length (set to batch size on purpose)
@@ -154,7 +154,7 @@ def collect_metrics(env):
             metrics["cpu_usage"] = round(cpu_usage/len(running_pods),3)
             metrics["memory_usage"] = round(memory_usage/len(running_pods),3)
             metrics["cost"] = round((metrics["cpu_usage"]*CPU_COST + metrics["memory_usage"]*RAM_COST)*len(running_pods),5)
-            metrics['num_requests'] = round(env.runner.stats.total.num_requests/COLLECT_METRIC_TIME,3)
+            metrics['num_requests'] = round(env.runner.stats.total.num_requests/(COLLECT_METRIC_TIME + n_trials * COLLECT_METRIC_WAIT_ON_ERROR),3)
             metrics['num_failures'] = round(env.runner.stats.total.num_failures,3)
             metrics['response_time'] = round(env.runner.stats.total.avg_response_time,3)
             metrics['performance'] = round(metrics['num_requests'] /  (users * expected_tps),6)
@@ -193,11 +193,11 @@ def step(action, state, env):
     print('cooldown period ended...')
     print('entering metric collection...')
     metrics = collect_metrics(env)
+    _, new_state = get_deployment_info()
     print('metrics collected',metrics)
     if metrics is None:
         return new_state, None, None
 
-    _, new_state = get_deployment_info()
    
     
     if OBSERVATION_SPACE.contains(updated_state):

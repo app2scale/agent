@@ -28,7 +28,7 @@ METRIC_DICT = {
     "container_cpu_usage_seconds_total": "cpu_usage",
     "container_memory_working_set_bytes": "memory_usage"
 }
-COLLECT_METRIC_TIME = 60
+COLLECT_METRIC_TIME = 20
 DEPLOYMENT_NAME = "teastore-webui"
 NAMESPACE = "app2scale"
 
@@ -66,7 +66,7 @@ def _get_deployment_info():
     return v1.read_namespaced_deployment(DEPLOYMENT_NAME, NAMESPACE)
 
 def update_and_deploy_deployment_specs(deployment, state):
-    print("update_and_deployment")
+    #print("update_and_deployment")
     deployment.spec.replicas = int(state["0replica"])
     deployment.spec.template.spec.containers[0].resources.limits["cpu"] = str(state["1cpu"]*100) + "m"
     deployment.spec.template.spec.containers[0].env[2].value = "-Xmx" + str(state["2heap"]*100) + "M"
@@ -76,25 +76,30 @@ def update_and_deploy_deployment_specs(deployment, state):
     v1.patch_namespaced_deployment(DEPLOYMENT_NAME, NAMESPACE, deployment)
 
 def get_running_pods():
-    time.sleep(1)
     config.load_kube_config()
     v1 = client.CoreV1Api()
-    deployment = _get_deployment_info()
+    all_pods_ready = True
     while True:
         pods = v1.list_namespaced_pod(NAMESPACE, label_selector=f"run={DEPLOYMENT_NAME}")
         running_pods = []
         for pod in pods.items:
-            if pod.status.phase.lower() == "running":
-                for container_status in pod.status.container_statuses:
-                    if container_status.ready:
-                        running_pods.append(pod.metadata.name)
-                        break
-        if deployment.spec.replicas == len(running_pods):
+            #print(pod.metadata.name,pod.status.phase.lower(), pod.status.container_statuses[0].ready, pod.metadata.deletion_timestamp)
+            if pod.status.phase.lower() == "running" and pod.status.container_statuses[0].ready and pod.metadata.deletion_timestamp == None:
+                #print(pod.metadata.name, pod.status.phase.lower(), pod.status.container_statuses[0].ready)
+                running_pods.append(pod.metadata.name)
+                #print(pod.metadata.name)
+                all_pods_ready = True
+            else:
+                all_pods_ready = False
+                #print("Replicaset is not ready!!")
+        deployment = _get_deployment_info()        
+        if all_pods_ready and (deployment.spec.replicas == len(running_pods)) and (deployment.status.replicas == len(running_pods)):
+           # print(deployment.spec.replicas, len(running_pods), deployment.status.replicas)
             print(running_pods)
             return running_pods
-
-        time.sleep(5)
-        deployment = _get_deployment_info()
+        else:
+            print("Deployment is not ready!!")
+            time.sleep(5)
 
 # def check_all_pods_running(deployment):
 #     time.sleep(1)
@@ -134,8 +139,8 @@ def collect_metrics_by_pod_names(running_pods, prom):
                 break
             else:
                 time.sleep(3)
-                print(running_pods)
-                print("Empty prometheus query... (Trying again)")
+                # print(running_pods)
+                # print("Empty prometheus query... (Trying again)")
                 continue
 
     metrics["inc_tps"] = round(inc_tps/len(running_pods))
@@ -213,13 +218,14 @@ def step(action, state, env, prom):
         #     print("Waiting for all pods to be running...")
         #     time.sleep(1)
         #     deployment = _get_deployment_info()
+        time.sleep(3)
+        running_pods = get_running_pods()
         print("All pods are available!")
         print("Collecting metrics...")
         env.runner.stats.reset_all()
         time.sleep(COLLECT_METRIC_TIME)
         num_requests_locust = env.runner.stats.total.num_requests
         response_time = env.runner.stats.total.avg_response_time 
-        running_pods = get_running_pods(deployment)
         metrics = collect_metrics_by_pod_names(running_pods, prom)
         state.update({"3used_cpu": np.array([metrics["cpu_usage"]],dtype=np.float32), "4used_ram": np.array([metrics["memory_usage"]],dtype=np.float32)})
         cost = round((metrics["cpu_usage"]*CPU_COST + metrics["memory_usage"]*RAM_COST)*deployment.spec.replicas,2)
@@ -233,9 +239,11 @@ def step(action, state, env, prom):
         print("Updated state is outside the observation space.")
         running_pods = get_running_pods()
         deployment = _get_deployment_info()
-        metrics = collect_metrics_by_pod_names(running_pods, prom)
-        response_time = env.runner.stats.total.avg_response_time 
+        env.runner.stats.reset_all()
+        time.sleep(COLLECT_METRIC_TIME)
         num_requests_locust = env.runner.stats.total.num_requests
+        response_time = env.runner.stats.total.avg_response_time
+        metrics = collect_metrics_by_pod_names(running_pods, prom)
         state.update({"3used_cpu": np.array([metrics["cpu_usage"]],dtype=np.float32), "4used_ram": np.array([metrics["memory_usage"]],dtype=np.float32)})
         cost = round((metrics["cpu_usage"]*CPU_COST + metrics["memory_usage"]*RAM_COST)*deployment.spec.replicas,2)
         reward = -1

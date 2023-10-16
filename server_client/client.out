@@ -1,0 +1,117 @@
+Episode started 4f53f52f02c94809bf1cdb1b7bfbcd85
+step 1
+action selected DO_NOTHING
+Entering step function
+updated_state {'replica': 4, 'cpu': 6, 'heap': 8}
+applying the state...
+Entering cooldown period...
+cooldown period ended...
+entering metric collection...
+try count for metric collection 0
+metric collection succesfull
+metrics collected {'replica': 4, 'cpu': 6, 'heap': 8, 'inc_tps': 28, 'out_tps': 35, 'cpu_usage': 0.035, 'memory_usage': 0.648, 'cost': 0.01541, 'num_requests': 46.933, 'num_failures': 0, 'response_time': 10.732, 'performance': 0.93866, 'expected_tps': 50, 'utilization': 0.43416666666666665}
+Calculated reward 0.8882106666666667
+cumulative reward calculated 0.8882106666666667
+policy_client.log_returns executed
+       action replica cpu  ... num_request num_failures expected_tps
+0  DO_NOTHING       4   6  ...      46.933            0           50
+
+[1 rows x 15 columns]
+step 2
+action selected DECREASE_REPLICA
+Entering step function
+updated_state {'replica': 3, 'cpu': 6, 'heap': 8}
+applying the state...
+Entering cooldown period...
+rk` has been deprecated. This will raise an error in the future!
+2023-10-14 18:32:33,352	WARNING deprecation.py:50 -- DeprecationWarning: `ray.rllib.models.torch.torch_modelv2.TorchModelV2` has been deprecated. Use `ray.rllib.core.rl_module.rl_module.RLModule` instead. This will raise an error in the future!
+2023-10-14 18:32:33,359	INFO policy.py:1294 -- Policy (worker=local) running on CPU.
+2023-10-14 18:32:33,360	INFO torch_policy_v2.py:113 -- Found 0 visible cuda devices.
+2023-10-14 18:32:33,360	WARNING deprecation.py:50 -- DeprecationWarning: `StochasticSampling` has been deprecated. This will raise an error in the future!
+2023-10-14 18:32:33,360	WARNING deprecation.py:50 -- DeprecationWarning: `Exploration` has been deprecated. This will raise an error in the future!
+2023-10-14 18:32:33,361	WARNING deprecation.py:50 -- DeprecationWarning: `Random` has been deprecated. This will raise an error in the future!
+2023-10-14 18:32:33,361	WARNING deprecation.py:50 -- DeprecationWarning: `ValueNetworkMixin` has been deprecated. This will raise an error in the future!
+2023-10-14 18:32:33,361	WARNING deprecation.py:50 -- DeprecationWarning: `LearningRateSchedule` has been deprecated. This will raise an error in the future!
+2023-10-14 18:32:33,361	WARNING deprecation.py:50 -- DeprecationWarning: `EntropyCoeffSchedule` has been deprecated. This will raise an error in the future!
+2023-10-14 18:32:33,361	WARNING deprecation.py:50 -- DeprecationWarning: `KLCoeffMixin` has been deprecated. This will raise an error in the future!
+2023-10-14 18:32:33,364	WARNING deprecation.py:50 -- DeprecationWarning: `ray.rllib.models.torch.torch_action_dist.TorchDistributionWrapper` has been deprecated. Use `ray.rllib.models.torch.torch_distributions.TorchCategorical` instead. This will raise an error in the future!
+2023-10-14 18:32:33,380	INFO rollout_worker.py:1742 -- Built policy map: <PolicyMap lru-caching-capacity=100 policy-IDs=['default_policy']>
+2023-10-14 18:32:33,380	INFO rollout_worker.py:1743 -- Built preprocessor map: {'default_policy': <ray.rllib.models.preprocessors.DictFlatteningPreprocessor object at 0x73107e083cd0>}
+2023-10-14 18:32:33,380	INFO rollout_worker.py:550 -- Built filter map: defaultdict(<class 'ray.rllib.utils.filter.NoFilter'>, {'default_policy': <ray.rllib.utils.filter.NoFilter object at 0x73107e0bc9a0>})
+2023-10-14 18:32:33,380	INFO policy_client.py:315 -- Generating new batch of experiences.
+2023-10-14 18:32:33,380	INFO rollout_worker.py:690 -- Generating sample batch of size 128
+2023-10-14 18:32:33,384	INFO policy_client.py:286 -- Querying server for new policy weights.
+2023-10-14 18:32:33,392	INFO policy_client.py:294 -- Updating rollout worker weights and global vars {'timestep': 0, 'num_grad_updates_per_policy': defaultdict(<class 'int'>, {})}.
+2023-10-14 18:33:18,714	INFO policy_client.py:286 -- Querying server for new policy weights.
+2023-10-14 18:33:18,721	INFO policy_client.py:294 -- Updating rollout worker weights and global vars {'timestep': 0, 'num_grad_updates_per_policy': defaultdict(<class 'int'>, {})}.
+2023-10-14 18:33:18,743	INFO sampler.py:618 -- Raw obs from env: { '4f53f52f02c94809bf1cdb1b7bfbcd85': { 'agent0': { 'cpu': 6,
+                                                    'heap': 8,
+                                                    'replica': 4}}}
+2023-10-14 18:33:18,743	INFO sampler.py:619 -- Info return from env: { '4f53f52f02c94809bf1cdb1b7bfbcd85': { 'agent0': { 'cost': 0.01541,
+                                                    'cpu': 6,
+                                                    'cpu_usage': 0.035,
+                                                    'expected_tps': 50,
+                                                    'heap': 8,
+                                                    'inc_tps': 28,
+                                                    'memory_usage': 0.648,
+                                                    'num_failures': 0,
+                                                    'num_requests': 46.933,
+                                                    'out_tps': 35,
+                                                    'performance': 0.93866,
+                                                    'replica': 4,
+                                                    'response_time': 10.732,
+                                                    'reward': 0.8882106666666667,
+                                                    'utilization': 0.43416666666666665}}}
+2023-10-14 18:33:18,744	INFO sampler.py:861 -- Preprocessed obs: np.ndarray((27,), dtype=float32, min=0.0, max=1.0, mean=0.111)
+2023-10-14 18:33:18,744	INFO sampler.py:866 -- Filtered obs: np.ndarray((27,), dtype=float32, min=0.0, max=1.0, mean=0.111)
+2023-10-14 18:33:18,746	INFO sampler.py:1152 -- Inputs to compute_actions():
+
+{ 'default_policy': [ { 'data': { 'agent_id': 'agent0',
+                                  'env_id': '4f53f52f02c94809bf1cdb1b7bfbcd85',
+                                  'info': { 'cost': 0.01541,
+                                            'cpu': 6,
+                                            'cpu_usage': 0.035,
+                                            'expected_tps': 50,
+                                            'heap': 8,
+                                            'inc_tps': 28,
+                                            'memory_usage': 0.648,
+                                            'num_failures': 0,
+                                            'num_requests': 46.933,
+                                            'out_tps': 35,
+                                            'performance': 0.93866,
+                                            'replica': 4,
+                                            'response_time': 10.732,
+                                            'reward': 0.8882106666666667,
+                                            'utilization': 0.43416666666666665},
+                                  'obs': np.ndarray((27,), dtype=float32, min=0.0, max=1.0, mean=0.111),
+                                  'prev_action': None,
+                                  'prev_reward': 0.8882106666666667,
+                                  'rnn_state': None},
+                        'type': '_PolicyEvalData'}]}
+
+2023-10-14 18:33:18,749	INFO sampler.py:1179 -- Outputs of compute_actions():
+
+{ 'default_policy': ( np.ndarray((1,), dtype=int32, min=2.0, max=2.0, mean=2.0),
+                      [],
+                      { 'action_dist_inputs': np.ndarray((1, 7), dtype=float32, min=-0.005, max=0.006, mean=-0.001),
+                        'action_logp': np.ndarray((1,), dtype=float32, min=-1.947, max=-1.947, mean=-1.947),
+                        'action_prob': np.ndarray((1,), dtype=float32, min=0.143, max=0.143, mean=0.143),
+                        'vf_preds': np.ndarray((1,), dtype=float32, min=-0.003, max=-0.003, mean=-0.003)})}
+
+KeyboardInterrupt
+2023-10-14T15:33:34Z
+Traceback (most recent call last):
+  File "/root/agent/server_client/app2scale_teastore_client_v3.py", line 231, in <module>
+    state, reward, info = step(action, prev_state, env)
+  File "/root/agent/server_client/app2scale_teastore_client_v3.py", line 192, in step
+    time.sleep(COOLDOWN_PERIOD)
+  File "/usr/local/lib/python3.10/dist-packages/gevent/hub.py", line 166, in sleep
+    hub.wait(t)
+  File "src/gevent/_hub_primitives.py", line 46, in gevent._gevent_c_hub_primitives.WaitOperationsGreenlet.wait
+  File "src/gevent/_hub_primitives.py", line 55, in gevent._gevent_c_hub_primitives.WaitOperationsGreenlet.wait
+  File "src/gevent/_waiter.py", line 154, in gevent._gevent_c_waiter.Waiter.get
+  File "src/gevent/_greenlet_primitives.py", line 61, in gevent._gevent_c_greenlet_primitives.SwitchOutGreenletWithLoop.switch
+  File "src/gevent/_greenlet_primitives.py", line 61, in gevent._gevent_c_greenlet_primitives.SwitchOutGreenletWithLoop.switch
+  File "src/gevent/_greenlet_primitives.py", line 65, in gevent._gevent_c_greenlet_primitives.SwitchOutGreenletWithLoop.switch
+  File "src/gevent/_gevent_c_greenlet_primitives.pxd", line 35, in gevent._gevent_c_greenlet_primitives._greenlet_switch
+KeyboardInterrupt

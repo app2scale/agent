@@ -22,7 +22,7 @@ config = (PPOConfig()
           .debugging(log_level="INFO")
           .rollouts(num_rollout_workers=0,
                     enable_connectors=False)
-            .training(train_batch_size=128)
+            .training(train_batch_size=2,sgd_minibatch_size=1)
           .offline_data(input_=policy_input)
           .evaluation(off_policy_estimation_methods={}))
 
