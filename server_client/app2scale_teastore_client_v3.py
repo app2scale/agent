@@ -29,13 +29,15 @@ METRIC_DICT = {
     "container_memory_working_set_bytes": "memory_usage"
 }
 # How many seconds to wait for transition
-COOLDOWN_PERIOD = 45
+COOLDOWN_PERIOD = 0
 # How many seconds to wait for metric collection
 COLLECT_METRIC_TIME = 15
 # Maximum number of metric collection attempt
 COLLECT_METRIC_MAX_TRIAL = 200
 # How many seconds to wait when metric collection fails
 COLLECT_METRIC_WAIT_ON_ERROR = 1
+# How many seconds to wait if pods are not ready
+CHECK_ALL_PODS_READY_TIME = 2
 # Episode length (set to batch size on purpose)
 EPISODE_LENGTH = 128
 PROMETHEUS_HOST_URL = "http://localhost:9090"
@@ -111,9 +113,15 @@ def get_running_pods():
     return running_pods
 
 def collect_metrics(env):
+    deployment, state = get_deployment_info()
+    while True:
+        running_pods = get_running_pods()
+        if len(running_pods) == state["replica"]:
+            break
+        else:
+            time.sleep(CHECK_ALL_PODS_READY_TIME)
     env.runner.stats.reset_all()
     time.sleep(COLLECT_METRIC_TIME)
-
     n_trials = 0
     while n_trials < COLLECT_METRIC_MAX_TRIAL:
         print('try count for metric collection',n_trials)
@@ -145,7 +153,7 @@ def collect_metrics(env):
             n_trials += 1
             time.sleep(COLLECT_METRIC_WAIT_ON_ERROR)
         else:
-            deployment, state = get_deployment_info()
+
             metrics['replica'] = state['replica']
             metrics['cpu'] = state['cpu']
             metrics['heap'] = state['heap']
@@ -229,8 +237,8 @@ while True:
     str_action = action_to_string(action)
     print('action selected',str_action)
     state, reward, info = step(action, prev_state, env)
-    if info is None:
-        print('info is None so skip')
+    if info is None or reward is None:
+        print('info or reward is None so skip')
         prev_state = state
         step_count += 1
         continue
