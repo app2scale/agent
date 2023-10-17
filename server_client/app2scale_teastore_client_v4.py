@@ -281,5 +281,6 @@ while True:
         info["num_requests"], info["num_failures"],info["expected_tps"]]
     output.loc[step_count-1,:] = temp_output
     output.to_csv("output.csv", index=False)
+    state_history.to_csv("state_history", index=False)
     print(output,flush=True)
     step_count += 1
