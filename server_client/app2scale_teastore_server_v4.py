@@ -16,9 +16,12 @@ config = (PPOConfig()
           .environment(
               env=None,
               action_space=Discrete(7),
-              observation_space=Dict({"replica": Discrete(9, start=1),
-                                      "cpu": Discrete(9, start=1),
-                                      "heap": Discrete(9, start=1)}))
+              observation_space=Dict({"replica": Discrete(9, start=1), 
+                                      "cpu": Discrete(9, start=1), 
+                                      "heap": Discrete(9, start=1),
+                                      "previous_tps": Box(0, 200),
+                                      "instant_tps": Box(0, 200)}))
+
           .debugging(log_level="INFO")
           .rollouts(num_rollout_workers=0,
                     enable_connectors=False)

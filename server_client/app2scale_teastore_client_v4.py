@@ -176,7 +176,7 @@ def collect_metrics(env):
             return metrics
     return None
 
-def step(action, state, env, step_count):
+def step(action, state, env):
     global previous_tps
     print('Entering step function')
     if action == DO_NOTHING:
@@ -219,8 +219,13 @@ def step(action, state, env, step_count):
             return new_state, None, None
     else:
         reward = -1
+        keys = [
+            "inc_tps", "out_tps", "cpu_usage", "memory_usage", "cost",
+            "num_requests", "num_failures", "response_time", "performance",
+            "expected_tps", "utilization"
+        ]
+        metrics = {key: None for key in keys}
         
-
     metrics['reward'] = reward
     print('Calculated reward',reward)
     return new_state, reward, metrics
@@ -230,7 +235,6 @@ columns = ["action", "replica",
            "cpu_usage", "memory_usage", "cost", "reward", "sum_reward", 
            "response_time", "num_request", "num_failures","expected_tps"]
 output = pd.DataFrame(columns=columns)
-
 
 episode_id = policy_client.start_episode(training_enabled=True)
 print('Episode started',episode_id)
@@ -244,7 +248,7 @@ while True:
     action = policy_client.get_action(episode_id, prev_state) if step_count > 1 else DO_NOTHING
     str_action = action_to_string(action)
     print('action selected',str_action)
-    state, reward, info = step(action, prev_state, env, step_count)
+    state, reward, info = step(action, prev_state, env)
     if info is None or reward is None:
         print('info or reward is None so skip')
         prev_state = state
