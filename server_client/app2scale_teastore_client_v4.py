@@ -202,14 +202,15 @@ def step(action, state, env):
     if OBSERVATION_SPACE.contains(temp_updated_state):
         print('applying the state...')
         update_and_deploy_deployment_specs(updated_state)
+        new_state = temp_updated_state
         print('Entering cooldown period...')
         time.sleep(COOLDOWN_PERIOD)
         print('cooldown period ended...')
         print('entering metric collection...')
-        state.update({"previous_tps": np.array([previous_tps],dtype=np.float32)})
+        new_state.update({"previous_tps": np.array([previous_tps],dtype=np.float16)})
         metrics = collect_metrics(env)  
-        _, new_state = get_deployment_info()
-        state.update({"instant_tps": np.array([metrics["num_requests"]],dtype=np.float32)})
+        # _, new_state = get_deployment_info()
+        new_state.update({"instant_tps": np.array([metrics["num_requests"]],dtype=np.float16)})
         previous_tps = metrics["num_requests"]
         print('updated_state', state)
         print('metrics collected',metrics)
