@@ -37,7 +37,7 @@ COLLECT_METRIC_TIME = 15
 # Maximum number of metric collection attempt
 COLLECT_METRIC_MAX_TRIAL = 200
 # How many seconds to wait when metric collection fails
-COLLECT_METRIC_WAIT_ON_ERROR = 1
+COLLECT_METRIC_WAIT_ON_ERROR = 2
 # How many seconds to wait if pods are not ready
 CHECK_ALL_PODS_READY_TIME = 2
 # Episode length (set to batch size on purpose)
@@ -157,7 +157,6 @@ def collect_metrics(env):
             n_trials += 1
             time.sleep(COLLECT_METRIC_WAIT_ON_ERROR)
         else:
-
             metrics['replica'] = state['replica']
             metrics['cpu'] = state['cpu']
             metrics['heap'] = state['heap']
@@ -231,12 +230,13 @@ def step(action, state, env):
     print('Calculated reward',reward)
     return new_state, reward, metrics
 
-columns = ["action", "replica", 
+output_columns = ["action", "replica", 
            "cpu", "heap", "inc_tps", "out_tps", 
            "cpu_usage", "memory_usage", "cost", "reward", "sum_reward", 
            "response_time", "num_request", "num_failures","expected_tps"]
-output = pd.DataFrame(columns=columns)
-
+output = pd.DataFrame(columns=output_columns)
+state_history_columns = ["replica", "cpu", "heap","previous_tps","instant_tps"]
+state_history = pd.DataFrame(columns=state_history_columns)
 episode_id = policy_client.start_episode(training_enabled=True)
 print('Episode started',episode_id)
 
@@ -262,15 +262,6 @@ while True:
     policy_client.log_returns(episode_id, reward, info=info)
     print('policy_client.log_returns executed')
 
-    temp = [str_action,
-            state["replica"], state["cpu"], state["heap"], 
-            info["inc_tps"], info["out_tps"], info["cpu_usage"], 
-            info["memory_usage"], info["cost"], reward, sum_reward, info["response_time"],
-            info["num_requests"], info["num_failures"],info["expected_tps"]]
-    output.loc[step_count-1,:] = temp
-    print(output,flush=True)
-
-    output.to_csv("output.csv", index=False)
     if step_count % EPISODE_LENGTH == 0:
         print("Total reward:", sum_reward)
         sum_reward = 0.0
@@ -280,4 +271,15 @@ while True:
         print('new episode started',episode_id)
         
     prev_state = state
+    temp_state_history = [prev_state["replica"], prev_state["cpu"], prev_state["heap"],
+                        prev_state["previous_tps"][0], prev_state["instant_tps"][0]]
+    state_history.loc[step_count-1,:] = temp_state_history
+    temp_output = [str_action,
+        state["replica"], state["cpu"], state["heap"], 
+        info["inc_tps"], info["out_tps"], info["cpu_usage"], 
+        info["memory_usage"], info["cost"], reward, sum_reward, info["response_time"],
+        info["num_requests"], info["num_failures"],info["expected_tps"]]
+    output.loc[step_count-1,:] = temp_output
+    output.to_csv("output.csv", index=False)
+    print(output,flush=True)
     step_count += 1
