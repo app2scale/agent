@@ -191,7 +191,6 @@ def step(action, state, env):
     
     updated_state = {"replica": temp_state[0], "cpu": temp_state[1], "heap": temp_state[2]}
     print('updated_state', updated_state)
-
     if OBSERVATION_SPACE.contains(updated_state):
         print('applying the state...')
         update_and_deploy_deployment_specs(updated_state)

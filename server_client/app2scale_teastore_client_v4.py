@@ -23,6 +23,7 @@ DECREASE_HEAP = 6
 MAX_STEPS = 100
 CPU_COST = 0.031611
 RAM_COST = 0.004237
+previous_tps = 0
 METRIC_DICT = {
     "container_network_receive_bytes_total": "inc_tps",
     "container_network_transmit_packets_total": "out_tps",
@@ -176,6 +177,7 @@ def collect_metrics(env):
     return None
 
 def step(action, state, env, step_count):
+    global previous_tps
     print('Entering step function')
     if action == DO_NOTHING:
         temp_state = np.array(list(state.values())[:3]) + np.array([0, 0, 0])
@@ -195,10 +197,8 @@ def step(action, state, env, step_count):
     
     updated_state = {"replica": temp_state[0], "cpu": temp_state[1], "heap": temp_state[2]}
     temp_updated_state = {"replica": temp_state[0], "cpu": temp_state[1], "heap": temp_state[2],
-                            "previous_tps": 50, "instant_tps": 50}
-    if step_count == 1:
-        previous_tps = 0
-
+                            "previous_tps": np.array([50], dtype=np.float32), "instant_tps": np.array([50], dtype=np.float32)}
+    
     if OBSERVATION_SPACE.contains(temp_updated_state):
         print('applying the state...')
         update_and_deploy_deployment_specs(updated_state)
