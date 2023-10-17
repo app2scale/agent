@@ -4,6 +4,7 @@ from ray.rllib.env.policy_server_input import PolicyServerInput
 import gym
 from gymnasium.spaces import Discrete, Dict, MultiDiscrete, Tuple, Box
 from ray.tune.logger import pretty_print
+import numpy as np
 
 ray.init()
 CHECKPOINT_FILE = "last_checkpoint_{}.out"
@@ -19,8 +20,8 @@ config = (PPOConfig()
               observation_space=Dict({"replica": Discrete(9, start=1), 
                                       "cpu": Discrete(9, start=1), 
                                       "heap": Discrete(9, start=1),
-                                      "previous_tps": Box(0, 200),
-                                      "instant_tps": Box(0, 200)}))
+                                      "previous_tps": Box(0, 200, dtype=np.float16),
+                                      "instant_tps": Box(0, 200, dtype=np.float16)}))
 
           .debugging(log_level="INFO")
           .rollouts(num_rollout_workers=0,

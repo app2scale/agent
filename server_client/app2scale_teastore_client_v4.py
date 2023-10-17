@@ -50,8 +50,8 @@ NAMESPACE = "app2scale"
 OBSERVATION_SPACE = Dict({"replica": Discrete(9, start=1), 
                            "cpu": Discrete(9, start=1), 
                            "heap": Discrete(9, start=1),
-                           "previous_tps": Box(0, 200),
-                           "instant_tps": Box(0, 200)}) # What should we set the default value
+                           "previous_tps": Box(0, 200, dtype=np.float16),
+                           "instant_tps": Box(0, 200, dtype=np.float16)}) # What should we set the default value
 ACTION_SPACE = Discrete(7)
 
 policy_client = PolicyClient("http://localhost:9900", inference_mode="local") 
@@ -197,7 +197,7 @@ def step(action, state, env):
     
     updated_state = {"replica": temp_state[0], "cpu": temp_state[1], "heap": temp_state[2]}
     temp_updated_state = {"replica": temp_state[0], "cpu": temp_state[1], "heap": temp_state[2],
-                            "previous_tps": np.array([50], dtype=np.float32), "instant_tps": np.array([50], dtype=np.float32)}
+                            "previous_tps": np.array([50], dtype=np.float16), "instant_tps": np.array([50], dtype=np.float16)}
     
     if OBSERVATION_SPACE.contains(temp_updated_state):
         print('applying the state...')
