@@ -157,6 +157,7 @@ def collect_metrics(env):
             n_trials += 1
             time.sleep(COLLECT_METRIC_WAIT_ON_ERROR)
         else:
+            print("TEST", running_pods, len(running_pods))
             metrics['replica'] = state['replica']
             metrics['cpu'] = state['cpu']
             metrics['heap'] = state['heap']
@@ -280,7 +281,7 @@ while True:
         info["memory_usage"], info["cost"], reward, sum_reward, info["response_time"],
         info["num_requests"], info["num_failures"],info["expected_tps"]]
     output.loc[step_count-1,:] = temp_output
-    output.to_csv("output.csv", index=False)
-    state_history.to_csv("state_history.csv", index=False)
+    output.to_csv("output_2.csv", index=False)
+    state_history.to_csv("state_history_2.csv", index=False)
     print(output,flush=True)
     step_count += 1
