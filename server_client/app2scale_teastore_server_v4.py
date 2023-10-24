@@ -5,6 +5,7 @@ import gym
 from gymnasium.spaces import Discrete, Dict, MultiDiscrete, Tuple, Box
 from ray.tune.logger import pretty_print
 import numpy as np
+from ray.rllib.algorithms.algorithm import Algorithm
 
 ray.init()
 CHECKPOINT_FILE = "last_checkpoint_{}.out"
@@ -35,7 +36,8 @@ config.training(_enable_learner_api=False)
 
 checkpoint_path = CHECKPOINT_FILE.format("PPO")
 
-algo = config.build()
+# algo = config.build() # It is commented to load saved pretrained model.
+algo = Algorithm.from_checkpoint("/root/ray_results/PPO_None_2023-10-17_15-44-345ng2ct98/checkpoint_003116/")
 time_steps = 0
 for epoch in range(10000):
     print('server side epoch loop',epoch)

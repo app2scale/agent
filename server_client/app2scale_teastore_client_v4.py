@@ -120,7 +120,7 @@ def collect_metrics(env):
     deployment, state = get_deployment_info()
     while True:
         running_pods, number_of_all_pods = get_running_pods()
-        if len(running_pods) == state["replica"] and state["replica"] == number_of_all_pods:
+        if len(running_pods) == state["replica"] and state["replica"] == number_of_all_pods and running_pods:
             break
         else:
             time.sleep(CHECK_ALL_PODS_READY_TIME)
@@ -281,7 +281,7 @@ while True:
         info["memory_usage"], info["cost"], reward, sum_reward, info["response_time"],
         info["num_requests"], info["num_failures"],info["expected_tps"]]
     output.loc[step_count-1,:] = temp_output
-    output.to_csv("output_2.csv", index=False)
-    state_history.to_csv("state_history_2.csv", index=False)
+    output.to_csv("output_3.csv", index=False)
+    state_history.to_csv("state_history_3.csv", index=False)
     print(output,flush=True)
     step_count += 1
