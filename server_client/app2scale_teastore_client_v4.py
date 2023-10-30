@@ -121,6 +121,7 @@ def collect_metrics(env):
     while True:
         running_pods, number_of_all_pods = get_running_pods()
         if len(running_pods) == state["replica"] and state["replica"] == number_of_all_pods and running_pods:
+            print("İnitial running pods", running_pods)
             break
         else:
             time.sleep(CHECK_ALL_PODS_READY_TIME)
@@ -136,7 +137,8 @@ def collect_metrics(env):
         memory_usage = 0
 
         empty_metric_situation_occured = False
-        running_pods, _ = get_running_pods()
+        #running_pods, _ = get_running_pods()
+        print("collect metric running pods", running_pods)
         for pod in running_pods:
             temp_inc_tps = METRIC_SERVER.custom_query(query=f'sum(irate(container_network_receive_packets_total{{pod="{pod}", namespace="{NAMESPACE}"}}[2m]))')
             temp_out_tps = METRIC_SERVER.custom_query(query=f'sum(irate(container_network_transmit_packets_total{{pod="{pod}", namespace="{NAMESPACE}"}}[2m]))')
@@ -198,7 +200,7 @@ def step(action, state, env):
     updated_state = {"replica": temp_state[0], "cpu": temp_state[1], "heap": temp_state[2]}
     temp_updated_state = {"replica": temp_state[0], "cpu": temp_state[1], "heap": temp_state[2],
                             "previous_tps": np.array([50], dtype=np.float16), "instant_tps": np.array([50], dtype=np.float16)}
-    
+
     if OBSERVATION_SPACE.contains(temp_updated_state):
         print('applying the state...')
         update_and_deploy_deployment_specs(updated_state)
@@ -281,7 +283,7 @@ while True:
         info["memory_usage"], info["cost"], reward, sum_reward, info["response_time"],
         info["num_requests"], info["num_failures"],info["expected_tps"]]
     output.loc[step_count-1,:] = temp_output
-    output.to_csv("output_3.csv", index=False)
-    state_history.to_csv("state_history_3.csv", index=False)
+    output.to_csv("output_4.csv", index=False)
+    state_history.to_csv("state_history_4.csv", index=False)
     print(output,flush=True)
     step_count += 1
