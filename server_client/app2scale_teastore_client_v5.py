@@ -274,6 +274,7 @@ while True:
         print('new episode started',episode_id)
         
     prev_state = state
+    print(prev_state)
     temp_state_history = [prev_state["replica"], prev_state["cpu"], prev_state["heap"],
                         prev_state["previous_tps"][0], prev_state["instant_tps"][0]]
     state_history.loc[step_count-1,:] = temp_state_history
@@ -283,7 +284,7 @@ while True:
         info["memory_usage"], info["cost"], reward, sum_reward, info["response_time"],
         info["num_requests"], info["num_failures"],info["expected_tps"]]
     output.loc[step_count-1,:] = temp_output
-    output.to_csv("output_4.csv", index=False)
-    state_history.to_csv("state_history_4.csv", index=False)
+    output.to_csv("output_v5_1.csv", index=False)
+    state_history.to_csv("state_history_v5_1.csv", index=False)
     print(output,flush=True)
     step_count += 1

@@ -28,7 +28,7 @@ config = (PPOConfig()
           .rollouts(num_rollout_workers=0,
                     enable_connectors=False)
             .training(train_batch_size=128,sgd_minibatch_size=128,
-                      ModelConfigDict ={"fcnet_hiddens": [64, 64]})
+                      model ={"fcnet_hiddens": [64, 64]})
           .offline_data(input_=policy_input)
           .evaluation(off_policy_estimation_methods={}))
 
