@@ -48,8 +48,8 @@ DEPLOYMENT_NAME = "teastore-webui"
 NAMESPACE = "app2scale"
 
 OBSERVATION_SPACE = Dict({"replica": Discrete(6, start=1), 
-                           "cpu": Discrete(9, start=4), 
-                           "heap": Discrete(9, start=4),
+                           "cpu": Discrete(6, start=4), 
+                           "heap": Discrete(6, start=4),
                            "previous_tps": Box(0, 200, dtype=np.float16),
                            "instant_tps": Box(0, 200, dtype=np.float16)}) # What should we set the default value
 ACTION_SPACE = Discrete(7)
