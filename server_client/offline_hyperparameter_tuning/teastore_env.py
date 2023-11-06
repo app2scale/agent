@@ -27,8 +27,8 @@ class Teastore(gym.Env):
 
 
     def __init__(self):
-        self.data = pd.read_csv("/Users/hasan.nayir/Projects/Payten/app2scale_reinforcement_learning/server_client/offline_hyperparameter_tuning/data/offline_data.csv")
-        self.action_space = Discrete(6)
+        self.data = pd.read_csv("./data/offline_data.csv")
+        self.action_space = Discrete(7)
         self.observation_space = Dict({"replica": Discrete(9, start=1), 
                            "cpu": Discrete(9, start=1), 
                            "heap": Discrete(9, start=1),
