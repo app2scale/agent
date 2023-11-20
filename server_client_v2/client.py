@@ -194,7 +194,7 @@ def step(action, state, env):
     metrics = collect_metrics(env)  
     new_state.update({"instant_tps": np.array([metrics["num_requests"]],dtype=np.float16)})
     previous_tps = metrics["num_requests"]
-    print('updated_state', state)
+    print('updated_state', new_state)
     print('metrics collected',metrics)
     reward = ALPHA*metrics['performance'] + (1-ALPHA)*metrics['utilization']
     if metrics is None:
