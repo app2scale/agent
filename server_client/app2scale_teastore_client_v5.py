@@ -284,7 +284,7 @@ while True:
         info["memory_usage"], info["cost"], reward, sum_reward, info["response_time"],
         info["num_requests"], info["num_failures"],info["expected_tps"]]
     output.loc[step_count-1,:] = temp_output
-    output.to_csv("output_v5_1.csv", index=False)
-    state_history.to_csv("state_history_v5_1.csv", index=False)
+    output.to_csv("output_v5_2.csv", index=False)
+    state_history.to_csv("state_history_v5_2.csv", index=False)
     print(output,flush=True)
     step_count += 1
