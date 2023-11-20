@@ -8,7 +8,7 @@ from collections import OrderedDict
 
 
 class Teastore(gym.Env):
-    DATA_PATH = "data/teastore_data.csv"
+    DATA_PATH = "offline_training/data/teastore_data.csv"
     DO_NOTHING = 0
     INCREASE_REPLICA = 1
     DECREASE_REPLICA = 2
@@ -31,7 +31,8 @@ class Teastore(gym.Env):
                                        "4used_ram": Box(self.data["used_ram"].min(), self.data["used_ram"].max())})
 
     def reset(self, *, seed=None, options=None):
-        idx = random.randint(0, len(self.data)-1)
+        # idx = random.randint(0, len(self.data)-1)
+        idx = 558
         try:
             self.state = OrderedDict({"0replica": self.data.iloc[idx, 0], 
                                 "1cpu": self.data.iloc[idx, 1], 
