@@ -19,7 +19,7 @@ def policy_input(context):
 config = (PPOConfig()
           .environment(
               env=None,
-              action_space=Discrete(7),
+              action_space=Tuple([Discrete(6), Discrete(6),Discrete(6)]),
               observation_space=Dict({"replica": Discrete(6, start=1), 
                                       "cpu": Discrete(9, start=4), 
                                       "heap": Discrete(9, start=4),
