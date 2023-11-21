@@ -178,9 +178,9 @@ def step(action, state, env):
     temp_state["replica"] = action[0] +1 
     temp_state["cpu"] = action[1] + 4
     temp_state["heap"] = action[2] + 4
-
-    updated_state = {"replica": temp_state[0], "cpu": temp_state[1], "heap": temp_state[2]}
-    temp_updated_state = {"replica": temp_state[0], "cpu": temp_state[1], "heap": temp_state[2],
+    print("temp_state", temp_state, "actionnn", action)
+    updated_state = {"replica": temp_state["replica"], "cpu": temp_state["cpu"], "heap": temp_state["heap"]}
+    temp_updated_state = {"replica": temp_state["replica"], "cpu": temp_state["cpu"], "heap": temp_state["heap"],
                             "previous_tps": np.array([50], dtype=np.float16), "instant_tps": np.array([50], dtype=np.float16)}
 
     print('applying the state...')
@@ -223,7 +223,11 @@ sum_reward = 0
 while True:
     print('step',step_count)
     # First action will always be do nothing
-    action = POLICY_CLIENT.get_action(episode_id, prev_state)
+    
+    if step_count > 1:
+        action = POLICY_CLIENT.get_action(episode_id, prev_state)
+    else:
+        action = np.array(list(prev_state.values())) - np.array([1,4,4])
     state, reward, info = step(action, prev_state, env)
     if info is None or reward is None:
         print('info or reward is None so skip')

@@ -39,8 +39,9 @@ config.training(_enable_learner_api=False)
 
 
 checkpoint_path = CHECKPOINT_FILE.format("PPO")
-algo = config.build() 
-
+#algo = config.build() 
+algo = Algorithm.from_checkpoint("/root/PPO_teastore_2023-11-17_11-56-15yqzu73lu/checkpoint_010000/")
+#algo = Algorithm.from_checkpoint("/root/ray_results/PPO_None_2023-10-17_15-44-345ng2ct98/checkpoint_003116/")
 time_steps = 0
 for epoch in range(500):
     print('server side epoch loop',epoch)
