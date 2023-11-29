@@ -32,7 +32,7 @@ COLLECT_METRIC_WAIT_ON_ERROR = 2
 # How many seconds to wait if pods are not ready
 CHECK_ALL_PODS_READY_TIME = 2
 # Episode length (set to batch size on purpose)
-EPISODE_LENGTH = 128
+EPISODE_LENGTH = 100
 PROMETHEUS_HOST_URL = "http://localhost:9090"
 # Weight of the performance in the reward function
 ALPHA = 0.6
