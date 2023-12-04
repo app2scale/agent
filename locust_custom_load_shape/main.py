@@ -1,5 +1,6 @@
+from typing import List, Optional, Tuple, Type
 from locust.env import Environment
-from locust import HttpUser, task, constant, constant_throughput, events, TaskSet
+from locust import HttpUser, User, task, constant, constant_throughput, events, TaskSet
 from locust.shape import LoadTestShape
 import time
 import math
@@ -28,7 +29,7 @@ class TeaStoreLocust(HttpUser):
 class CustomLoad(LoadTestShape):
     trx_load_data = pd.read_csv("/Users/hasan.nayir/Projects/Payten/app2scale_reinforcement_learning/locust_custom_load_shape/transactions.csv")
     trx_load = trx_load_data["transactions"].values.tolist()
-    trx_load = (trx_load/np.max(trx_load)*200).astype(int)
+    trx_load = (trx_load/np.max(trx_load)*100).astype(int)
     ct = 0
     
     def tick(self):
@@ -38,8 +39,17 @@ class CustomLoad(LoadTestShape):
         self.ct += 1
         return (user_count, user_count) 
 
+    # def tick(self):
 
-env = Environment(user_classes=[TeaStoreLocust], shape_class=CustomLoad())
+    #   if self.ct >= len(self.trx_load):
+    #     self.ct = 0
+
+    #   user_count = self.trx_load[self.ct]
+
+    #   return (user_count, user_count)
+
+load = CustomLoad()
+env = Environment(user_classes=[TeaStoreLocust], shape_class=load)
 env.create_local_runner()
 web_ui = env.create_web_ui("127.0.0.1", 8089)
 env.runner.start_shape() 
@@ -70,7 +80,8 @@ while True:
   print()
   
   
-#   env.runner.stats.reset_all()
+  # env.runner.stats.reset_all()
   step = step + 1
+
 
 env.runner.quit()
