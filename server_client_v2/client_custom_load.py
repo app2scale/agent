@@ -70,7 +70,7 @@ class TeaStoreLocust(HttpUser):
 
 class CustomLoad(LoadTestShape):
 
-    trx_load_data = pd.read_csv("/Users/hasan.nayir/Projects/Payten/app2scale_reinforcement_learning/locust_custom_load_shape/transactions.csv")
+    trx_load_data = pd.read_csv("./locust_custom_load_shape/transactions.csv")
     trx_load = trx_load_data["transactions"].values.tolist()
     trx_load = (trx_load/np.max(trx_load)*200).astype(int)
     ct = 0
