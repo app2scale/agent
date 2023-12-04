@@ -16,7 +16,7 @@ class Teastore(gym.Env):
     DECREASE_CPU = 4
     INCREASE_HEAP = 5
     DECREASE_HEAP = 6
-    MAX_STEPS = 100
+    MAX_STEPS = 50
     EXPECTED_TPS = 50
     USERS = 1
     ALPHA = 0.6
