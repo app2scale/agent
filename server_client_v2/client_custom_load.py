@@ -72,9 +72,9 @@ class TeaStoreLocust(HttpUser):
         self.login()
         self.browse()
         # 50/50 chance to buy
-        choice_buy = random.choice([True, False])
-        if choice_buy:
-            self.buy()
+        #choice_buy = random.choice([True, False])
+        #if choice_buy:
+        self.buy()
         self.visit_profile()
         self.logout()
 
@@ -108,7 +108,7 @@ class TeaStoreLocust(HttpUser):
     def browse(self):
 
         # execute browsing action randomly up to 5 times
-        for i in range(1, random.randint(2, 5)):
+        for i in range(1, 2):
             # browses random category and page
             category_id = random.randint(2, 6)
             page = random.randint(1, 5)
@@ -189,7 +189,7 @@ class CustomLoad(LoadTestShape):
         if self.ct >= len(self.trx_load):
             self.ct = 0
         user_count = self.trx_load[self.ct]
-        return (user_count, user_count) 
+        return (1, 1) 
 
 load = CustomLoad()
 env = Environment(user_classes=[TeaStoreLocust], shape_class=load)
@@ -242,6 +242,7 @@ def collect_metrics(env):
         else:
             time.sleep(CHECK_ALL_PODS_READY_TIME)
     env.runner.stats.reset_all()
+    print("asdasd", env.runner.stats.total.num_requests)
     time.sleep(COLLECT_METRIC_TIME)
     n_trials = 0
     while n_trials < COLLECT_METRIC_MAX_TRIAL:
@@ -286,8 +287,8 @@ def collect_metrics(env):
             metrics['num_requests'] = round(env.runner.stats.total.num_requests/(COLLECT_METRIC_TIME + n_trials * COLLECT_METRIC_WAIT_ON_ERROR),2)
             metrics['num_failures'] = round(env.runner.stats.total.num_failures,2)
             metrics['response_time'] = round(env.runner.stats.total.avg_response_time,2)
-            metrics['performance'] = round(metrics['num_requests'] /  (env.runner.target_user_count * expected_tps),6)
-            metrics['expected_tps'] = env.runner.target_user_count * expected_tps
+            metrics['performance'] = round(metrics['num_requests'] /  (env.runner.target_user_count * expected_tps*9),6)
+            metrics['expected_tps'] = env.runner.target_user_count * expected_tps*9 # 9 req for each user
             metrics['utilization'] = (metrics["cpu_usage"]/(state["cpu"]/10)+metrics["memory_usage"]/(state["heap"]/10))/2
             print('metric collection succesfull')
             load.ct += 1
