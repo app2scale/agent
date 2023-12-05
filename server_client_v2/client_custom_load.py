@@ -11,6 +11,7 @@ from locust import HttpUser, task, constant, constant_throughput, events
 import ssl
 import random
 from locust.shape import LoadTestShape
+import logging
 ssl._create_default_https_context = ssl._create_unverified_context
 
 
@@ -58,14 +59,130 @@ ACTION_SPACE = Tuple([Discrete(6), Discrete(6),Discrete(6)])
 POLICY_CLIENT = PolicyClient("http://localhost:9900", inference_mode="local") 
 METRIC_SERVER = PrometheusConnect(url=PROMETHEUS_HOST_URL, disable_ssl=True)
 
+logging.getLogger().setLevel(logging.INFO)
 # Locust settings
 expected_tps = 1
 class TeaStoreLocust(HttpUser):
     wait_time = constant_throughput(expected_tps)
-    host = "http://teastore.local.payten.com.tr"
+    host = "http://teastore.local.payten.com.tr/tools.descartes.teastore.webui/"
+
     @task
-    def my_task(self):
-        response = self.client.get("/tools.descartes.teastore.webui/")
+    def load(self):
+        self.visit_home()
+        self.login()
+        self.browse()
+        # 50/50 chance to buy
+        choice_buy = random.choice([True, False])
+        if choice_buy:
+            self.buy()
+        self.visit_profile()
+        self.logout()
+
+    def visit_home(self):
+
+        # load landing page
+        res = self.client.get('/')
+        if res.ok:
+            pass
+        else:
+            logging.error(f"Could not load landing page: {res.status_code}")
+
+    def login(self):
+
+        # load login page
+        res = self.client.get('/login')
+        if res.ok:
+            pass
+        else:
+            logging.error(f"Could not load login page: {res.status_code}")
+        # login random user
+        user = random.randint(1, 99)
+        login_request = self.client.post("/loginAction", params={"username": user, "password": "password"})
+        if login_request.ok:
+            pass
+        else:
+            logging.error(
+                f"Could not login with username: {user} - status: {login_request.status_code}")
+            
+
+    def browse(self):
+
+        # execute browsing action randomly up to 5 times
+        for i in range(1, random.randint(2, 5)):
+            # browses random category and page
+            category_id = random.randint(2, 6)
+            page = random.randint(1, 5)
+            category_request = self.client.get("/category", params={"page": page, "category": category_id})
+            if category_request.ok:
+                # logging.info(f"Visited category {category_id} on page 1")
+                # browses random product
+                product_id = random.randint(7, 506)
+                product_request = self.client.get("/product", params={"id": product_id})
+                if product_request.ok:
+                    # logging.info(f"Visited product with id {product_id}.")
+                    cart_request = self.client.post("/cartAction", params={"addToCart": "", "productid": product_id})
+                    if cart_request.ok:
+                        pass
+                        # logging.info(f"Added product {product_id} to cart.")
+                    else:
+                        logging.error(
+                            f"Could not put product {product_id} in cart - status {cart_request.status_code}")
+                else:
+                    logging.error(
+                        f"Could not visit product {product_id} - status {product_request.status_code}")
+            else:
+                logging.error(
+                    f"Could not visit category {category_id} on page 1 - status {category_request.status_code}")
+                
+
+
+    def buy(self):
+
+        # sample user data
+        user_data = {
+            "firstname": "User",
+            "lastname": "User",
+            "adress1": "Road",
+            "adress2": "City",
+            "cardtype": "volvo",
+            "cardnumber": "314159265359",
+            "expirydate": "12/2050",
+            "confirm": "Confirm"
+        }
+        buy_request = self.client.post("/cartAction", params=user_data)
+        if buy_request.ok:
+            pass
+            # logging.info(f"Bought products.")
+        else:
+            logging.error("Could not buy products.")
+
+    def visit_profile(self) -> None:
+
+        profile_request = self.client.get("/profile")
+        if profile_request.ok:
+            pass
+            # logging.info("Visited profile page.")
+        else:
+            logging.error("Could not visit profile page.")
+
+    def logout(self):
+
+        logout_request = self.client.post("/loginAction", params={"logout": ""})
+        if logout_request.ok:
+            pass
+            # logging.info("Successful logout.")
+        else:
+            logging.error(f"Could not log out - status: {logout_request.status_code}")
+
+
+
+
+
+
+
+
+
+
 
 
 class CustomLoad(LoadTestShape):
