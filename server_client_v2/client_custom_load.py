@@ -242,7 +242,6 @@ def collect_metrics(env):
         else:
             time.sleep(CHECK_ALL_PODS_READY_TIME)
     env.runner.stats.reset_all()
-    print("asdasd", env.runner.stats.total.num_requests)
     time.sleep(COLLECT_METRIC_TIME)
     n_trials = 0
     while n_trials < COLLECT_METRIC_MAX_TRIAL:
@@ -287,9 +286,9 @@ def collect_metrics(env):
             metrics['num_requests'] = round(env.runner.stats.total.num_requests/(COLLECT_METRIC_TIME + n_trials * COLLECT_METRIC_WAIT_ON_ERROR),2)
             metrics['num_failures'] = round(env.runner.stats.total.num_failures,2)
             metrics['response_time'] = round(env.runner.stats.total.avg_response_time,2)
-            metrics['performance'] = round(metrics['num_requests'] /  (env.runner.target_user_count * expected_tps*9),6)
+            metrics['performance'] = min(round(metrics['num_requests'] /  (env.runner.target_user_count * expected_tps*9),6),1)
             metrics['expected_tps'] = env.runner.target_user_count * expected_tps*9 # 9 req for each user
-            metrics['utilization'] = (metrics["cpu_usage"]/(state["cpu"]/10)+metrics["memory_usage"]/(state["heap"]/10))/2
+            metrics['utilization'] = min((metrics["cpu_usage"]/(state["cpu"]/10)+metrics["memory_usage"]/(state["heap"]/10))/2,1)
             print('metric collection succesfull')
             load.ct += 1
             return metrics
