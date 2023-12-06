@@ -42,17 +42,17 @@ checkpoint_path = CHECKPOINT_FILE.format("PPO")
 algo = config.build() 
 #algo = Algorithm.from_checkpoint("/root/PPO_teastore_2023-11-17_11-56-15yqzu73lu/checkpoint_010000/")
 #algo = Algorithm.from_checkpoint("/root/ray_results/PPO_None_2023-10-17_15-44-345ng2ct98/checkpoint_003116/")
-saved_policy_path = "/root/PPO_teastore_2023-11-28_17-45-58fl7frwqm/checkpoint_003000"
-algo.restore(saved_policy_path)
-print("Restored checpoint")
+#saved_policy_path = "/root/PPO_teastore_2023-11-28_17-45-58fl7frwqm/checkpoint_003000"
+#algo.restore(saved_policy_path)
+#print("Restored checpoint")
 
 time_steps = 0
-for epoch in range(500):
+for epoch in range(2000):
     print('server side epoch loop',epoch)
     results = algo.train() 
     print('algo.train executed')
     print(pretty_print(results))
-    if epoch % 20 == 0:
+    if epoch % 200 == 0:
       checkpoint = algo.save()
       print("Last checkpoint", epoch, checkpoint)
 

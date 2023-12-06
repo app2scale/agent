@@ -181,7 +181,7 @@ class CustomLoad(LoadTestShape):
 
     trx_load_data = pd.read_csv("./transactions.csv")
     trx_load = trx_load_data["transactions"].values.tolist()
-    trx_load = (trx_load/np.max(trx_load)*100).astype(int)
+    trx_load = (trx_load/np.max(trx_load)*10).astype(int)+1
     ct = 0
 
     
@@ -189,7 +189,7 @@ class CustomLoad(LoadTestShape):
         if self.ct >= len(self.trx_load):
             self.ct = 0
         user_count = self.trx_load[self.ct]
-        return (1, 1) 
+        return (user_count, user_count) 
 
 load = CustomLoad()
 env = Environment(user_classes=[TeaStoreLocust], shape_class=load)
