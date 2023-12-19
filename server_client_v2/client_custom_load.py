@@ -112,18 +112,20 @@ class TeaStoreLocust(HttpUser):
             # browses random category and page
             category_id = random.randint(2, 6)
             page = random.randint(1, 5)
+            #page = 1
             category_request = self.client.get("/category", params={"page": page, "category": category_id})
             if category_request.ok:
                 # logging.info(f"Visited category {category_id} on page 1")
                 # browses random product
                 product_id = random.randint(7, 506)
+                #product_id = 8
                 product_request = self.client.get("/product", params={"id": product_id})
                 if product_request.ok:
-                    # logging.info(f"Visited product with id {product_id}.")
+                    #logging.info(f"Visited product with id {product_id}.")
                     cart_request = self.client.post("/cartAction", params={"addToCart": "", "productid": product_id})
                     if cart_request.ok:
                         pass
-                        # logging.info(f"Added product {product_id} to cart.")
+                        #logging.info(f"Added product {product_id} to cart.")
                     else:
                         logging.error(
                             f"Could not put product {product_id} in cart - status {cart_request.status_code}")
@@ -181,7 +183,7 @@ class CustomLoad(LoadTestShape):
 
     trx_load_data = pd.read_csv("./transactions.csv")
     trx_load = trx_load_data["transactions"].values.tolist()
-    trx_load = (trx_load/np.max(trx_load)*10).astype(int)+1
+    trx_load = (trx_load/np.max(trx_load)*20).astype(int)+1
     ct = 0
 
     
@@ -288,7 +290,7 @@ def collect_metrics(env):
             metrics['response_time'] = round(env.runner.stats.total.avg_response_time,2)
             metrics['performance'] = min(round(metrics['num_requests'] /  (env.runner.target_user_count * expected_tps*9),6),1)
             metrics['expected_tps'] = env.runner.target_user_count * expected_tps*9 # 9 req for each user
-            metrics['utilization'] = min((metrics["cpu_usage"]/(state["cpu"]/10)+metrics["memory_usage"]/(state["heap"]/10))/2,1)
+            metrics['utilization'] = 0.5*min(metrics["cpu_usage"]/(state["cpu"]/10),1)+ 0.5*min(metrics["memory_usage"]/(state["heap"]/10),1)
             print('metric collection succesfull')
             load.ct += 1
             return metrics
