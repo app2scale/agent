@@ -28,9 +28,9 @@ class TeaStoreLocust(HttpUser):
         self.login()
         self.browse()
         # 50/50 chance to buy
-        choice_buy = choice([True, False])
-        if choice_buy:
-            self.buy()
+        #choice_buy = choice([True, False])
+        #if choice_buy:
+        self.buy()
         self.visit_profile()
         self.logout()
         logging.info("Completed user.")
@@ -73,7 +73,7 @@ class TeaStoreLocust(HttpUser):
         :return: None
         """
         # execute browsing action randomly up to 5 times
-        for i in range(1, randint(2, 5)):
+        for i in range(1, 2):
             # browses random category and page
             category_id = randint(2, 6)
             page = randint(1, 5)
@@ -145,7 +145,7 @@ class TeaStoreLocust(HttpUser):
 
 
 class CustomLoad(LoadTestShape):
-    trx_load_data = pd.read_csv("/Users/hasan.nayir/Projects/Payten/app2scale_reinforcement_learning/locust_custom_load_shape/transactions.csv")
+    trx_load_data = pd.read_csv("./transactions.csv")
     trx_load = trx_load_data["transactions"].values.tolist()
     trx_load = (trx_load/np.max(trx_load)*100).astype(int)
     ct = 0
@@ -155,7 +155,7 @@ class CustomLoad(LoadTestShape):
             self.ct = 0
         user_count = self.trx_load[self.ct]
         self.ct += 1
-        return (user_count, user_count) 
+        return (10, 10) 
 
 load = CustomLoad()
 env = Environment(user_classes=[TeaStoreLocust], shape_class=load)
@@ -169,7 +169,7 @@ env.stop_timeout=10000
 
 step = 0
 while True:
-  time.sleep(1)
+  #time.sleep(1)
   s = dict()
   s['avg_response_time'] = env.runner.stats.total.avg_response_time 
   s['med_response_time'] = env.runner.stats.total.median_response_time
@@ -191,7 +191,7 @@ while True:
   print()
   
   
-  # env.runner.stats.reset_all()
+  #env.runner.stats.reset_all()
   step = step + 1
 
 
