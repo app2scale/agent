@@ -147,7 +147,7 @@ class TeaStoreLocust(HttpUser):
 class CustomLoad(LoadTestShape):
     trx_load_data = pd.read_csv("./transactions.csv")
     trx_load = trx_load_data["transactions"].values.tolist()
-    trx_load = (trx_load/np.max(trx_load)*100).astype(int)
+    trx_load = (trx_load/np.max(trx_load)*10).astype(int)
     ct = 0
     
     def tick(self):
