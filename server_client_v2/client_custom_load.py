@@ -384,6 +384,6 @@ while True:
                    info["num_failures"],info["expected_tps"]]
         
     output.loc[step_count-1,:] = temp_output
-    output.to_csv("output_2.csv", index=False)
+    output.to_csv("output_3.csv", index=False)
     print(output,flush=True)
     step_count += 1
