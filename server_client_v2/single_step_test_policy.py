@@ -5,7 +5,7 @@ import tree
 import numpy as np
 from ray.rllib.policy.policy import Policy
 
-policy_path = "/root/ray_results/PPO_None_2023-12-13_16-13-28gfb08q9q/checkpoint_000201/policies/default_policy"
+policy_path = "/Users/hasan.nayir/Projects/Payten/app2scale_reinforcement_learning/server_client_v2/default_policy"
 restored_policy = Policy.from_checkpoint(policy_path)
 
 obs = {'replica': np.array([5]), 'cpu': np.array([8]), "heap": np.array([2]), 'previous_tps': np.array([45.53]), 'instant_tps': np.array([46.44])}
