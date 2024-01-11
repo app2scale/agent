@@ -7,6 +7,8 @@ import time
 import numpy as np
 from collections import OrderedDict
 from gymnasium.spaces import Discrete, Dict, MultiDiscrete, Tuple, Box
+from ray.rllib.algorithms.ppo import PPOConfig
+
 from locust import HttpUser, task, constant, constant_throughput, events
 import ssl
 import random
@@ -303,6 +305,7 @@ def step(action, state, env):
                             "previous_tps": np.array([50], dtype=np.float16), "instant_tps": np.array([50], dtype=np.float16)}
 
     print('applying the state...')
+    print(updated_state)
     update_and_deploy_deployment_specs(updated_state)
     new_state = temp_updated_state
     print('Entering cooldown period...')
@@ -324,30 +327,50 @@ def step(action, state, env):
 
     return new_state, reward, metrics
 
+config_ppo = (PPOConfig()
+          .environment(
+              env=None,
+              action_space=Tuple([Discrete(6), Discrete(6),Discrete(6)]),
+              observation_space=Dict({"replica": Discrete(6, start=1), 
+                                      "cpu": Discrete(9, start=4), 
+                                      "heap": Discrete(9, start=4),
+                                      "previous_tps": Box(0, 200, dtype=np.float16),
+                                      "instant_tps": Box(0, 200, dtype=np.float16)}))
 
+          .debugging(log_level="INFO")
+          .rollouts(num_rollout_workers=0, enable_connectors=False)
+            .training(train_batch_size=32,sgd_minibatch_size=16,
+                      model ={"fcnet_hiddens": [64, 64]}, lr=0.001)
+          #.offline_data(input_=policy_input)
+          .evaluation(off_policy_estimation_methods={})
+          )
 
-ray.init(ignore_reinit_error=True)
-checkpoint_dir = "/Users/hasan.nayir/ray_results/PPO_teastore_2023-11-28_16-26-46gq61hp37/"
-policy_name = "checkpoint_003000"
+config_ppo.rl_module(_enable_rl_module_api=False)
+config_ppo.training(_enable_learner_api=False)
+algo = config_ppo.build() 
+
 output_columns = ["replica", "cpu", "heap", "previous_tps", "instant_tps", "inc_tps", "out_tps", 
            "cpu_usage", "memory_usage", "reward", "sum_reward", 
            "response_time", "num_request", "num_failures","expected_tps"]
 
 output = pd.DataFrame(columns=output_columns)
 _, obs = get_deployment_info()
-
+obs["previous_tps"]=np.array([50], dtype=np.float16)
+obs["instant_tps"]=np.array([50],dtype=np.float16)
 done = False
 truncated = False
 sum_reward = 0
-checkpoint_dir = "/Users/hasan.nayir/ray_results/PPO_teastore_2023-11-28_16-26-46gq61hp37/"
-policy_name = "checkpoint_003000"
+checkpoint_dir = "/root/ray_results/PPO_None_2023-12-13_16-13-28gfb08q9q/"
+policy_name = "checkpoint_000401"
 path_to_checkpoint = checkpoint_dir + policy_name
-algo = Algorithm.from_checkpoint(path_to_checkpoint)
-step = 1
+algo.restore(path_to_checkpoint)
+step_count = 1
 
 while not done:
+    print("obsss", obs)
     action = algo.compute_single_action(obs)
-    next_obs, reward, done, truncated, info = env.step(action)
+    print("asdasdasd", obs, "asdasdasd", action)
+    next_obs, reward, done, truncated, info = step(action,obs,env)
     sum_reward += reward
     np.set_printoptions(formatter={'float': '{:0.4f}'.format})
     temp_output = [next_obs["replica"], next_obs["cpu"], next_obs["heap"], next_obs["previous_tps"][0],
@@ -358,5 +381,5 @@ while not done:
     print(output)
     output.to_csv("./test_results.csv", index=False)
     obs = next_obs
-    step += 1
+    step_count += 1
     
