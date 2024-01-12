@@ -28,7 +28,7 @@ def convert_data_to_batch(df, writer):
             truncated = True if i == data.shape[0]-1 else False
             terminated = truncated
             selected_row = data.iloc[i,:]
-            action = action = 100 * selected_row['replica'] + 10 * selected_row['cpu'] + selected_row['heap']
+            action = 100 * selected_row['replica'] + 10 * selected_row['cpu'] + selected_row['heap']
             new_obs = np.array([selected_row['replica'], selected_row['cpu'], selected_row['heap'], selected_row['previous_tps'], selected_row['instant_tps']], dtype=np.float32)
             rew = selected_row["reward"]
             batch_builder.add_values(
