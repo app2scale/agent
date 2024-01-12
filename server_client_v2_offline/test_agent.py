@@ -171,7 +171,7 @@ class TeaStoreLocust(HttpUser):
 
 class CustomLoad(LoadTestShape):
 
-    trx_load_data = pd.read_csv("./server_client_v2_offline/transactions.csv")
+    trx_load_data = pd.read_csv("./transactions.csv")
     trx_load = trx_load_data["transactions"].values.tolist()
     trx_load = (trx_load/np.max(trx_load)*20).astype(int)+1
     ct = 0
@@ -335,10 +335,12 @@ obs["instant_tps"]=np.array([50],dtype=np.float16)
 done = False
 truncated = False
 sum_reward = 0
-checkpoint_dir = "/Users/hasan.nayir/ray_results/DQN_None_2024-01-11_17-29-545zbvu0c4/checkpoints/"
+checkpoint_dir = "./"
 policy_name = "checkpoint_010000"
 path_to_checkpoint = checkpoint_dir + policy_name
+print("Algo will be loaded")
 algo = Algorithm.from_checkpoint(path_to_checkpoint)
+print("Algo loaded")
 step_count = 1
 
 while not done:
