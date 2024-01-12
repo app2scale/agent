@@ -181,7 +181,7 @@ class TeaStoreLocust(HttpUser):
 
 class CustomLoad(LoadTestShape):
 
-    trx_load_data = pd.read_csv("./server_client_v2/transactions.csv")
+    trx_load_data = pd.read_csv("./transactions.csv")
     trx_load = trx_load_data["transactions"].values.tolist()
     trx_load = (trx_load/np.max(trx_load)*20).astype(int)+1
     ct = 0
@@ -346,23 +346,28 @@ sum_reward = 0
 step_count = 1
 spaces = dict(
     {
-        "replica": Discrete(6),
-        "cpu": Discrete(9),
-        "heap": Discrete(9),
+        "replica": Discrete(6, start=1),
+        "cpu": Discrete(9, start=4),
+        "heap": Discrete(9, start=4),
         "previous_tps":Box(0, 200, dtype=np.float16),
         "instant_tps":Box(0, 200, dtype=np.float16)
     }
 )
 
-policy_path = "./server_client_v2/default_policy"
+policy_path = "./default_policy"
 restored_policy = Policy.from_checkpoint(policy_path)
 
 
 
 
 while not done:
+    print("obsss", obs)
+    obs["replica"] = np.array([obs["replica"]])
+    obs["cpu"] = np.array([obs["cpu"]])
+    obs["heap"] = np.array([obs["heap"]])
     struct_torch = tree.map_structure(lambda s: torch.from_numpy(s), obs)
     model_input = flatten_inputs_to_1d_tensor(struct_torch, spaces_struct=spaces)
+    print("inputt", model_input)
     action = restored_policy.compute_single_action(model_input)[0] 
 
     next_obs, reward, done, truncated, info = step(action,obs,env)
