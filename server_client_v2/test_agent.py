@@ -1,25 +1,28 @@
-from locust.env import Environment
+from gevent import monkey
+monkey.patch_all(thread=False, select=False)
+
 from ray.rllib.env.policy_client import PolicyClient
 import pandas as pd
-from prometheus_api_client import PrometheusConnect
-from kubernetes import client, config
 import time
 import numpy as np
 from collections import OrderedDict
 from gymnasium.spaces import Discrete, Dict, MultiDiscrete, Tuple, Box
 from ray.rllib.algorithms.ppo import PPOConfig
 
-from locust import HttpUser, task, constant, constant_throughput, events
 import ssl
 import random
-from locust.shape import LoadTestShape
 import logging
 import ray
 from ray.rllib.algorithms.algorithm import Algorithm
 from ray.rllib.env.policy_server_input import PolicyServerInput
+#from locust import HttpUser, task, constant, constant_throughput, events
+#from locust.shape import LoadTestShape
 
 
 ssl._create_default_https_context = ssl._create_unverified_context
+
+
+
 
 
 previous_tps = 0
@@ -55,7 +58,6 @@ OBSERVATION_SPACE = Dict({"replica": Discrete(6, start=1),
                            "instant_tps": Box(0, 200, dtype=np.float16)})
 
 ACTION_SPACE = Tuple([Discrete(6), Discrete(6),Discrete(6)])
-METRIC_SERVER = PrometheusConnect(url=PROMETHEUS_HOST_URL, disable_ssl=True)
 
 logging.getLogger().setLevel(logging.INFO)
 
@@ -81,7 +83,7 @@ config_ppo = (PPOConfig()
           .rollouts(num_rollout_workers=0, enable_connectors=False)
             .training(train_batch_size=32,sgd_minibatch_size=16,
                       model ={"fcnet_hiddens": [64, 64]}, lr=0.001)
-          #.offline_data(input_=policy_input)
+         # .offline_data(input_=policy_input)
           .evaluation(off_policy_estimation_methods={})
           )
 
