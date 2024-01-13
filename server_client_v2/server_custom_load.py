@@ -45,6 +45,14 @@ algo = config.build()
 #saved_policy_path = "/root/PPO_teastore_2023-11-28_17-45-58fl7frwqm/checkpoint_003000"
 #algo.restore(saved_policy_path)
 #print("Restored checpoint")
+checkpoint_dir = "/root/ray_results/PPO_None_2023-12-13_16-13-28gfb08q9q/"
+policy_name = "checkpoint_000401"
+path_to_checkpoint = checkpoint_dir + policy_name
+algo.restore(path_to_checkpoint)
+
+sample_state = {'replica': 6, 'cpu': 9, 'heap': 6, 'previous_tps': np.array([50.], dtype=np.float16), 'instant_tps': np.array([50.], dtype=np.float16)}
+action = algo.compute_single_action(sample_state)
+print("Action: ", action)
 
 time_steps = 0
 for epoch in range(2000):

@@ -346,9 +346,9 @@ sum_reward = 0
 step_count = 1
 spaces = dict(
     {
-        "replica": Discrete(6, start=1),
-        "cpu": Discrete(9, start=4),
-        "heap": Discrete(9, start=4),
+        "replica": Discrete(7, start=1),
+        "cpu": Discrete(10, start=4),
+        "heap": Discrete(10, start=4),
         "previous_tps":Box(0, 200, dtype=np.float16),
         "instant_tps":Box(0, 200, dtype=np.float16)
     }
