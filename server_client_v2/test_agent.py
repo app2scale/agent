@@ -16,6 +16,8 @@ from locust.shape import LoadTestShape
 import logging
 import ray
 from ray.rllib.algorithms.algorithm import Algorithm
+from ray.rllib.env.policy_server_input import PolicyServerInput
+
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -292,6 +294,7 @@ def collect_metrics(env):
 
 
 
+
 def step(action, state, env):
     global previous_tps
     print('Entering step function')
@@ -326,6 +329,10 @@ def step(action, state, env):
     print('Calculated reward',reward)
 
     return new_state, reward, metrics
+
+
+def policy_input(context):
+    return PolicyServerInput(context, "localhost", 9900)
 
 config_ppo = (PPOConfig()
           .environment(
