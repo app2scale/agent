@@ -1,20 +1,14 @@
-
-
-from gevent import monkey
-monkey.patch_all()
-from ray.rllib.utils.torch_utils import flatten_inputs_to_1d_tensor
-import torch
-import tree
-import numpy as np
-from ray.rllib.policy.policy import Policy
 from locust.env import Environment
 from ray.rllib.env.policy_client import PolicyClient
 import pandas as pd
 from prometheus_api_client import PrometheusConnect
 from kubernetes import client, config
 import time
+import numpy as np
 from collections import OrderedDict
 from gymnasium.spaces import Discrete, Dict, MultiDiscrete, Tuple, Box
+from ray.rllib.algorithms.ppo import PPOConfig
+
 from locust import HttpUser, task, constant, constant_throughput, events
 import ssl
 import random
@@ -23,8 +17,8 @@ import logging
 import ray
 from ray.rllib.algorithms.algorithm import Algorithm
 
-
 ssl._create_default_https_context = ssl._create_unverified_context
+
 
 previous_tps = 0
 METRIC_DICT = {
@@ -33,7 +27,7 @@ METRIC_DICT = {
     "container_cpu_usage_seconds_total": "cpu_usage",
     "container_memory_working_set_bytes": "memory_usage"
 }
-
+# How many seconds to wait for transition
 COOLDOWN_PERIOD = 0
 # How many seconds to wait for metric collection
 COLLECT_METRIC_TIME = 15
@@ -52,13 +46,9 @@ ALPHA = 0.6
 DEPLOYMENT_NAME = "teastore-webui"
 NAMESPACE = "app2scale"
 
-OBSERVATION_SPACE = Dict({"replica": Discrete(6, start=1), 
-                           "cpu": Discrete(6, start=4), 
-                           "heap": Discrete(6, start=4),
-                           "previous_tps": Box(0, 200, dtype=np.float16),
-                           "instant_tps": Box(0, 200, dtype=np.float16)})
+OBSERVATION_SPACE = Box(low=np.array([1, 4, 4, 0, 0]), high=np.array([6, 9, 9, 200, 200]), dtype=np.float32)
 
-ACTION_SPACE = Tuple([Discrete(6), Discrete(6),Discrete(6)])
+ACTION_SPACE = Discrete(700, start=144)
 METRIC_SERVER = PrometheusConnect(url=PROMETHEUS_HOST_URL, disable_ssl=True)
 
 logging.getLogger().setLevel(logging.INFO)
@@ -297,13 +287,14 @@ def collect_metrics(env):
     return None
 
 
+
 def step(action, state, env):
     global previous_tps
     print('Entering step function')
     temp_state = state.copy()
-    temp_state["replica"] = action[0] +1 
-    temp_state["cpu"] = action[1] + 4
-    temp_state["heap"] = action[2] + 4
+    temp_state["replica"] = action//100
+    temp_state["cpu"] = (action%100)//10
+    temp_state["heap"] = action%10
     print("temp_state", temp_state, "actionnn", action)
     updated_state = {"replica": temp_state["replica"], "cpu": temp_state["cpu"], "heap": temp_state["heap"]}
     temp_updated_state = {"replica": temp_state["replica"], "cpu": temp_state["cpu"], "heap": temp_state["heap"],
@@ -332,6 +323,7 @@ def step(action, state, env):
 
     return new_state, reward, metrics
 
+
 output_columns = ["replica", "cpu", "heap", "previous_tps", "instant_tps", "inc_tps", "out_tps", 
            "cpu_usage", "memory_usage", "reward", "sum_reward", 
            "response_time", "num_request", "num_failures","expected_tps"]
@@ -343,33 +335,18 @@ obs["instant_tps"]=np.array([50],dtype=np.float16)
 done = False
 truncated = False
 sum_reward = 0
+checkpoint_dir = "./"
+policy_name = "checkpoint_010000"
+path_to_checkpoint = checkpoint_dir + policy_name
+print("Algo will be loaded")
+algo = Algorithm.from_checkpoint(path_to_checkpoint)
+print("Algo loaded")
 step_count = 1
-spaces = dict(
-    {
-        "replica": Discrete(7, start=1),
-        "cpu": Discrete(10, start=4),
-        "heap": Discrete(10, start=4),
-        "previous_tps":Box(0, 200, dtype=np.float16),
-        "instant_tps":Box(0, 200, dtype=np.float16)
-    }
-)
-
-policy_path = "./default_policy"
-restored_policy = Policy.from_checkpoint(policy_path)
-
-
-
 
 while not done:
     print("obsss", obs)
-    obs["replica"] = np.array([obs["replica"]])
-    obs["cpu"] = np.array([obs["cpu"]])
-    obs["heap"] = np.array([obs["heap"]])
-    struct_torch = tree.map_structure(lambda s: torch.from_numpy(s), obs)
-    model_input = flatten_inputs_to_1d_tensor(struct_torch, spaces_struct=spaces)
-    print("inputt", model_input)
-    action = restored_policy.compute_single_action(model_input)[0] 
-
+    action = algo.compute_single_action(obs)
+    print("asdasdasd", obs, "asdasdasd", action)
     next_obs, reward, done, truncated, info = step(action,obs,env)
     sum_reward += reward
     np.set_printoptions(formatter={'float': '{:0.4f}'.format})
@@ -382,4 +359,4 @@ while not done:
     output.to_csv("./test_results.csv", index=False)
     obs = next_obs
     step_count += 1
-
+    

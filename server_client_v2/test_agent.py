@@ -1,23 +1,32 @@
+from gevent import monkey
+monkey.patch_all(thread=False, select=False)
 from locust.env import Environment
+from kubernetes import client, config
+
+from prometheus_api_client import PrometheusConnect
+
 from ray.rllib.env.policy_client import PolicyClient
 import pandas as pd
-from prometheus_api_client import PrometheusConnect
-from kubernetes import client, config
 import time
 import numpy as np
 from collections import OrderedDict
 from gymnasium.spaces import Discrete, Dict, MultiDiscrete, Tuple, Box
 from ray.rllib.algorithms.ppo import PPOConfig
 
-from locust import HttpUser, task, constant, constant_throughput, events
 import ssl
 import random
-from locust.shape import LoadTestShape
 import logging
 import ray
 from ray.rllib.algorithms.algorithm import Algorithm
+from ray.rllib.env.policy_server_input import PolicyServerInput
+from locust import HttpUser, task, constant, constant_throughput, events
+from locust.shape import LoadTestShape
+
 
 ssl._create_default_https_context = ssl._create_unverified_context
+
+
+
 
 
 previous_tps = 0
@@ -55,9 +64,14 @@ OBSERVATION_SPACE = Dict({"replica": Discrete(6, start=1),
 ACTION_SPACE = Tuple([Discrete(6), Discrete(6),Discrete(6)])
 METRIC_SERVER = PrometheusConnect(url=PROMETHEUS_HOST_URL, disable_ssl=True)
 
+
 logging.getLogger().setLevel(logging.INFO)
 
 expected_tps = 1
+
+ray.init(ignore_reinit_error=True)
+
+
 class TeaStoreLocust(HttpUser):
     wait_time = constant_throughput(expected_tps)
     host = "http://teastore.local.payten.com.tr/tools.descartes.teastore.webui/"
@@ -175,7 +189,7 @@ class TeaStoreLocust(HttpUser):
 
 class CustomLoad(LoadTestShape):
 
-    trx_load_data = pd.read_csv("./transactions.csv")
+    trx_load_data = pd.read_csv("./server_client_v2/transactions.csv")
     trx_load = trx_load_data["transactions"].values.tolist()
     trx_load = (trx_load/np.max(trx_load)*20).astype(int)+1
     ct = 0
@@ -292,6 +306,7 @@ def collect_metrics(env):
 
 
 
+
 def step(action, state, env):
     global previous_tps
     print('Entering step function')
@@ -341,7 +356,7 @@ config_ppo = (PPOConfig()
           .rollouts(num_rollout_workers=0, enable_connectors=False)
             .training(train_batch_size=32,sgd_minibatch_size=16,
                       model ={"fcnet_hiddens": [64, 64]}, lr=0.001)
-          #.offline_data(input_=policy_input)
+         # .offline_data(input_=policy_input)
           .evaluation(off_policy_estimation_methods={})
           )
 
@@ -352,24 +367,29 @@ algo = config_ppo.build()
 output_columns = ["replica", "cpu", "heap", "previous_tps", "instant_tps", "inc_tps", "out_tps", 
            "cpu_usage", "memory_usage", "reward", "sum_reward", 
            "response_time", "num_request", "num_failures","expected_tps"]
-
 output = pd.DataFrame(columns=output_columns)
 _, obs = get_deployment_info()
 obs["previous_tps"]=np.array([50], dtype=np.float16)
 obs["instant_tps"]=np.array([50],dtype=np.float16)
+
 done = False
 truncated = False
 sum_reward = 0
-checkpoint_dir = "/root/ray_results/PPO_None_2023-12-13_16-13-28gfb08q9q/"
+checkpoint_dir = "/Users/hasan.nayir/Projects/Payten/app2scale_reinforcement_learning/server_client_v2/PPO_None_2023-12-13_16-13-28gfb08q9q/"
 policy_name = "checkpoint_000401"
 path_to_checkpoint = checkpoint_dir + policy_name
 algo.restore(path_to_checkpoint)
 step_count = 1
 
-while not done:
+for _ in range(0,2):
+    # obs = {'replica': 6, 'cpu': 9, 'heap': 6, 'previous_tps': np.array([50.], dtype=np.float16), 'instant_tps': np.array([50.], dtype=np.float16)}
+
+    # print("obsss", obs)
+    # action = algo.compute_single_action(obs)
+    # print("asdasdasd", obs, "asdasdasd", action)
+    # obs = {'replica': 3, 'cpu': 6, 'heap': 4, 'previous_tps': np.array([50.], dtype=np.float16), 'instant_tps': np.array([50.], dtype=np.float16)}
     print("obsss", obs)
     action = algo.compute_single_action(obs)
-    print("asdasdasd", obs, "asdasdasd", action)
     next_obs, reward, done, truncated, info = step(action,obs,env)
     sum_reward += reward
     np.set_printoptions(formatter={'float': '{:0.4f}'.format})
@@ -382,4 +402,6 @@ while not done:
     output.to_csv("./test_results.csv", index=False)
     obs = next_obs
     step_count += 1
+
+
     
