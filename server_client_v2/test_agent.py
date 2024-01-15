@@ -189,7 +189,7 @@ class TeaStoreLocust(HttpUser):
 
 class CustomLoad(LoadTestShape):
 
-    trx_load_data = pd.read_csv("./server_client_v2/transactions.csv")
+    trx_load_data = pd.read_csv("./transactions.csv")
     trx_load = trx_load_data["transactions"].values.tolist()
     trx_load = (trx_load/np.max(trx_load)*20).astype(int)+1
     ct = 0
@@ -375,13 +375,13 @@ obs["instant_tps"]=np.array([50],dtype=np.float16)
 done = False
 truncated = False
 sum_reward = 0
-checkpoint_dir = "/Users/hasan.nayir/Projects/Payten/app2scale_reinforcement_learning/server_client_v2/PPO_None_2023-12-13_16-13-28gfb08q9q/"
+checkpoint_dir = "/root/ray_results/PPO_None_2023-12-13_16-13-28gfb08q9q/"
 policy_name = "checkpoint_000401"
 path_to_checkpoint = checkpoint_dir + policy_name
 algo.restore(path_to_checkpoint)
 step_count = 1
 
-for _ in range(0,2):
+for _ in range(0,2200):
     # obs = {'replica': 6, 'cpu': 9, 'heap': 6, 'previous_tps': np.array([50.], dtype=np.float16), 'instant_tps': np.array([50.], dtype=np.float16)}
 
     # print("obsss", obs)
@@ -390,14 +390,14 @@ for _ in range(0,2):
     # obs = {'replica': 3, 'cpu': 6, 'heap': 4, 'previous_tps': np.array([50.], dtype=np.float16), 'instant_tps': np.array([50.], dtype=np.float16)}
     print("obsss", obs)
     action = algo.compute_single_action(obs)
-    next_obs, reward, done, truncated, info = step(action,obs,env)
+    next_obs, reward, info = step(action,obs,env)
     sum_reward += reward
     np.set_printoptions(formatter={'float': '{:0.4f}'.format})
     temp_output = [next_obs["replica"], next_obs["cpu"], next_obs["heap"], next_obs["previous_tps"][0],
                    next_obs["instant_tps"][0], info["inc_tps"], info["out_tps"], info["cpu_usage"], 
                    info["memory_usage"], reward, sum_reward, info["response_time"],info["num_requests"], 
                    info["num_failures"],info["expected_tps"]]
-    output.loc[step,:] = temp_output
+    output.loc[step_count,:] = temp_output
     print(output)
     output.to_csv("./test_results.csv", index=False)
     obs = next_obs
