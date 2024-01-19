@@ -58,16 +58,16 @@ def generate_plots(filename,  mean_q_list, is_v_gain_list,wis_v_gain_list):
 
 
 hyperparameters = {"learning_rate": [1e-05, 1e-04],
-                   "fcnet_hiddens": [[32, 32],[64,64]]
+                   "fcnet_hiddens": [[32,32],[64,64]]
                    }
 parameter_combinations = list(product(*hyperparameters.values())) # This variable includes all combinations of the hyperparameters. ex. (1e-05, [32, 32])
 
 
-train_path = "/tmp/training-out"
-eval_path = "/tmp/eval-out"
-epoch_number = 10000
+train_path = "/tmp/trainingresp-out"
+eval_path = "/tmp/evalresp-out"
+epoch_number = 15000
 
-for comb in parameter_combinations:
+for comb in parameter_combinations[1:]:
     config = generate_config(train_path, eval_path, comb)
     print(f"Started training with lr: {comb[0]} and fcnet: {comb[1]}")
     mean_q_list = []
@@ -77,7 +77,7 @@ for comb in parameter_combinations:
 
     algo = config.build()
     debug_dir = "{}checkpoints/".format(algo.logdir)
-    filename = f"./server_client_v2_offline/results/lr_{comb[0]}_fcnet_{comb[1][0]}_{comb[1][1]}.pdf"
+    filename = f"./server_client_v2_offline/results/{algo.logdir.split('/')[-2]}_lr_{comb[0]}_fcnet_{comb[1][0]}_{comb[1][1]}.pdf"
     for i in range(epoch_number):
         print("------------- Iteration", i+1, "-------------")
         results = algo.train()
