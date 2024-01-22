@@ -1,3 +1,6 @@
+from gevent import monkey
+monkey.patch_all(thread=False, select=False)
+
 import logging
 from random import randint, choice
 
@@ -15,7 +18,7 @@ logging.getLogger().setLevel(logging.INFO)
 expected_tps = 1
 class TeaStoreLocust(HttpUser):
     wait_time = constant_throughput(expected_tps)
-    host = "http://teastore.local.payten.com.tr/tools.descartes.teastore.webui/"
+    host = "http://teastore-test.local.payten.com.tr/tools.descartes.teastore.webui/"
     
     @task
     def load(self) -> None:
@@ -23,7 +26,7 @@ class TeaStoreLocust(HttpUser):
         Simulates user behaviour.
         :return: None
         """
-        logging.info("Starting user.")
+        # logging.info("Starting user.")
         self.visit_home()
         self.login()
         self.browse()
@@ -33,7 +36,7 @@ class TeaStoreLocust(HttpUser):
         self.buy()
         self.visit_profile()
         self.logout()
-        logging.info("Completed user.")
+        # logging.info("Completed user.")
 
     def visit_home(self) -> None:
         """
@@ -43,7 +46,8 @@ class TeaStoreLocust(HttpUser):
         # load landing page
         res = self.client.get('/')
         if res.ok:
-            logging.info("Loaded landing page.")
+            pass
+            # logging.info("Loaded landing page.")
         else:
             logging.error(f"Could not load landing page: {res.status_code}")
 
@@ -55,14 +59,16 @@ class TeaStoreLocust(HttpUser):
         # load login page
         res = self.client.get('/login')
         if res.ok:
-            logging.info("Loaded login page.")
+            pass
+            # logging.info("Loaded login page.")
         else:
             logging.error(f"Could not load login page: {res.status_code}")
         # login random user
         user = randint(1, 99)
         login_request = self.client.post("/loginAction", params={"username": user, "password": "password"})
         if login_request.ok:
-            logging.info(f"Login with username: {user}")
+            pass
+            # logging.info(f"Login with username: {user}")
         else:
             logging.error(
                 f"Could not login with username: {user} - status: {login_request.status_code}")
@@ -79,15 +85,18 @@ class TeaStoreLocust(HttpUser):
             page = randint(1, 5)
             category_request = self.client.get("/category", params={"page": page, "category": category_id})
             if category_request.ok:
-                logging.info(f"Visited category {category_id} on page 1")
+                pass
+                # logging.info(f"Visited category {category_id} on page 1")
                 # browses random product
                 product_id = randint(7, 506)
                 product_request = self.client.get("/product", params={"id": product_id})
                 if product_request.ok:
-                    logging.info(f"Visited product with id {product_id}.")
+                    pass
+                    # logging.info(f"Visited product with id {product_id}.")
                     cart_request = self.client.post("/cartAction", params={"addToCart": "", "productid": product_id})
                     if cart_request.ok:
-                        logging.info(f"Added product {product_id} to cart.")
+                        pass
+                        # logging.info(f"Added product {product_id} to cart.")
                     else:
                         logging.error(
                             f"Could not put product {product_id} in cart - status {cart_request.status_code}")
@@ -116,7 +125,8 @@ class TeaStoreLocust(HttpUser):
         }
         buy_request = self.client.post("/cartAction", params=user_data)
         if buy_request.ok:
-            logging.info(f"Bought products.")
+            pass
+            # logging.info(f"Bought products.")
         else:
             logging.error("Could not buy products.")
 
@@ -127,7 +137,8 @@ class TeaStoreLocust(HttpUser):
         """
         profile_request = self.client.get("/profile")
         if profile_request.ok:
-            logging.info("Visited profile page.")
+            pass
+            # logging.info("Visited profile page.")
         else:
             logging.error("Could not visit profile page.")
 
@@ -138,14 +149,15 @@ class TeaStoreLocust(HttpUser):
         """
         logout_request = self.client.post("/loginAction", params={"logout": ""})
         if logout_request.ok:
-            logging.info("Successful logout.")
+            pass
+            # logging.info("Successful logout.")
         else:
             logging.error(f"Could not log out - status: {logout_request.status_code}")
 
 
 
 class CustomLoad(LoadTestShape):
-    trx_load_data = pd.read_csv("./transactions.csv")
+    trx_load_data = pd.read_csv("./locust_custom_load_shape/transactions.csv")
     trx_load = trx_load_data["transactions"].values.tolist()
     trx_load = (trx_load/np.max(trx_load)*10).astype(int)
     ct = 0
@@ -165,11 +177,15 @@ env.runner.start_shape()
 env.stop_timeout=10000
 
 
+columns = ['avg_response_time', 'med_response_time', 'current_rps',
+           'total_rps', 'num_requests', 'num_none_requests', 'num_failures', 
+           'current_fail_per_sec', 'expected_tps']
 
+result_df = pd.DataFrame(columns=columns)
 
 step = 0
 while True:
-  #time.sleep(1)
+  time.sleep(1)
   s = dict()
   s['avg_response_time'] = env.runner.stats.total.avg_response_time 
   s['med_response_time'] = env.runner.stats.total.median_response_time
@@ -179,8 +195,7 @@ while True:
   s['num_requests'] = env.runner.stats.total.num_requests
   s['num_none_requests'] = env.runner.stats.total.num_none_requests
   s['num_failures'] = env.runner.stats.total.num_failures
-  s['current_fail_per_sec'] = env.runner.stats.total.current_fail_per_sec
-  s['expected_tps'] = env.runner.target_user_count * expected_tps
+  s['expected_tps'] = env.runner.target_user_count * expected_tps * 9
 
   if step % 10 == 0:
       for key in s.keys():
@@ -188,10 +203,12 @@ while True:
       print()
   for key,value in s.items():
     print(f'{value:25.3f} ',end='')
+    
   print()
   
-  
-  #env.runner.stats.reset_all()
+  result_df.loc[step,:] = list(s.values())
+  result_df.to_csv("./locust_custom_load_shape/load_test.csv", index=False)
+  env.runner.stats.reset_all()
   step = step + 1
 
 
