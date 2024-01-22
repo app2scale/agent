@@ -12,6 +12,7 @@ import numpy as np
 from collections import OrderedDict
 from gymnasium.spaces import Discrete, Dict, MultiDiscrete, Tuple, Box
 from ray.rllib.algorithms.ppo import PPOConfig
+from ray.rllib.algorithms.dqn import DQNConfig
 
 import ssl
 import random
@@ -53,7 +54,7 @@ PROMETHEUS_HOST_URL = "http://localhost:9090"
 ALPHA = 0.6
 
 DEPLOYMENT_NAME = "teastore-webui"
-NAMESPACE = "app2scale"
+NAMESPACE = "app2scale-test"
 
 OBSERVATION_SPACE = Box(low=np.array([1, 4, 4, 0, 0]), high=np.array([6, 9, 9, 200, 200]), dtype=np.float32)
 
@@ -70,7 +71,7 @@ ray.init(ignore_reinit_error=True)
 
 class TeaStoreLocust(HttpUser):
     wait_time = constant_throughput(expected_tps)
-    host = "http://teastore.local.payten.com.tr/tools.descartes.teastore.webui/"
+    host = "http://teastore-test.local.payten.com.tr/tools.descartes.teastore.webui/"
 
     @task
     def load(self):
@@ -188,13 +189,19 @@ class CustomLoad(LoadTestShape):
     trx_load_data = pd.read_csv("./transactions.csv")
     trx_load = trx_load_data["transactions"].values.tolist()
     trx_load = (trx_load/np.max(trx_load)*20).astype(int)+1
+    indexes = [(177, 184), (661, 685), (1143, 1152), (1498, 1524), (1858, 1900)]
+    clipped_data = []
+    for idx in indexes:
+        start, end = idx
+        clipped_data.extend(trx_load[start:end+1])
+
     ct = 0
 
     
     def tick(self):
-        if self.ct >= len(self.trx_load):
+        if self.ct >= len(self.clipped_data):
             self.ct = 0
-        user_count = self.trx_load[self.ct]
+        user_count = self.clipped_data[self.ct]
         return (user_count, user_count) 
 
 load = CustomLoad()
@@ -323,7 +330,7 @@ def step(action, state, env):
     print('entering metric collection...')
     new_state[3] = previous_tps
     metrics = collect_metrics(env)  
-    new_state = metrics["num_requests"]
+    new_state[4] = metrics["num_requests"]
     previous_tps = metrics["num_requests"]
     print('updated_state', new_state)
     print('metrics collected',metrics)
@@ -336,23 +343,24 @@ def step(action, state, env):
 
     return new_state, reward, metrics
 
-config_ppo = (PPOConfig()
+config_dqn = (DQNConfig()
           .environment(
               env=None,
               action_space=ACTION_SPACE,
               observation_space=OBSERVATION_SPACE)
 
+          .training(model={"fcnet_hiddens": [64,64]},
+              gamma=0.99,
+              lr=1e-05,
+              train_batch_size=256)
           .debugging(log_level="INFO")
-          .rollouts(num_rollout_workers=0, enable_connectors=False)
-            .training(train_batch_size=32,sgd_minibatch_size=16,
-                      model ={"fcnet_hiddens": [64, 64]}, lr=0.001)
           .evaluation(off_policy_estimation_methods={})
           
           )
 
-config_ppo.rl_module(_enable_rl_module_api=False)
-config_ppo.training(_enable_learner_api=False)
-algo = config_ppo.build() 
+config_dqn.rl_module(_enable_rl_module_api=False)
+config_dqn.training(_enable_learner_api=False)
+algo = config_dqn.build() 
 
 output_columns = ["replica", "cpu", "heap", "previous_tps", "instant_tps", "inc_tps", "out_tps", 
            "cpu_usage", "memory_usage", "reward", "sum_reward", 
@@ -366,26 +374,27 @@ obs = np.append(obs, [50,50])
 done = False
 truncated = False
 sum_reward = 0
-checkpoint_dir = "/root/ray_results/PPO_None_2023-12-13_16-13-28gfb08q9q/"
-policy_name = "checkpoint_000401"
-path_to_checkpoint = checkpoint_dir + policy_name
+#checkpoint_dir = "/root/ray_results/PPO_None_2023-12-13_16-13-28gfb08q9q/"
+#policy_name = "checkpoint_000401"
+#path_to_checkpoint = checkpoint_dir + policy_name
+path_to_checkpoint = "./checkpoint_010000_act"
 algo.restore(path_to_checkpoint)
 step_count = 1
 
-for _ in range(0,2200):
+for _ in range(0,120):
 
     print("obsss", obs)
     action = algo.compute_single_action(obs)
     next_obs, reward, info = step(action,obs,env)
     sum_reward += reward
     np.set_printoptions(formatter={'float': '{:0.4f}'.format})
-    temp_output = [next_obs["replica"], next_obs["cpu"], next_obs["heap"], next_obs["previous_tps"][0],
-                   next_obs["instant_tps"][0], info["inc_tps"], info["out_tps"], info["cpu_usage"], 
+    temp_output = [next_obs[0], next_obs[1], next_obs[2], next_obs[3],
+                   next_obs[4], info["inc_tps"], info["out_tps"], info["cpu_usage"], 
                    info["memory_usage"], reward, sum_reward, info["response_time"],info["num_requests"], 
                    info["num_failures"],info["expected_tps"]]
     output.loc[step_count,:] = temp_output
     print(output)
-    output.to_csv("./test_results.csv", index=False)
+    output.to_csv("./test_results_act.csv", index=False)
     obs = next_obs
     step_count += 1
 
