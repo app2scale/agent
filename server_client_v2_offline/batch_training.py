@@ -57,17 +57,17 @@ def generate_plots(filename,  mean_q_list, is_v_gain_list,wis_v_gain_list):
     plt.savefig(filename)
 
 
-hyperparameters = {"learning_rate": [1e-05, 1e-04],
-                   "fcnet_hiddens": [[32,32],[64,64]]
+hyperparameters = {"learning_rate": [1e-05],
+                   "fcnet_hiddens": [[64,64]]
                    }
 parameter_combinations = list(product(*hyperparameters.values())) # This variable includes all combinations of the hyperparameters. ex. (1e-05, [32, 32])
 
 
-train_path = "/tmp/trainingresp-out"
-eval_path = "/tmp/evalresp-out"
-epoch_number = 15000
+train_path = "/tmp/trainingaction-out"
+eval_path = "/tmp/evalaction-out"
+epoch_number = 10000
 
-for comb in parameter_combinations[1:]:
+for comb in parameter_combinations:
     config = generate_config(train_path, eval_path, comb)
     print(f"Started training with lr: {comb[0]} and fcnet: {comb[1]}")
     mean_q_list = []

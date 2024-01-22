@@ -58,10 +58,10 @@ def convert_data_to_batch(df, writer):
 if __name__ == "__main__":
     batch_builder = SampleBatchBuilder() 
     training_writer = JsonWriter(
-        os.path.join(ray._private.utils.get_user_temp_dir(), "trainingresp-out")
+        os.path.join(ray._private.utils.get_user_temp_dir(), "trainingaction-out")
     )
     eval_writer = JsonWriter(
-        os.path.join(ray._private.utils.get_user_temp_dir(), "evalresp-out")
+        os.path.join(ray._private.utils.get_user_temp_dir(), "evalaction-out")
     )
     
     action_space = Discrete(700, start=144) #6*6*6
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     prep = get_preprocessor(observation_space)(observation_space)
     print("The preprocessor is", prep)
     episode_length = 100
-    full_data = pd.read_csv("/Users/hasan.nayir/Projects/Payten/app2scale_reinforcement_learning/server_client_v2_offline/resp_reward_data.csv")
+    full_data = pd.read_csv("/Users/hasan.nayir/Projects/Payten/app2scale_reinforcement_learning/server_client_v2_offline/action_reward_data.csv")
     training_split_ratio = 0.8
     train_df = full_data.sample(frac=training_split_ratio, random_state=42)  # Eğitim verisi
     eval_df = full_data.drop(train_df.index) 
