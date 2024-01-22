@@ -50,17 +50,13 @@ policy_name = "checkpoint_000401"
 path_to_checkpoint = checkpoint_dir + policy_name
 algo.restore(path_to_checkpoint)
 
-sample_state = {'replica': 6, 'cpu': 9, 'heap': 6, 'previous_tps': np.array([50.], dtype=np.float16), 'instant_tps': np.array([50.], dtype=np.float16)}
-action = algo.compute_single_action(sample_state)
-print("Action: ", action)
-
 time_steps = 0
 for epoch in range(2000):
     print('server side epoch loop',epoch)
     results = algo.train() 
     print('algo.train executed')
     print(pretty_print(results))
-    if epoch % 200 == 0:
+    if epoch % 50 == 0:
       checkpoint = algo.save()
       print("Last checkpoint", epoch, checkpoint)
 

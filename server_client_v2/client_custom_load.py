@@ -1,3 +1,6 @@
+from gevent import monkey
+monkey.patch_all(thread=False, select=False)
+
 from locust.env import Environment
 from ray.rllib.env.policy_client import PolicyClient
 import pandas as pd
@@ -288,6 +291,7 @@ def collect_metrics(env):
             metrics['num_requests'] = round(env.runner.stats.total.num_requests/(COLLECT_METRIC_TIME + n_trials * COLLECT_METRIC_WAIT_ON_ERROR),2)
             metrics['num_failures'] = round(env.runner.stats.total.num_failures,2)
             metrics['response_time'] = round(env.runner.stats.total.avg_response_time,2)
+            print(env.runner.target_user_count, expected_tps)
             metrics['performance'] = min(round(metrics['num_requests'] /  (env.runner.target_user_count * expected_tps*9),6),1)
             metrics['expected_tps'] = env.runner.target_user_count * expected_tps*9 # 9 req for each user
             metrics['utilization'] = 0.5*min(metrics["cpu_usage"]/(state["cpu"]/10),1)+ 0.5*min(metrics["memory_usage"]/(state["heap"]/10),1)
@@ -384,6 +388,6 @@ while True:
                    info["num_failures"],info["expected_tps"]]
         
     output.loc[step_count-1,:] = temp_output
-    output.to_csv("output_3.csv", index=False)
+    output.to_csv("output_4.csv", index=False)
     print(output,flush=True)
     step_count += 1
