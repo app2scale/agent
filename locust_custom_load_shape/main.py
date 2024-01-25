@@ -3,7 +3,7 @@ monkey.patch_all(thread=False, select=False)
 
 import logging
 from random import randint, choice
-
+from kubernetes import client, config
 from locust import HttpUser, task, constant_throughput
 from locust.shape import LoadTestShape
 from locust.env import Environment
@@ -28,14 +28,14 @@ class TeaStoreLocust(HttpUser):
         """
         # logging.info("Starting user.")
         self.visit_home()
-        self.login()
-        self.browse()
+        #self.login()
+        #self.browse()
         # 50/50 chance to buy
         #choice_buy = choice([True, False])
         #if choice_buy:
-        self.buy()
-        self.visit_profile()
-        self.logout()
+       # self.buy()
+        #self.visit_profile()
+        #self.logout()
         # logging.info("Completed user.")
 
     def visit_home(self) -> None:
@@ -64,7 +64,8 @@ class TeaStoreLocust(HttpUser):
         else:
             logging.error(f"Could not load login page: {res.status_code}")
         # login random user
-        user = randint(1, 99)
+        #user = randint(1, 99)
+        user = 2
         login_request = self.client.post("/loginAction", params={"username": user, "password": "password"})
         if login_request.ok:
             pass
@@ -81,14 +82,16 @@ class TeaStoreLocust(HttpUser):
         # execute browsing action randomly up to 5 times
         for i in range(1, 2):
             # browses random category and page
-            category_id = randint(2, 6)
-            page = randint(1, 5)
+            #category_id = randint(2, 6)
+            #page = randint(1, 5)
+            category_id = 3
+            page = 2
             category_request = self.client.get("/category", params={"page": page, "category": category_id})
             if category_request.ok:
-                pass
                 # logging.info(f"Visited category {category_id} on page 1")
                 # browses random product
-                product_id = randint(7, 506)
+                #product_id = randint(7, 506)
+                product_id = 10
                 product_request = self.client.get("/product", params={"id": product_id})
                 if product_request.ok:
                     pass
@@ -157,7 +160,7 @@ class TeaStoreLocust(HttpUser):
 
 
 class CustomLoad(LoadTestShape):
-    trx_load_data = pd.read_csv("./locust_custom_load_shape/transactions.csv")
+    trx_load_data = pd.read_csv("./transactions.csv")
     trx_load = trx_load_data["transactions"].values.tolist()
     trx_load = (trx_load/np.max(trx_load)*10).astype(int)
     ct = 0
@@ -172,43 +175,72 @@ class CustomLoad(LoadTestShape):
 load = CustomLoad()
 env = Environment(user_classes=[TeaStoreLocust], shape_class=load)
 env.create_local_runner()
-web_ui = env.create_web_ui("127.0.0.1", 8089)
+#web_ui = env.create_web_ui("127.0.0.1", 8089)
 env.runner.start_shape() 
 env.stop_timeout=10000
 
+def get_running_pods():
+    config.load_kube_config()
+    v1 = client.CoreV1Api()
+    pods = v1.list_namespaced_pod("app2scale-test", label_selector="run=teastore-webui")
+    running_pods = []
+    for pod in pods.items:
+        if pod.status.phase.lower() == "running" and pod.status.container_statuses[0].ready and pod.metadata.deletion_timestamp == None:
+            running_pods.append(pod.metadata.name)
+    return running_pods, len(pods.items)
 
-columns = ['avg_response_time', 'med_response_time', 'current_rps',
-           'total_rps', 'num_requests', 'num_none_requests', 'num_failures', 
-           'current_fail_per_sec', 'expected_tps']
+def get_deployment_info():
+    config.load_kube_config()
+    v1 = client.AppsV1Api()
+    deployment = v1.read_namespaced_deployment("teastore-webui", "app2scale-test")
+    state = get_state(deployment)
+    return deployment, state
+
+def get_state(deployment):
+    replica = deployment.spec.replicas
+    cpu = int(int(deployment.spec.template.spec.containers[0].resources.limits["cpu"][:-1])/100)
+    heap = int(int(deployment.spec.template.spec.containers[0].env[2].value[4:-1])/100)
+    return np.array([replica, cpu, heap])
+
+
+
+columns = ['avg_response_time', 'current_rps', 'num_requests', 'num_failures', 'expected_tps']
 
 result_df = pd.DataFrame(columns=columns)
 
 step = 0
 while True:
+  deployment, state = get_deployment_info()
+  while True:
+      running_pods, number_of_all_pods = get_running_pods()
+      if len(running_pods) == state[0] and state[0] == number_of_all_pods and running_pods:
+        break
+      else:
+        time.sleep(2)
+  env.runner.stats.reset_all()
   time.sleep(1)
   s = dict()
   s['avg_response_time'] = env.runner.stats.total.avg_response_time 
-  s['med_response_time'] = env.runner.stats.total.median_response_time
+  #s['med_response_time'] = env.runner.stats.total.median_response_time
   s['current_rps'] = env.runner.stats.total.current_rps
-  s['current_fail_per_sec'] = env.runner.stats.total.current_fail_per_sec
-  s['total_rps'] = env.runner.stats.total.total_rps
+  #s['current_fail_per_sec'] = env.runner.stats.total.current_fail_per_sec
+  #s['total_rps'] = env.runner.stats.total.total_rps
   s['num_requests'] = env.runner.stats.total.num_requests
-  s['num_none_requests'] = env.runner.stats.total.num_none_requests
+  #s['num_none_requests'] = env.runner.stats.total.num_none_requests
   s['num_failures'] = env.runner.stats.total.num_failures
   s['expected_tps'] = env.runner.target_user_count * expected_tps * 9
 
-  if step % 10 == 0:
-      for key in s.keys():
-          print(f'{key:25s} ',end='')
-      print()
-  for key,value in s.items():
-    print(f'{value:25.3f} ',end='')
-    
-  print()
+  #if step % 10 == 0:
+  #    for key in s.keys():
+  #        print(f'{key:25s} ',end='')
+  #    print()
+  #for key,value in s.items():
+  #    print(f'{value:25.3f} ',end='') 
+  #print()
   
   result_df.loc[step,:] = list(s.values())
-  result_df.to_csv("./locust_custom_load_shape/load_test.csv", index=False)
-  env.runner.stats.reset_all()
+  print(result_df)
+  result_df.to_csv("./load_test.csv", index=False)
   step = step + 1
 
 
