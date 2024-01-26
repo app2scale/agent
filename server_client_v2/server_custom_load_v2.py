@@ -19,7 +19,7 @@ def policy_input(context):
 config = (PPOConfig()
           .environment(
               env=None,
-              action_space=Discrete(556, start=144),
+              action_space=Discrete(216),
               observation_space=Box(low=np.array([1, 4, 4, 0, 0]), high=np.array([6, 9, 9, 200, 200]), dtype=np.float32))
 
           .debugging(log_level="INFO")

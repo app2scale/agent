@@ -16,7 +16,7 @@ import random
 from locust.shape import LoadTestShape
 import logging
 ssl._create_default_https_context = ssl._create_unverified_context
-
+from itertools import product
 
 MAX_STEPS = 32
 previous_tps = 0
@@ -55,7 +55,16 @@ OBSERVATION_SPACE = Box(low=np.array([1, 4, 4, 0, 0]), high=np.array([6, 9, 9, 2
     # heap : 4,5,6,7,8,9 -> 0,1,2,3,4,5   +   4
 """
 
-ACTION_SPACE = Discrete(556, start=144)
+ACTION_SPACE = Discrete(216) # index of the possible states
+replica = [1, 2, 3, 4, 5, 6]
+cpu = [4, 5, 6, 7, 8, 9]
+heap = [4, 5, 6, 7, 8, 9]
+
+POSSIBLE_STATES = np.array(list(product(replica, cpu, heap)))
+
+
+
+
 
 POLICY_CLIENT = PolicyClient("http://localhost:9900", inference_mode="local") 
 METRIC_SERVER = PrometheusConnect(url=PROMETHEUS_HOST_URL, disable_ssl=True)
@@ -184,7 +193,7 @@ class CustomLoad(LoadTestShape):
 
     trx_load_data = pd.read_csv("./transactions.csv")
     trx_load = trx_load_data["transactions"].values.tolist()
-    trx_load = (trx_load/np.max(trx_load)*20).astype(int)+1
+    trx_load = (trx_load/np.max(trx_load)*180).astype(int)+1
     indexes = [(177, 184), (661, 685), (1143, 1152), (1498, 1524), (1858, 1900)]
     clipped_data = []
     for idx in indexes:
@@ -220,14 +229,13 @@ def get_deployment_info():
 
 def update_and_deploy_deployment_specs(target_state):
     deployment, _ = get_deployment_info()
-    deployment.spec.replicas = int(target_state["replica"])
-    deployment.spec.template.spec.containers[0].resources.limits["cpu"] = str(target_state["cpu"]*100) + "m"
-    deployment.spec.template.spec.containers[0].env[2].value = "-Xmx" + str(target_state["heap"]*100) + "M"
+    deployment.spec.replicas = int(target_state[0])
+    deployment.spec.template.spec.containers[0].resources.limits["cpu"] = str(target_state[1]*100) + "m"
+    deployment.spec.template.spec.containers[0].env[2].value = "-Xmx" + str(target_state[2]*100) + "M"
 
     config.load_kube_config()
     v1 = client.AppsV1Api()
     v1.patch_namespaced_deployment(DEPLOYMENT_NAME, NAMESPACE, deployment)
-
 
 def get_running_pods():
     config.load_kube_config()
@@ -244,11 +252,12 @@ def collect_metrics(env):
     deployment, state = get_deployment_info()
     while True:
         running_pods, number_of_all_pods = get_running_pods()
-        if len(running_pods) == state["replica"] and state["replica"] == number_of_all_pods and running_pods:
+        if len(running_pods) == state[0] and state[0] == number_of_all_pods and running_pods:
             print("İnitial running pods", running_pods)
             break
         else:
             time.sleep(CHECK_ALL_PODS_READY_TIME)
+    time.sleep(WARM_UP_PERIOD)
     env.runner.stats.reset_all()
     time.sleep(COLLECT_METRIC_TIME)
     n_trials = 0
@@ -284,9 +293,9 @@ def collect_metrics(env):
             time.sleep(COLLECT_METRIC_WAIT_ON_ERROR)
         else:
             #print("TEST", running_pods, len(running_pods))
-            metrics['replica'] = state['replica']
-            metrics['cpu'] = state['cpu']
-            metrics['heap'] = state['heap']
+            metrics['replica'] = state[0]
+            metrics['cpu'] = state[1]
+            metrics['heap'] = state[2]
             metrics["inc_tps"] = round(inc_tps/len(running_pods))
             metrics["out_tps"] = round(out_tps/len(running_pods))
             metrics["cpu_usage"] = round(cpu_usage/len(running_pods),3)
@@ -296,8 +305,8 @@ def collect_metrics(env):
             metrics['response_time'] = round(env.runner.stats.total.avg_response_time,2)
             #print(env.runner.target_user_count, expected_tps)
             metrics['performance'] = min(round(metrics['num_requests'] /  (env.runner.target_user_count * expected_tps),6),1)
-            metrics['expected_tps'] = env.runner.target_user_count * expected_tps*9 # 9 req for each user
-            metrics['utilization'] = 0.5*min(metrics["cpu_usage"]/(state["cpu"]/10),1)+ 0.5*min(metrics["memory_usage"]/(state["heap"]/10),1)
+            metrics['expected_tps'] = env.runner.target_user_count * expected_tps # 9 req for each user, it has changed now we just send request to the main page
+            metrics['utilization'] = 0.5*min(metrics["cpu_usage"]/(state[1]/10),1)+ 0.5*min(metrics["memory_usage"]/(state[2]/10),1)
             print('metric collection succesfull')
             load.ct += 1
             return metrics
@@ -309,18 +318,20 @@ def step(action, state, env):
     global previous_tps
     print('Entering step function')
     temp_state = state.copy()
-    temp_state[0] = action // 100
-    temp_state[1] = (action // 10) % 10
-    temp_state[2] = action % 10
-    updated_state = np.array([temp_state[0], temp_state[1], temp_state[2]])
+    #temp_state[0] = action // 100
+    #temp_state[1] = (action // 10) % 10
+    #temp_state[2] = action % 10
+    temp_state = POSSIBLE_STATES[action]
+    #updated_state = np.array([temp_state[0], temp_state[1], temp_state[2]])
+    updated_state = temp_state
     temp_updated_state = np.array([temp_state[0], temp_state[1], temp_state[2], 50, 50])
 
     print('applying the state...')
+    print("updated state", updated_state)
     update_and_deploy_deployment_specs(updated_state)
     new_state = temp_updated_state
     print('Entering cooldown period...')
     time.sleep(WARM_UP_PERIOD)
-    time.sleep(COOLDOWN_PERIOD)
     print('cooldown period ended...')
     print('entering metric collection...')
     new_state[3] = previous_tps
@@ -360,7 +371,7 @@ while True:
     if step_count > 1:
         action = POLICY_CLIENT.get_action(episode_id, prev_state)
     else:
-        action = prev_state[0]*100+prev_state[1]*10+prev_state[2] - 144
+        action = np.where(np.all(prev_state == POSSIBLE_STATES, axis=1))[0][0]
     state, reward, info = step(action, prev_state, env)
     if info is None or reward is None:
         print('info or reward is None so skip')
