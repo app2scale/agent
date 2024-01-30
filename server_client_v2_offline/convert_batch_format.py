@@ -46,6 +46,7 @@ def convert_data_to_batch(df, writer):
                 truncateds=truncated,
                 infos=info,
                 new_obs=prep.transform(new_obs),
+
             )
             obs = new_obs
             prev_action = action
@@ -56,7 +57,7 @@ def convert_data_to_batch(df, writer):
 
 
 if __name__ == "__main__":
-    batch_builder = SampleBatchBuilder() 
+    batch_builder = SampleBatchBuilder()
     training_writer = JsonWriter(
         os.path.join(ray._private.utils.get_user_temp_dir(), "trainingaction-out")
     )

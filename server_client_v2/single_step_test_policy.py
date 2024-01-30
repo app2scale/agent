@@ -23,6 +23,6 @@ spaces = dict(
 model_input = flatten_inputs_to_1d_tensor(struct_torch, spaces_struct=spaces)
 print(model_input.size())
 action = restored_policy.compute_single_action(model_input)
-print(action)
+print(action[2])
 
 

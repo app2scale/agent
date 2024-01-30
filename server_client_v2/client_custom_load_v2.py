@@ -17,6 +17,8 @@ from locust.shape import LoadTestShape
 import logging
 ssl._create_default_https_context = ssl._create_unverified_context
 from itertools import product
+import time
+
 
 MAX_STEPS = 32
 previous_tps = 0
@@ -329,6 +331,7 @@ def step(action, state, env):
     print('applying the state...')
     print("updated state", updated_state)
     update_and_deploy_deployment_specs(updated_state)
+    deployment_time = time.time()
     new_state = temp_updated_state
     print('Entering cooldown period...')
     time.sleep(WARM_UP_PERIOD)
@@ -347,14 +350,14 @@ def step(action, state, env):
     metrics['reward'] = reward
     print('Calculated reward',reward)
 
-    return new_state, reward, metrics
+    return new_state, reward, metrics, deployment_time
 
 
 
 
 output_columns = ["replica", "cpu", "heap", "previous_tps", "instant_tps", "inc_tps", "out_tps", 
            "cpu_usage", "memory_usage", "reward", "sum_reward", 
-           "response_time", "num_request", "num_failures","expected_tps"]
+           "response_time", "num_request", "num_failures","expected_tps", "timestamp"]
 
 output = pd.DataFrame(columns=output_columns)
 episode_id = POLICY_CLIENT.start_episode(training_enabled=True)
@@ -372,7 +375,7 @@ while True:
         action = POLICY_CLIENT.get_action(episode_id, prev_state)
     else:
         action = np.where(np.all(prev_state == POSSIBLE_STATES, axis=1))[0][0]
-    state, reward, info = step(action, prev_state, env)
+    state, reward, info, deployment_time = step(action, prev_state, env)
     if info is None or reward is None:
         print('info or reward is None so skip')
         prev_state = state
@@ -398,7 +401,7 @@ while True:
     temp_output = [state[0], state[1], state[2], state[3],
                    state[4], info["inc_tps"], info["out_tps"], info["cpu_usage"], 
                    info["memory_usage"], reward, sum_reward, info["response_time"],info["num_requests"], 
-                   info["num_failures"],info["expected_tps"]]
+                   info["num_failures"],info["expected_tps"], deployment_time]
         
     output.loc[step_count-1,:] = temp_output
     output.to_csv("output_new_1.csv", index=False)
