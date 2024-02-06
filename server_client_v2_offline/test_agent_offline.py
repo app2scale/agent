@@ -23,13 +23,13 @@ from ray.rllib.env.policy_server_input import PolicyServerInput
 from locust import HttpUser, task, constant, constant_throughput, events
 from locust.shape import LoadTestShape
 
-
 ssl._create_default_https_context = ssl._create_unverified_context
+from itertools import product
+import time
 
 
 
-
-
+MAX_STEPS = 32
 previous_tps = 0
 METRIC_DICT = {
     "container_network_receive_bytes_total": "inc_tps",
@@ -37,6 +37,8 @@ METRIC_DICT = {
     "container_cpu_usage_seconds_total": "cpu_usage",
     "container_memory_working_set_bytes": "memory_usage"
 }
+
+WARM_UP_PERIOD = 60
 # How many seconds to wait for transition
 COOLDOWN_PERIOD = 0
 # How many seconds to wait for metric collection
@@ -58,7 +60,12 @@ NAMESPACE = "app2scale-test"
 
 OBSERVATION_SPACE = Box(low=np.array([1, 4, 4, 0, 0]), high=np.array([6, 9, 9, 200, 200]), dtype=np.float32)
 
-ACTION_SPACE = Discrete(700, start=144)
+ACTION_SPACE = Discrete(216) # index of the possible states
+replica = [1, 2, 3, 4, 5, 6]
+cpu = [4, 5, 6, 7, 8, 9]
+heap = [4, 5, 6, 7, 8, 9]
+
+POSSIBLE_STATES = np.array(list(product(replica, cpu, heap)))
 METRIC_SERVER = PrometheusConnect(url=PROMETHEUS_HOST_URL, disable_ssl=True)
 
 
@@ -76,14 +83,14 @@ class TeaStoreLocust(HttpUser):
     @task
     def load(self):
         self.visit_home()
-        self.login()
-        self.browse()
+        # self.login()
+        # self.browse()
         # 50/50 chance to buy
         #choice_buy = random.choice([True, False])
         #if choice_buy:
-        self.buy()
-        self.visit_profile()
-        self.logout()
+        # self.buy()
+        # self.visit_profile()
+        # self.logout()
 
     def visit_home(self):
 
@@ -288,7 +295,6 @@ def collect_metrics(env):
             n_trials += 1
             time.sleep(COLLECT_METRIC_WAIT_ON_ERROR)
         else:
-            print("TEST", running_pods, len(running_pods))
             metrics['replica'] = state[0]
             metrics['cpu'] = state[1]
             metrics['heap'] = state[2]
@@ -314,24 +320,23 @@ def step(action, state, env):
     global previous_tps
     print('Entering step function')
     temp_state = state.copy()
-    temp_state[0] = action // 100
-    temp_state[1] = (action // 10) % 10
-    temp_state[2] = action % 10
-    updated_state = np.array([temp_state[0], temp_state[1], temp_state[2]])
+    temp_state = POSSIBLE_STATES[action]
+    updated_state = temp_state
     temp_updated_state = np.array([temp_state[0], temp_state[1], temp_state[2], 50, 50])
 
     print('applying the state...')
-    print(updated_state)
+    print("updated state", updated_state)
     update_and_deploy_deployment_specs(updated_state)
+    deployment_time = time.time()
     new_state = temp_updated_state
     print('Entering cooldown period...')
-    time.sleep(COOLDOWN_PERIOD)
+    time.sleep(WARM_UP_PERIOD)
     print('cooldown period ended...')
     print('entering metric collection...')
     new_state[3] = previous_tps
-    metrics = collect_metrics(env)  
+    metrics = collect_metrics(env)
     new_state[4] = metrics["num_requests"]
-    previous_tps = metrics["num_requests"]
+    previous_tps = metrics["num_requests"]  
     print('updated_state', new_state)
     print('metrics collected',metrics)
     reward = ALPHA*metrics['performance'] + (1-ALPHA)*metrics['utilization']
@@ -341,7 +346,7 @@ def step(action, state, env):
     metrics['reward'] = reward
     print('Calculated reward',reward)
 
-    return new_state, reward, metrics
+    return new_state, reward, metrics, deployment_time
 
 config_dqn = (DQNConfig()
           .environment(
@@ -364,7 +369,7 @@ algo = config_dqn.build()
 
 output_columns = ["replica", "cpu", "heap", "previous_tps", "instant_tps", "inc_tps", "out_tps", 
            "cpu_usage", "memory_usage", "reward", "sum_reward", 
-           "response_time", "num_request", "num_failures","expected_tps"]
+           "response_time", "num_request", "num_failures","expected_tps", "timestamp"]
 output = pd.DataFrame(columns=output_columns)
 _, obs = get_deployment_info()
 obs = np.append(obs, [50,50])
@@ -383,7 +388,6 @@ step_count = 1
 
 for _ in range(0,120):
 
-    print("obsss", obs)
     action = algo.compute_single_action(obs)
     next_obs, reward, info = step(action,obs,env)
     sum_reward += reward
@@ -394,7 +398,7 @@ for _ in range(0,120):
                    info["num_failures"],info["expected_tps"]]
     output.loc[step_count,:] = temp_output
     print(output)
-    output.to_csv("./test_results_act.csv", index=False)
+    output.to_csv("./test_results_new.csv", index=False)
     obs = next_obs
     step_count += 1
 
