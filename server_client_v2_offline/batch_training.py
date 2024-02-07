@@ -16,7 +16,7 @@ def generate_config(train_path, eval_path, hyper_params):
     config = (
         DQNConfig()
         .environment(env=None,
-                    action_space=Discrete(700, start=144), 
+                    action_space=Discrete(216), 
                     observation_space=Box(low=np.array([1, 4, 4, 0, 0]), high=np.array([6, 9, 9, 200, 200]), dtype=np.float32)
                     )
         .training(model={"fcnet_hiddens": fcnet_hiddens},
@@ -63,8 +63,8 @@ hyperparameters = {"learning_rate": [1e-05],
 parameter_combinations = list(product(*hyperparameters.values())) # This variable includes all combinations of the hyperparameters. ex. (1e-05, [32, 32])
 
 
-train_path = "/tmp/trainingaction-out"
-eval_path = "/tmp/evalaction-out"
+train_path = "/tmp/training-out"
+eval_path = "/tmp/eval-out"
 epoch_number = 10000
 
 for comb in parameter_combinations:
