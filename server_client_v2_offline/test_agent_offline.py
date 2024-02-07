@@ -195,7 +195,7 @@ class CustomLoad(LoadTestShape):
 
     trx_load_data = pd.read_csv("./transactions.csv")
     trx_load = trx_load_data["transactions"].values.tolist()
-    trx_load = (trx_load/np.max(trx_load)*20).astype(int)+1
+    trx_load = (trx_load/np.max(trx_load)*180).astype(int)+1
     indexes = [(177, 184), (661, 685), (1143, 1152), (1498, 1524), (1858, 1900)]
     clipped_data = []
     for idx in indexes:
@@ -305,8 +305,8 @@ def collect_metrics(env):
             metrics['num_requests'] = round(env.runner.stats.total.num_requests/(COLLECT_METRIC_TIME + n_trials * COLLECT_METRIC_WAIT_ON_ERROR),2)
             metrics['num_failures'] = round(env.runner.stats.total.num_failures,2)
             metrics['response_time'] = round(env.runner.stats.total.avg_response_time,2)
-            metrics['performance'] = min(round(metrics['num_requests'] /  (env.runner.target_user_count * expected_tps*9),6),1)
-            metrics['expected_tps'] = env.runner.target_user_count * expected_tps*9 # 9 req for each user
+            metrics['performance'] = min(round(metrics['num_requests'] /  (env.runner.target_user_count * expected_tps),6),1)
+            metrics['expected_tps'] = env.runner.target_user_count * expected_tps # 9 req for each user
             metrics['utilization'] = 0.5*min(metrics["cpu_usage"]/(state[1]/10),1)+ 0.5*min(metrics["memory_usage"]/(state[2]/10),1)
             print('metric collection succesfull')
             load.ct += 1
@@ -382,20 +382,20 @@ sum_reward = 0
 #checkpoint_dir = "/root/ray_results/PPO_None_2023-12-13_16-13-28gfb08q9q/"
 #policy_name = "checkpoint_000401"
 #path_to_checkpoint = checkpoint_dir + policy_name
-path_to_checkpoint = "./checkpoint_010000_act"
+path_to_checkpoint = "./checkpoint_010000"
 algo.restore(path_to_checkpoint)
 step_count = 1
 
 for _ in range(0,120):
 
     action = algo.compute_single_action(obs)
-    next_obs, reward, info = step(action,obs,env)
+    next_obs, reward, info, timestamp = step(action,obs,env)
     sum_reward += reward
     np.set_printoptions(formatter={'float': '{:0.4f}'.format})
     temp_output = [next_obs[0], next_obs[1], next_obs[2], next_obs[3],
                    next_obs[4], info["inc_tps"], info["out_tps"], info["cpu_usage"], 
                    info["memory_usage"], reward, sum_reward, info["response_time"],info["num_requests"], 
-                   info["num_failures"],info["expected_tps"]]
+                   info["num_failures"],info["expected_tps"], timestamp]
     output.loc[step_count,:] = temp_output
     print(output)
     output.to_csv("./test_results_new.csv", index=False)
