@@ -382,7 +382,7 @@ sum_reward = 0
 #checkpoint_dir = "/root/ray_results/PPO_None_2023-12-13_16-13-28gfb08q9q/"
 #policy_name = "checkpoint_000401"
 #path_to_checkpoint = checkpoint_dir + policy_name
-path_to_checkpoint = "./checkpoint_010000"
+path_to_checkpoint = "./checkpoint_006000_resp_new"
 algo.restore(path_to_checkpoint)
 step_count = 1
 
@@ -398,7 +398,7 @@ for _ in range(0,120):
                    info["num_failures"],info["expected_tps"], timestamp]
     output.loc[step_count,:] = temp_output
     print(output)
-    output.to_csv("./test_results_new.csv", index=False)
+    output.to_csv("./test_results_resp_new.csv", index=False)
     obs = next_obs
     step_count += 1
 
