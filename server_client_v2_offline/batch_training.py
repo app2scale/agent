@@ -65,7 +65,7 @@ parameter_combinations = list(product(*hyperparameters.values())) # This variabl
 
 train_path = "/tmp/training-out"
 eval_path = "/tmp/eval-out"
-epoch_number = 5000
+epoch_number = 4000
 
 for comb in parameter_combinations:
     config = generate_config(train_path, eval_path, comb)

@@ -53,7 +53,7 @@ CHECK_ALL_PODS_READY_TIME = 2
 EPISODE_LENGTH = 100
 PROMETHEUS_HOST_URL = "http://localhost:9090"
 # Weight of the performance in the reward function
-ALPHA = 0.6
+ALPHA = 0.5
 
 DEPLOYMENT_NAME = "teastore-webui"
 NAMESPACE = "app2scale-test"
@@ -307,7 +307,8 @@ def collect_metrics(env):
             metrics['response_time'] = round(env.runner.stats.total.avg_response_time,2)
             metrics['performance'] = min(round(metrics['num_requests'] /  (env.runner.target_user_count * expected_tps),6),1)
             metrics['expected_tps'] = env.runner.target_user_count * expected_tps # 9 req for each user
-            metrics['utilization'] = 0.5*min(metrics["cpu_usage"]/(state[1]/10),1)+ 0.5*min(metrics["memory_usage"]/(state[2]/10),1)
+            # metrics['utilization'] = 0.5*min(metrics["cpu_usage"]/(state[1]/10),1)+ 0.5*min(metrics["memory_usage"]/(state[2]/10),1)
+            metrics['utilization'] = min(metrics["cpu_usage"]/(state[1]/10),1)
             print('metric collection succesfull')
             load.ct += 1
             return metrics

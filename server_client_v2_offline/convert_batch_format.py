@@ -84,7 +84,7 @@ if __name__ == "__main__":
     # full_data_1 = pd.read_csv("/Users/hasan.nayir/Projects/Payten/app2scale_reinforcement_learning/server_client_v2/output_new_1.csv")
     # full_data_2 = pd.read_csv("/Users/hasan.nayir/Projects/Payten/app2scale_reinforcement_learning/server_client_v2/output_new_1_test_deployment.csv")
     # full_data = pd.concat([full_data_1, full_data_2]).reset_index()
-    full_data = pd.read_csv("/Users/hasan.nayir/Projects/Payten/app2scale_reinforcement_learning/server_client_v2_offline/response_time_new_data.csv")
+    full_data = pd.read_csv("/Users/hasan.nayir/Projects/Payten/app2scale_reinforcement_learning/server_client_v2_offline/cpu_request_new_data.csv")
     training_split_ratio = 0.8
     train_df = full_data.sample(frac=training_split_ratio, random_state=42)  # Eğitim verisi
     eval_df = full_data.drop(train_df.index) 
