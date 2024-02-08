@@ -83,14 +83,14 @@ class TeaStoreLocust(HttpUser):
     @task
     def load(self):
         self.visit_home()
-        # self.login()
-        # self.browse()
+        self.login()
+        self.browse()
         # 50/50 chance to buy
         #choice_buy = random.choice([True, False])
         #if choice_buy:
         # self.buy()
-        # self.visit_profile()
-        # self.logout()
+        self.visit_profile()
+        self.logout()
 
     def visit_home(self):
 
@@ -126,13 +126,11 @@ class TeaStoreLocust(HttpUser):
             # browses random category and page
             category_id = random.randint(2, 6)
             page = random.randint(1, 5)
-            #page = 1
             category_request = self.client.get("/category", params={"page": page, "category": category_id})
             if category_request.ok:
                 # logging.info(f"Visited category {category_id} on page 1")
                 # browses random product
-                product_id = random.randint(7, 506)
-                #product_id = 8
+                product_id = random.randint((category_id-2)*100+7+(page-1)*20, (category_id-2)*100+26+(page-1)*20)
                 product_request = self.client.get("/product", params={"id": product_id})
                 if product_request.ok:
                     #logging.info(f"Visited product with id {product_id}.")

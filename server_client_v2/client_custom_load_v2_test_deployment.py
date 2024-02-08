@@ -44,7 +44,7 @@ CHECK_ALL_PODS_READY_TIME = 2
 EPISODE_LENGTH = 100
 PROMETHEUS_HOST_URL = "http://localhost:9090"
 # Weight of the performance in the reward function
-ALPHA = 0.6
+ALPHA = 0.8
 
 DEPLOYMENT_NAME = "teastore-webui"
 NAMESPACE = "app2scale-test"
@@ -81,14 +81,14 @@ class TeaStoreLocust(HttpUser):
     @task
     def load(self):
         self.visit_home()
-        #self.login()
-        #self.browse()
+        self.login()
+        self.browse()
         # 50/50 chance to buy
         #choice_buy = random.choice([True, False])
         #if choice_buy:
         #self.buy()
-        #self.visit_profile()
-        #self.logout()
+        self.visit_profile()
+        self.logout()
 
     def visit_home(self):
 
@@ -195,7 +195,7 @@ class CustomLoad(LoadTestShape):
 
     trx_load_data = pd.read_csv("./transactions.csv")
     trx_load = trx_load_data["transactions"].values.tolist()
-    trx_load = (trx_load/np.max(trx_load)*180).astype(int)+1
+    trx_load = (trx_load/np.max(trx_load)*20).astype(int)+1
     indexes = [(177, 184), (661, 685), (1143, 1152), (1498, 1524), (1858, 1900)]
     clipped_data = []
     for idx in indexes:
@@ -307,7 +307,7 @@ def collect_metrics(env):
             metrics['response_time'] = round(env.runner.stats.total.avg_response_time,2)
             #print(env.runner.target_user_count, expected_tps)
             metrics['performance'] = min(round(metrics['num_requests'] /  (env.runner.target_user_count * expected_tps),6),1)
-            metrics['expected_tps'] = env.runner.target_user_count * expected_tps # 9 req for each user, it has changed now we just send request to the main page
+            metrics['expected_tps'] = env.runner.target_user_count * expected_tps*8 # 9 req for each user, it has changed now we just send request to the main page
             metrics['utilization'] = 0.5*min(metrics["cpu_usage"]/(state[1]/10),1)+ 0.5*min(metrics["memory_usage"]/(state[2]/10),1)
             print('metric collection succesfull')
             load.ct += 1
@@ -404,6 +404,6 @@ while True:
                    info["num_failures"],info["expected_tps"], deployment_time]
         
     output.loc[step_count-1,:] = temp_output
-    output.to_csv("output_new_1_test_deployment.csv", index=False)
+    output.to_csv("output_browse_1_test_deployment.csv", index=False)
     print(output,flush=True)
     step_count += 1
