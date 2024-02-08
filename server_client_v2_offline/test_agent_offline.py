@@ -383,7 +383,7 @@ sum_reward = 0
 #checkpoint_dir = "/root/ray_results/PPO_None_2023-12-13_16-13-28gfb08q9q/"
 #policy_name = "checkpoint_000401"
 #path_to_checkpoint = checkpoint_dir + policy_name
-path_to_checkpoint = "./checkpoint_006000_resp_new"
+path_to_checkpoint = "./cpu_req_4000"
 algo.restore(path_to_checkpoint)
 step_count = 1
 
