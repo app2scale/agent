@@ -200,6 +200,20 @@ def get_state(deployment):
     heap = int(int(deployment.spec.template.spec.containers[0].env[2].value[4:-1])/100)
     return np.array([replica, cpu, heap])
 
+def get_usage_metrics_from_server(running_pods_array):
+    config.load_kube_config()
+    api = client.CustomObjectsApi()
+    k8s_pods = api.list_namespaced_custom_object("metrics.k8s.io", "v1beta1", "app2scale-test", "pods")
+    usage_metric_server = {}
+
+    for stats in k8s_pods['items']:
+        if stats["metadata"]["name"] in running_pods_array:
+            usage_metric_server[stats["metadata"]["name"]] = [round(float(stats["containers"][0]["usage"]["cpu"].rstrip('n'))/1e6), 
+                                                          round(float(stats["containers"][0]["usage"]["memory"].rstrip('Ki'))/1024)]
+            
+    usage_metric_server["cpu"], usage_metric_server["memory"] = np.mean(np.array(list(usage_metric_server.values()))[:,0]), np.mean(np.array(list(usage_metric_server.values()))[:,1])
+    return usage_metric_server
+
 WARM_UP_PERIOD = 60
 COOLDOWN_PERIOD = 0
 # How many seconds to wait for metric collection
@@ -254,11 +268,14 @@ def collect_metrics(env):
             time.sleep(COLLECT_METRIC_WAIT_ON_ERROR)
         else:
             #print("TEST", running_pods, len(running_pods))
+            metric_server = get_usage_metrics_from_server(running_pods)
             metrics['replica'] = state[0]
             metrics['cpu'] = state[1]
             metrics['heap'] = state[2]
-            metrics["cpu_usage"] = round(cpu_usage/len(running_pods),3)
-            metrics["memory_usage"] = round(memory_usage/len(running_pods),3)
+            metrics["cpu_usage_prom"] = round(cpu_usage/len(running_pods),3)
+            metrics["memory_usage_prom"] = round(memory_usage/len(running_pods),3)
+            metrics["cpu_usage_server"] = metric_server["cpu"]
+            metrics["memory_usage_server"] = metric_server["memory"]
             metrics['num_requests'] = round(env.runner.stats.total.num_requests/(COLLECT_METRIC_TIME + n_trials * COLLECT_METRIC_WAIT_ON_ERROR),2)
             metrics['num_failures'] = round(env.runner.stats.total.num_failures,2)
             metrics['response_time'] = round(env.runner.stats.total.avg_response_time,2)
@@ -266,6 +283,10 @@ def collect_metrics(env):
             #metrics['performance'] = min(round(metrics['num_requests'] /  (env.runner.target_user_count * expected_tps),6),1)
             metrics['expected_tps'] = env.runner.target_user_count * expected_tps*8 # 9 req for each user, it has changed now we just send request to the main page
             #metrics['utilization'] = 0.5*min(metrics["cpu_usage"]/(state[1]/10),1)+ 0.5*min(metrics["memory_usage"]/(state[2]/10),1)
+
+
+
+ 
             print('metric collection succesfull')
             load.ct += 1
             return metrics
@@ -273,7 +294,8 @@ def collect_metrics(env):
 
 
 columns = ["replica", "cpu", "heap", 
-           "cpu_usage", "memory_usage",  "num_request", "num_failures","response_time","expected_tps"]
+           "cpu_usage_prom", "memory_usage_prom","cpu_usage_server","memory_usage_server",
+             "num_request", "num_failures","response_time","expected_tps"]
 result_df = pd.DataFrame(columns=columns)
 
 step = 0
