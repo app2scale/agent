@@ -10,12 +10,13 @@ from locust.env import Environment
 import pandas as pd
 import numpy as np
 import time
-
+import random
+from prometheus_api_client import PrometheusConnect
 
 # logging
 logging.getLogger().setLevel(logging.INFO)
 
-expected_tps = 1
+expected_tps = 5
 class TeaStoreLocust(HttpUser):
     wait_time = constant_throughput(expected_tps)
     host = "http://teastore-test.local.payten.com.tr/tools.descartes.teastore.webui/"
@@ -28,14 +29,14 @@ class TeaStoreLocust(HttpUser):
         """
         # logging.info("Starting user.")
         self.visit_home()
-        #self.login()
-        #self.browse()
+        self.login()
+        self.browse()
         # 50/50 chance to buy
         #choice_buy = choice([True, False])
         #if choice_buy:
        # self.buy()
-        #self.visit_profile()
-        #self.logout()
+        self.visit_profile()
+        self.logout()
         # logging.info("Completed user.")
 
     def visit_home(self) -> None:
@@ -55,6 +56,7 @@ class TeaStoreLocust(HttpUser):
         """
         User login with random userid between 1 and 90.
         :return: categories
+        l
         """
         # load login page
         res = self.client.get('/login')
@@ -64,8 +66,8 @@ class TeaStoreLocust(HttpUser):
         else:
             logging.error(f"Could not load login page: {res.status_code}")
         # login random user
-        #user = randint(1, 99)
-        user = 2
+        user = randint(1, 99)
+        #user = 2
         login_request = self.client.post("/loginAction", params={"username": user, "password": "password"})
         if login_request.ok:
             pass
@@ -82,16 +84,13 @@ class TeaStoreLocust(HttpUser):
         # execute browsing action randomly up to 5 times
         for i in range(1, 2):
             # browses random category and page
-            #category_id = randint(2, 6)
-            #page = randint(1, 5)
-            category_id = 3
-            page = 2
+            category_id = randint(2, 6)
+            page = randint(1, 5)
             category_request = self.client.get("/category", params={"page": page, "category": category_id})
             if category_request.ok:
                 # logging.info(f"Visited category {category_id} on page 1")
                 # browses random product
-                #product_id = randint(7, 506)
-                product_id = 10
+                product_id = random.randint((category_id-2)*100+7+(page-1)*20, (category_id-2)*100+26+(page-1)*20)
                 product_request = self.client.get("/product", params={"id": product_id})
                 if product_request.ok:
                     pass
@@ -162,15 +161,14 @@ class TeaStoreLocust(HttpUser):
 class CustomLoad(LoadTestShape):
     trx_load_data = pd.read_csv("./transactions.csv")
     trx_load = trx_load_data["transactions"].values.tolist()
-    trx_load = (trx_load/np.max(trx_load)*10).astype(int)
+    trx_load = (trx_load/np.max(trx_load)*20).astype(int)
     ct = 0
     
     def tick(self):
         if self.ct >= len(self.trx_load):
             self.ct = 0
         user_count = self.trx_load[self.ct]
-        self.ct += 1
-        return (10, 10) 
+        return (3, 3) 
 
 load = CustomLoad()
 env = Environment(user_classes=[TeaStoreLocust], shape_class=load)
@@ -202,45 +200,89 @@ def get_state(deployment):
     heap = int(int(deployment.spec.template.spec.containers[0].env[2].value[4:-1])/100)
     return np.array([replica, cpu, heap])
 
+WARM_UP_PERIOD = 60
+COOLDOWN_PERIOD = 0
+# How many seconds to wait for metric collection
+COLLECT_METRIC_TIME = 15
+# Maximum number of metric collection attempt
+COLLECT_METRIC_MAX_TRIAL = 200
+# How many seconds to wait when metric collection fails
+COLLECT_METRIC_WAIT_ON_ERROR = 2
+# How many seconds to wait if pods are not ready
+CHECK_ALL_PODS_READY_TIME = 2
+PROMETHEUS_HOST_URL = "http://localhost:9090"
+METRIC_SERVER=PrometheusConnect(url=PROMETHEUS_HOST_URL, disable_ssl=True)
+DEPLOYMENT_NAME = "teastore-webui"
+NAMESPACE = "app2scale-test"
+
+def collect_metrics(env):
+    deployment, state = get_deployment_info()
+    while True:
+        running_pods, number_of_all_pods = get_running_pods()
+        if len(running_pods) == state[0] and state[0] == number_of_all_pods and running_pods:
+            print("İnitial running pods", running_pods)
+            break
+        else:
+            time.sleep(CHECK_ALL_PODS_READY_TIME)        
+    time.sleep(WARM_UP_PERIOD)
+    env.runner.stats.reset_all()
+    time.sleep(COLLECT_METRIC_TIME)
+    n_trials = 0
+    while n_trials < COLLECT_METRIC_MAX_TRIAL:
+        print('try count for metric collection',n_trials)
+        metrics = {}
+        cpu_usage = 0
+        memory_usage = 0
+
+        empty_metric_situation_occured = False
+        #running_pods, _ = get_running_pods()
+        print("collect metric running pods", running_pods)
+        for pod in running_pods:
+            temp_cpu_usage = METRIC_SERVER.custom_query(query=f'sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{{pod="{pod}", namespace="{NAMESPACE}"}})')
+            temp_memory_usage = METRIC_SERVER.custom_query(query=f'sum(container_memory_working_set_bytes{{pod="{pod}", namespace="{NAMESPACE}"}}) by (name)')
+         
+            if temp_cpu_usage and temp_memory_usage:
+                cpu_usage += float(temp_cpu_usage[0]["value"][1])
+                memory_usage += float(temp_memory_usage[0]["value"][1])/1024/1024/1024
+            else:
+                empty_metric_situation_occured = True
+                break
+            
+
+        if empty_metric_situation_occured:
+            n_trials += 1
+            time.sleep(COLLECT_METRIC_WAIT_ON_ERROR)
+        else:
+            #print("TEST", running_pods, len(running_pods))
+            metrics['replica'] = state[0]
+            metrics['cpu'] = state[1]
+            metrics['heap'] = state[2]
+            metrics["cpu_usage"] = round(cpu_usage/len(running_pods),3)
+            metrics["memory_usage"] = round(memory_usage/len(running_pods),3)
+            metrics['num_requests'] = round(env.runner.stats.total.num_requests/(COLLECT_METRIC_TIME + n_trials * COLLECT_METRIC_WAIT_ON_ERROR),2)
+            metrics['num_failures'] = round(env.runner.stats.total.num_failures,2)
+            metrics['response_time'] = round(env.runner.stats.total.avg_response_time,2)
+            #print(env.runner.target_user_count, expected_tps)
+            #metrics['performance'] = min(round(metrics['num_requests'] /  (env.runner.target_user_count * expected_tps),6),1)
+            metrics['expected_tps'] = env.runner.target_user_count * expected_tps*8 # 9 req for each user, it has changed now we just send request to the main page
+            #metrics['utilization'] = 0.5*min(metrics["cpu_usage"]/(state[1]/10),1)+ 0.5*min(metrics["memory_usage"]/(state[2]/10),1)
+            print('metric collection succesfull')
+            load.ct += 1
+            return metrics
+    return None
 
 
-columns = ['avg_response_time', 'current_rps', 'num_requests', 'num_failures', 'expected_tps']
-
+columns = ["replica", "cpu", "heap", 
+           "cpu_usage", "memory_usage",  "num_request", "num_failures","response_time","expected_tps"]
 result_df = pd.DataFrame(columns=columns)
 
 step = 0
 while True:
-  deployment, state = get_deployment_info()
-  while True:
-      running_pods, number_of_all_pods = get_running_pods()
-      if len(running_pods) == state[0] and state[0] == number_of_all_pods and running_pods:
-        break
-      else:
-        time.sleep(2)
-  env.runner.stats.reset_all()
-  time.sleep(1)
-  s = dict()
-  s['avg_response_time'] = env.runner.stats.total.avg_response_time 
-  #s['med_response_time'] = env.runner.stats.total.median_response_time
-  s['current_rps'] = env.runner.stats.total.current_rps
-  #s['current_fail_per_sec'] = env.runner.stats.total.current_fail_per_sec
-  #s['total_rps'] = env.runner.stats.total.total_rps
-  s['num_requests'] = env.runner.stats.total.num_requests
-  #s['num_none_requests'] = env.runner.stats.total.num_none_requests
-  s['num_failures'] = env.runner.stats.total.num_failures
-  s['expected_tps'] = env.runner.target_user_count * expected_tps * 9
-
-  #if step % 10 == 0:
-  #    for key in s.keys():
-  #        print(f'{key:25s} ',end='')
-  #    print()
-  #for key,value in s.items():
-  #    print(f'{value:25.3f} ',end='') 
-  #print()
-  
-  result_df.loc[step,:] = list(s.values())
+ 
+  metrics = collect_metrics(env)
+  result_df.loc[step,:] =list(metrics.values())
   print(result_df)
-  result_df.to_csv("./load_test.csv", index=False)
+  #result_df.to_csv("./load_test.csv", index=False)
   step = step + 1
 
 

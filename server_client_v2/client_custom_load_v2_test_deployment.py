@@ -129,7 +129,7 @@ class TeaStoreLocust(HttpUser):
             if category_request.ok:
                 # logging.info(f"Visited category {category_id} on page 1")
                 # browses random product
-                product_id = random.randint(7, 506)
+                product_id = random.randint((category_id-2)*100+7+(page-1)*20, (category_id-2)*100+26+(page-1)*20)
                 #product_id = 8
                 product_request = self.client.get("/product", params={"id": product_id})
                 if product_request.ok:
