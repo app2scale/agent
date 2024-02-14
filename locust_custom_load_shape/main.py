@@ -168,7 +168,7 @@ class CustomLoad(LoadTestShape):
         if self.ct >= len(self.trx_load):
             self.ct = 0
         user_count = self.trx_load[self.ct]
-        return (3, 3) 
+        return (1, 1) 
 
 load = CustomLoad()
 env = Environment(user_classes=[TeaStoreLocust], shape_class=load)
@@ -208,13 +208,13 @@ def get_usage_metrics_from_server(running_pods_array):
 
     for stats in k8s_pods['items']:
         if stats["metadata"]["name"] in running_pods_array:
-            usage_metric_server[stats["metadata"]["name"]] = [round(float(stats["containers"][0]["usage"]["cpu"].rstrip('n'))/1e6), 
-                                                          round(float(stats["containers"][0]["usage"]["memory"].rstrip('Ki'))/1024)]
+            usage_metric_server[stats["metadata"]["name"]] = [round(float(stats["containers"][0]["usage"]["cpu"].rstrip('n'))/1e9, 3), 
+                                                          round(float(stats["containers"][0]["usage"]["memory"].rstrip('Ki'))/(1024*1024),3)]
             
     usage_metric_server["cpu"], usage_metric_server["memory"] = np.mean(np.array(list(usage_metric_server.values()))[:,0]), np.mean(np.array(list(usage_metric_server.values()))[:,1])
     return usage_metric_server
 
-WARM_UP_PERIOD = 60
+WARM_UP_PERIOD = 180
 COOLDOWN_PERIOD = 0
 # How many seconds to wait for metric collection
 COLLECT_METRIC_TIME = 15
@@ -224,7 +224,7 @@ COLLECT_METRIC_MAX_TRIAL = 200
 COLLECT_METRIC_WAIT_ON_ERROR = 2
 # How many seconds to wait if pods are not ready
 CHECK_ALL_PODS_READY_TIME = 2
-PROMETHEUS_HOST_URL = "http://localhost:9090"
+PROMETHEUS_HOST_URL = "http://prometheus.local.payten.com.tr"
 METRIC_SERVER=PrometheusConnect(url=PROMETHEUS_HOST_URL, disable_ssl=True)
 DEPLOYMENT_NAME = "teastore-webui"
 NAMESPACE = "app2scale-test"
