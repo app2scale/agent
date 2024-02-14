@@ -42,12 +42,12 @@ COLLECT_METRIC_WAIT_ON_ERROR = 2
 CHECK_ALL_PODS_READY_TIME = 2
 # Episode length (set to batch size on purpose)
 EPISODE_LENGTH = 100
-PROMETHEUS_HOST_URL = "http://teastore.local.payten.com.tr"
+PROMETHEUS_HOST_URL = "http://prometheus.local.payten.com.tr"
 # Weight of the performance in the reward function
 ALPHA = 0.8
 
 DEPLOYMENT_NAME = "teastore-webui"
-NAMESPACE = "app2scale"
+NAMESPACE = "app2scale-test"
 
 OBSERVATION_SPACE = Box(low=np.array([1, 4, 4, 0, 0]), high=np.array([3, 9, 9, 500, 500]), dtype=np.float32)
 
@@ -70,7 +70,7 @@ logging.getLogger().setLevel(logging.INFO)
 expected_tps = 1
 class TeaStoreLocust(HttpUser):
     wait_time = constant_throughput(expected_tps)
-    host = "http://teastore.local.payten.com.tr/tools.descartes.teastore.webui/"
+    host = "http://teastore-test.local.payten.com.tr/tools.descartes.teastore.webui/"
 
     @task
     def load(self):
@@ -186,7 +186,7 @@ class TeaStoreLocust(HttpUser):
 
 class CustomLoad(LoadTestShape):
 
-    trx_load_data = pd.read_csv("./server_client_v4/transactions.csv")
+    trx_load_data = pd.read_csv("./transactions.csv")
     trx_load = trx_load_data["transactions"].values.tolist()
     trx_load = (trx_load/np.max(trx_load)*20).astype(int)+1
     indexes = [(177, 184), (661, 685), (1143, 1152), (1498, 1524), (1858, 1900)]
@@ -395,6 +395,6 @@ while True:
                    info["num_failures"],info["expected_tps"], deployment_time]
         
     output.loc[step_count-1,:] = temp_output
-    output.to_csv("output_browse_1.csv", index=False)
+    output.to_csv("output_browse_300_data_1.csv", index=False)
     print(output,flush=True)
     step_count += 1
