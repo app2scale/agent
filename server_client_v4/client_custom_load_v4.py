@@ -311,7 +311,7 @@ def collect_metrics(env):
             metrics['num_failures'] = round(env.runner.stats.total.num_failures,2)
             metrics['response_time'] = round(env.runner.stats.total.avg_response_time,2)
             #print(env.runner.target_user_count, expected_tps)
-            metrics['performance'] = min(round(metrics['num_requests'] /  (env.runner.target_user_count * expected_tps),6),1)
+            metrics['performance'] = min(round(metrics['num_requests'] /  (env.runner.target_user_count * expected_tps*8),6),1)
             metrics['expected_tps'] = env.runner.target_user_count * expected_tps*8 # 9 req for each user, it has changed now we just send request to the main page
             metrics['utilization'] = 0.5*min(metrics["cpu_usage"]/(state[1]/10),1)+ 0.5*min(metrics["memory_usage"]/(state[2]/10),1)
             print('metric collection succesfull')
@@ -405,6 +405,6 @@ while True:
                    info["num_failures"],info["expected_tps"], deployment_time]
         
     output.loc[step_count-1,:] = temp_output
-    output.to_csv("./output_300_1.csv", index=False)
+    output.to_csv("./output_300_2.csv", index=False)
     print(output,flush=True)
     step_count += 1

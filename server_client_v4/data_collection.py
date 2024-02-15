@@ -245,7 +245,7 @@ def get_running_pods():
 def get_usage_metrics_from_server(running_pods_array):
     config.load_kube_config()
     api = client.CustomObjectsApi()
-    k8s_pods = api.list_namespaced_custom_object("metrics.k8s.io", "v1beta1", "app2scale", "pods")
+    k8s_pods = api.list_namespaced_custom_object("metrics.k8s.io", "v1beta1", "app2scale-test", "pods")
     usage_metric_server = {}
 
     for stats in k8s_pods['items']:
