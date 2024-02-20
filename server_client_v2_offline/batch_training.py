@@ -16,8 +16,8 @@ def generate_config(train_path, eval_path, hyper_params):
     config = (
         DQNConfig()
         .environment(env=None,
-                    action_space=Discrete(216), 
-                    observation_space=Box(low=np.array([1, 4, 4, 0, 0]), high=np.array([6, 9, 9, 200, 200]), dtype=np.float32)
+                    action_space=Discrete(108), 
+                    observation_space=Box(low=np.array([1, 4, 4, 0, 0]), high=np.array([3, 9, 9, 500, 500]), dtype=np.float32)
                     )
         .training(model={"fcnet_hiddens": fcnet_hiddens},
                   gamma=0.99,
@@ -40,6 +40,8 @@ def generate_config(train_path, eval_path, hyper_params):
 
     )
     return config
+
+# Burada eval duration ve interval batch bağlantısı var. aynı eps_id üzerinden tekrar geçmemesi gerekir
 
 
 
@@ -65,7 +67,7 @@ parameter_combinations = list(product(*hyperparameters.values())) # This variabl
 
 train_path = "/tmp/training-out"
 eval_path = "/tmp/eval-out"
-epoch_number = 4000
+epoch_number = 10000
 
 for comb in parameter_combinations:
     config = generate_config(train_path, eval_path, comb)
@@ -91,7 +93,7 @@ for comb in parameter_combinations:
                 wis_v_gain_list.append(results['evaluation']['off_policy_estimator']["wis"]["v_gain"])
 
 
-        if (i+1) % 100 == 0:
+        if (i+1) % 1000 == 0:
             ma_checkpoint_dir = algo.save(checkpoint_dir=debug_dir)
             print(
                 "An Algorithm checkpoint has been created inside directory: "
