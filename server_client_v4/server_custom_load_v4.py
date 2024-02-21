@@ -52,7 +52,7 @@ for epoch in range(2000):
     results = algo.train() 
     print('algo.train executed')
     print(pretty_print(results))
-    if epoch % 10 == 0:
+    if epoch % 2 == 0:
       checkpoint = algo.save()
       print("Last checkpoint", epoch, checkpoint)
 

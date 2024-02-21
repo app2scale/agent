@@ -82,7 +82,7 @@ ray.init(ignore_reinit_error=True)
 expected_tps = 1
 class TeaStoreLocust(HttpUser):
     wait_time = constant_throughput(expected_tps)
-    host = "http://teastore.local.payten.com.tr/tools.descartes.teastore.webui/"
+    host = "http://teastore-test.local.payten.com.tr/tools.descartes.teastore.webui/"
 
     @task
     def load(self):
@@ -255,7 +255,7 @@ def get_running_pods():
 def get_usage_metrics_from_server(running_pods_array):
     config.load_kube_config()
     api = client.CustomObjectsApi()
-    k8s_pods = api.list_namespaced_custom_object("metrics.k8s.io", "v1beta1", "app2scale", "pods")
+    k8s_pods = api.list_namespaced_custom_object("metrics.k8s.io", "v1beta1", "app2scale-test", "pods")
     usage_metric_server = {}
 
     for stats in k8s_pods['items']:
@@ -392,7 +392,7 @@ done = False
 truncated = False
 sum_reward = 0
 
-path_to_checkpoint = "./cpu_req_4000"
+path_to_checkpoint = "./checkpoint_300_1"
 algo.restore(path_to_checkpoint)
 step_count = 1
 
