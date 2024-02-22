@@ -52,7 +52,7 @@ CHECK_ALL_PODS_READY_TIME = 2
 EPISODE_LENGTH = 100
 PROMETHEUS_HOST_URL = "http://prometheus.local.payten.com.tr"
 # Weight of the performance in the reward function
-ALPHA = 0.8
+ALPHA = 0.6
 
 DEPLOYMENT_NAME = "teastore-webui"
 NAMESPACE = "app2scale-test"
@@ -321,7 +321,8 @@ def collect_metrics(env):
             #print(env.runner.target_user_count, expected_tps)
             metrics['performance'] = min(round(metrics['num_requests'] /  (env.runner.target_user_count * expected_tps*8),6),1)
             metrics['expected_tps'] = env.runner.target_user_count * expected_tps*8 # 9 req for each user, it has changed now we just send request to the main page
-            metrics['utilization'] = 0.5*min(metrics["cpu_usage"]/(state[1]/10),1)+ 0.5*min(metrics["memory_usage"]/(state[2]/10),1)
+            #metrics['utilization'] = 0.5*min(metrics["cpu_usage"]/(state[1]/10),1)+ 0.5*min(metrics["memory_usage"]/(state[2]/10),1)
+            metrics["utilization"] = min(metrics["cpu_usage"]/(state[1]/10),1)
             print('metric collection succesfull')
             load.ct += 1
             return metrics
@@ -392,7 +393,7 @@ done = False
 truncated = False
 sum_reward = 0
 
-path_to_checkpoint = "./checkpoint_300_1"
+path_to_checkpoint = "./checkpoint_300_2_cpu"
 algo.restore(path_to_checkpoint)
 step_count = 1
 
@@ -408,6 +409,6 @@ for _ in range(0,120):
                    info["num_failures"],info["expected_tps"], timestamp]
     output.loc[step_count,:] = temp_output
     print(output)
-    output.to_csv("./test_results_300_1.csv", index=False)
+    output.to_csv("./test_results_300_2_cpu.csv", index=False)
     obs = next_obs
     step_count += 1
