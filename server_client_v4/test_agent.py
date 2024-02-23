@@ -78,7 +78,7 @@ logging.getLogger().setLevel(logging.INFO)
 
 ray.init(ignore_reinit_error=True)
 
-expected_tps = 10
+expected_tps = 8
 class TeaStoreLocust(HttpUser):
     wait_time = constant_throughput(expected_tps)
     host = "http://teastore-test.local.payten.com.tr/tools.descartes.teastore.webui/"
@@ -319,7 +319,7 @@ def collect_metrics(env):
             metrics['response_time'] = round(env.runner.stats.total.avg_response_time,2)
             #print(env.runner.target_user_count, expected_tps)
             #metrics['performance'] = min(round(metrics['num_requests'] /  (env.runner.target_user_count * expected_tps*8),6),1)
-            if metrics["response_time"] >=30:
+            if metrics["response_time"] >=20:
                 metrics["performance"] = 1/metrics["response_time"]
             else:
                 metrics["performance"] = 1
@@ -396,7 +396,7 @@ done = False
 truncated = False
 sum_reward = 0
 
-path_to_checkpoint = "./checkpoint_300_cpu_response_2"
+path_to_checkpoint = "./checkpoint_300_cpu_response_3"
 algo.restore(path_to_checkpoint)
 step_count = 1
 
@@ -412,6 +412,6 @@ for _ in range(0,120):
                    info["num_failures"],info["expected_tps"], timestamp]
     output.loc[step_count,:] = temp_output
     print(output)
-    output.to_csv("./test_results_300_2_cpu_response_exp_10.csv", index=False)
+    output.to_csv("./test_results_300_3_cpu_response_exp_8.csv", index=False)
     obs = next_obs
     step_count += 1
