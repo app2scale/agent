@@ -78,7 +78,7 @@ logging.getLogger().setLevel(logging.INFO)
 
 ray.init(ignore_reinit_error=True)
 
-expected_tps = 8
+expected_tps = 1
 class TeaStoreLocust(HttpUser):
     wait_time = constant_throughput(expected_tps)
     host = "http://teastore-test.local.payten.com.tr/tools.descartes.teastore.webui/"
@@ -205,7 +205,7 @@ class CustomLoad(LoadTestShape):
         clipped_data.extend(trx_load[start:end+1])
     ct = 0
 
-    
+    clipped_data = (np.linspace(20, 150, 27, dtype=np.int32)/5).astype(int) 
     def tick(self):
         if self.ct >= len(self.clipped_data):
             self.ct = 0
@@ -318,11 +318,13 @@ def collect_metrics(env):
             metrics['num_failures'] = round(env.runner.stats.total.num_failures,2)
             metrics['response_time'] = round(env.runner.stats.total.avg_response_time,2)
             #print(env.runner.target_user_count, expected_tps)
-            #metrics['performance'] = min(round(metrics['num_requests'] /  (env.runner.target_user_count * expected_tps*8),6),1)
+            temp_perf_request = min(round(metrics['num_requests'] /  (env.runner.target_user_count * expected_tps*8),6),1)
+            temp_perf_response = 0
             if metrics["response_time"] >=20:
-                metrics["performance"] = 1/metrics["response_time"]
+                temp_perf_response  = 20/metrics["response_time"]
             else:
-                metrics["performance"] = 1
+                temp_perf_response = 1
+            metrics["performance"] = 0.5*temp_perf_response + 0.5*temp_perf_request 
             metrics['expected_tps'] = env.runner.target_user_count * expected_tps*8 # 9 req for each user, it has changed now we just send request to the main page
             #metrics['utilization'] = 0.5*min(metrics["cpu_usage"]/(state[1]/10),1)+ 0.5*min(metrics["memory_usage"]/(state[2]/10),1)
             metrics["utilization"] = min(metrics["cpu_usage"]/(state[1]/10),1)
@@ -396,7 +398,7 @@ done = False
 truncated = False
 sum_reward = 0
 
-path_to_checkpoint = "./checkpoint_300_cpu_response_3"
+path_to_checkpoint = "./checkpoint_hybrid_1"
 algo.restore(path_to_checkpoint)
 step_count = 1
 
@@ -412,6 +414,6 @@ for _ in range(0,120):
                    info["num_failures"],info["expected_tps"], timestamp]
     output.loc[step_count,:] = temp_output
     print(output)
-    output.to_csv("./test_results_300_3_cpu_response_exp_8.csv", index=False)
+    output.to_csv("./test_results_hybrid_1.csv", index=False)
     obs = next_obs
     step_count += 1
