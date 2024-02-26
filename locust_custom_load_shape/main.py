@@ -16,7 +16,7 @@ from prometheus_api_client import PrometheusConnect
 # logging
 logging.getLogger().setLevel(logging.INFO)
 
-expected_tps = 1
+expected_tps = 5
 class TeaStoreLocust(HttpUser):
     wait_time = constant_throughput(expected_tps)
     host = "http://teastore-test.local.payten.com.tr/tools.descartes.teastore.webui/"
@@ -168,7 +168,7 @@ class CustomLoad(LoadTestShape):
         if self.ct >= len(self.trx_load):
             self.ct = 0
         user_count = self.trx_load[self.ct]
-        return (user_count, user_count) 
+        return (1, 1) 
 
 load = CustomLoad()
 env = Environment(user_classes=[TeaStoreLocust], shape_class=load)
@@ -214,7 +214,7 @@ def get_usage_metrics_from_server(running_pods_array):
     usage_metric_server["cpu"], usage_metric_server["memory"] = np.mean(np.array(list(usage_metric_server.values()))[:,0]), np.mean(np.array(list(usage_metric_server.values()))[:,1])
     return usage_metric_server
 
-WARM_UP_PERIOD = 300
+WARM_UP_PERIOD = 180
 COOLDOWN_PERIOD = 0
 # How many seconds to wait for metric collection
 COLLECT_METRIC_TIME = 15
@@ -277,13 +277,8 @@ def collect_metrics(env):
             metrics["cpu_usage_server"] = metric_server["cpu"]
             metrics["memory_usage_server"] = metric_server["memory"]
             metrics['num_requests'] = round(env.runner.stats.total.num_requests/(COLLECT_METRIC_TIME + n_trials * COLLECT_METRIC_WAIT_ON_ERROR),2)
-            metrics['num_none_requests'] = round(env.runner.stats.total.num_none_requests/(COLLECT_METRIC_TIME + n_trials * COLLECT_METRIC_WAIT_ON_ERROR),2)
             metrics['num_failures'] = round(env.runner.stats.total.num_failures,2)
             metrics['response_time'] = round(env.runner.stats.total.avg_response_time,2)
-            metrics["total_response_time"] = round(env.runner.stats.total.total_response_time,2)
-            metrics["min_response_time"] = round(env.runner.stats.total.min_response_time,2)
-            metrics["max_response_time"] = round(env.runner.stats.total.max_response_time,2)
-
             #print(env.runner.target_user_count, expected_tps)
             #metrics['performance'] = min(round(metrics['num_requests'] /  (env.runner.target_user_count * expected_tps),6),1)
             metrics['expected_tps'] = env.runner.target_user_count * expected_tps*8 # 9 req for each user, it has changed now we just send request to the main page
@@ -300,7 +295,7 @@ def collect_metrics(env):
 
 columns = ["replica", "cpu", "heap", 
            "cpu_usage_prom", "memory_usage_prom","cpu_usage_server","memory_usage_server",
-             "num_request","num_none_request", "num_failures","response_time","total_response_time","min_response_time","max_response_time","expected_tps"]
+             "num_request", "num_failures","response_time","expected_tps"]
 result_df = pd.DataFrame(columns=columns)
 
 step = 0
@@ -309,9 +304,8 @@ while True:
   metrics = collect_metrics(env)
   result_df.loc[step,:] =list(metrics.values())
   print(result_df)
-  result_df.to_csv("./load_test_3.csv", index=False)
+  #result_df.to_csv("./load_test.csv", index=False)
   step = step + 1
 
 
 env.runner.quit()
-

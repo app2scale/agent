@@ -10,7 +10,7 @@ from ray.rllib.offline.json_writer import JsonWriter
 from itertools import product
 
 
-def convert_data_to_batch(df, writer, eps_id_list, episode_length):
+def convert_data_to_batch(df, writer, eps_id_list):
     number_episodes = int(df.shape[0]/episode_length)
     remained_steps = df.shape[0]-number_episodes*episode_length
     for eps_id,idx in zip(eps_id_list, range(len(eps_id_list))):
@@ -81,34 +81,32 @@ if __name__ == "__main__":
 
     prep = get_preprocessor(observation_space)(observation_space)
     print("The preprocessor is", prep)
-    episode_length_training = 100
+    episode_length = 100
     # full_data_1 = pd.read_csv("/Users/hasan.nayir/Projects/Payten/app2scale_reinforcement_learning/server_client_v2/output_new_1.csv")
     # full_data_2 = pd.read_csv("/Users/hasan.nayir/Projects/Payten/app2scale_reinforcement_learning/server_client_v2/output_new_1_test_deployment.csv")
     # full_data = pd.concat([full_data_1, full_data_2]).reset_index()
-    full_data = pd.read_csv("./server_client_v4/data.csv")
+    full_data = pd.read_csv("./server_client_v2_offline/cpu_response_300_20.csv")
     training_split_ratio = 0.8
     train_df = full_data.sample(frac=training_split_ratio, random_state=42)  # Eğitim verisi
     eval_df = full_data.drop(train_df.index) 
     train_df = train_df.reset_index(drop=True)
     eval_df = eval_df.reset_index(drop=True)
 
-    number_episodes_training = int(train_df.shape[0]/episode_length_training)
-    remained_steps_training = train_df.shape[0]-number_episodes_training*episode_length_training
+    number_episodes_training = int(train_df.shape[0]/episode_length)
+    remained_steps_training = train_df.shape[0]-number_episodes_training*episode_length
     if remained_steps_training > 0:
         number_episodes_training += 1
 
-    episode_length_eval = eval_df.shape[0]
-    number_episodes_eval= int(eval_df.shape[0]/episode_length_eval)
-    remained_steps_eval = eval_df.shape[0]-number_episodes_eval*episode_length_eval
+    # episode_length_eval = eval_df.shape[0]
+    number_episodes_eval= int(eval_df.shape[0]/episode_length)
+    remained_steps_eval = eval_df.shape[0]-number_episodes_eval*episode_length
     if remained_steps_eval > 0:
         number_episodes_eval += 1
         
     eps_id_training = list(range(number_episodes_training))
     eps_id_eval = list(range(len(eps_id_training), number_episodes_eval+ len(eps_id_training)))
-    convert_data_to_batch(train_df, training_writer, eps_id_training, episode_length_training)
-
-    convert_data_to_batch(eval_df, eval_writer, eps_id_eval, episode_length_eval)
-
+    convert_data_to_batch(train_df, training_writer, eps_id_training)
+    convert_data_to_batch(eval_df, eval_writer, eps_id_eval)
     # !!!! When we create batch as train_df and eval_df, eps_id is repeated and it will raise error like ValueError: eps_id 0 was already passed to the peek function. Make sure dataset contains only unique episodes with unique ids.
     
 
