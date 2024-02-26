@@ -1,0 +1,1302 @@
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+  replica cpu heap  ... min_response_time max_response_time expected_tps
+0       3   5    7  ...              7.33            190.55           24
+
+[1 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+  replica cpu heap  ... min_response_time max_response_time expected_tps
+0       3   5    7  ...              7.33            190.55           24
+1       3   5    7  ...              6.69            270.11           24
+
+[2 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+  replica cpu heap  ... min_response_time max_response_time expected_tps
+0       3   5    7  ...              7.33            190.55           24
+1       3   5    7  ...              6.69            270.11           24
+2       3   5    7  ...              7.41             81.93            8
+
+[3 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+  replica cpu heap  ... min_response_time max_response_time expected_tps
+0       3   5    7  ...              7.33            190.55           24
+1       3   5    7  ...              6.69            270.11           24
+2       3   5    7  ...              7.41             81.93            8
+3       3   5    7  ...              6.55            196.94            8
+
+[4 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+  replica cpu heap  ... min_response_time max_response_time expected_tps
+0       3   5    7  ...              7.33            190.55           24
+1       3   5    7  ...              6.69            270.11           24
+2       3   5    7  ...              7.41             81.93            8
+3       3   5    7  ...              6.55            196.94            8
+4       3   5    7  ...               7.1            138.52           24
+
+[5 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+  replica cpu heap  ... min_response_time max_response_time expected_tps
+0       3   5    7  ...              7.33            190.55           24
+1       3   5    7  ...              6.69            270.11           24
+2       3   5    7  ...              7.41             81.93            8
+3       3   5    7  ...              6.55            196.94            8
+4       3   5    7  ...               7.1            138.52           24
+5       3   5    7  ...              8.12            169.96           16
+
+[6 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+  replica cpu heap  ... min_response_time max_response_time expected_tps
+0       3   5    7  ...              7.33            190.55           24
+1       3   5    7  ...              6.69            270.11           24
+2       3   5    7  ...              7.41             81.93            8
+3       3   5    7  ...              6.55            196.94            8
+4       3   5    7  ...               7.1            138.52           24
+5       3   5    7  ...              8.12            169.96           16
+6       3   5    7  ...              6.81            186.96           16
+
+[7 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+  replica cpu heap  ... min_response_time max_response_time expected_tps
+0       3   5    7  ...              7.33            190.55           24
+1       3   5    7  ...              6.69            270.11           24
+2       3   5    7  ...              7.41             81.93            8
+3       3   5    7  ...              6.55            196.94            8
+4       3   5    7  ...               7.1            138.52           24
+5       3   5    7  ...              8.12            169.96           16
+6       3   5    7  ...              6.81            186.96           16
+7       3   5    7  ...              6.83            276.22           16
+
+[8 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+  replica cpu heap  ... min_response_time max_response_time expected_tps
+0       3   5    7  ...              7.33            190.55           24
+1       3   5    7  ...              6.69            270.11           24
+2       3   5    7  ...              7.41             81.93            8
+3       3   5    7  ...              6.55            196.94            8
+4       3   5    7  ...               7.1            138.52           24
+5       3   5    7  ...              8.12            169.96           16
+6       3   5    7  ...              6.81            186.96           16
+7       3   5    7  ...              6.83            276.22           16
+8       3   5    7  ...               6.7            227.33           16
+
+[9 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+  replica cpu heap  ... min_response_time max_response_time expected_tps
+0       3   5    7  ...              7.33            190.55           24
+1       3   5    7  ...              6.69            270.11           24
+2       3   5    7  ...              7.41             81.93            8
+3       3   5    7  ...              6.55            196.94            8
+4       3   5    7  ...               7.1            138.52           24
+5       3   5    7  ...              8.12            169.96           16
+6       3   5    7  ...              6.81            186.96           16
+7       3   5    7  ...              6.83            276.22           16
+8       3   5    7  ...               6.7            227.33           16
+9       3   5    7  ...              7.06            113.56           16
+
+[10 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+
+[11 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+
+[12 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+
+[13 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+
+[14 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+
+[15 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+
+[16 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+
+[17 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+
+[18 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+
+[19 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+
+[20 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+
+[21 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+
+[22 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+22       3   5    7  ...              7.14            327.81           16
+
+[23 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+22       3   5    7  ...              7.14            327.81           16
+23       3   5    7  ...              7.48             33.85            8
+
+[24 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+22       3   5    7  ...              7.14            327.81           16
+23       3   5    7  ...              7.48             33.85            8
+24       3   5    7  ...              7.59             81.44            8
+
+[25 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+22       3   5    7  ...              7.14            327.81           16
+23       3   5    7  ...              7.48             33.85            8
+24       3   5    7  ...              7.59             81.44            8
+25       3   5    7  ...              7.01             87.59           24
+
+[26 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+22       3   5    7  ...              7.14            327.81           16
+23       3   5    7  ...              7.48             33.85            8
+24       3   5    7  ...              7.59             81.44            8
+25       3   5    7  ...              7.01             87.59           24
+26       3   5    7  ...              7.24             98.02           16
+
+[27 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+22       3   5    7  ...              7.14            327.81           16
+23       3   5    7  ...              7.48             33.85            8
+24       3   5    7  ...              7.59             81.44            8
+25       3   5    7  ...              7.01             87.59           24
+26       3   5    7  ...              7.24             98.02           16
+27       3   5    7  ...              7.14            204.83           16
+
+[28 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+22       3   5    7  ...              7.14            327.81           16
+23       3   5    7  ...              7.48             33.85            8
+24       3   5    7  ...              7.59             81.44            8
+25       3   5    7  ...              7.01             87.59           24
+26       3   5    7  ...              7.24             98.02           16
+27       3   5    7  ...              7.14            204.83           16
+28       3   5    7  ...              6.82              66.0           16
+
+[29 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+22       3   5    7  ...              7.14            327.81           16
+23       3   5    7  ...              7.48             33.85            8
+24       3   5    7  ...              7.59             81.44            8
+25       3   5    7  ...              7.01             87.59           24
+26       3   5    7  ...              7.24             98.02           16
+27       3   5    7  ...              7.14            204.83           16
+28       3   5    7  ...              6.82              66.0           16
+29       3   5    7  ...              5.72            167.33           24
+
+[30 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+22       3   5    7  ...              7.14            327.81           16
+23       3   5    7  ...              7.48             33.85            8
+24       3   5    7  ...              7.59             81.44            8
+25       3   5    7  ...              7.01             87.59           24
+26       3   5    7  ...              7.24             98.02           16
+27       3   5    7  ...              7.14            204.83           16
+28       3   5    7  ...              6.82              66.0           16
+29       3   5    7  ...              5.72            167.33           24
+30       3   5    7  ...              6.65            319.99           16
+
+[31 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+22       3   5    7  ...              7.14            327.81           16
+23       3   5    7  ...              7.48             33.85            8
+24       3   5    7  ...              7.59             81.44            8
+25       3   5    7  ...              7.01             87.59           24
+26       3   5    7  ...              7.24             98.02           16
+27       3   5    7  ...              7.14            204.83           16
+28       3   5    7  ...              6.82              66.0           16
+29       3   5    7  ...              5.72            167.33           24
+30       3   5    7  ...              6.65            319.99           16
+31       3   5    7  ...              7.43             51.34            8
+
+[32 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+22       3   5    7  ...              7.14            327.81           16
+23       3   5    7  ...              7.48             33.85            8
+24       3   5    7  ...              7.59             81.44            8
+25       3   5    7  ...              7.01             87.59           24
+26       3   5    7  ...              7.24             98.02           16
+27       3   5    7  ...              7.14            204.83           16
+28       3   5    7  ...              6.82              66.0           16
+29       3   5    7  ...              5.72            167.33           24
+30       3   5    7  ...              6.65            319.99           16
+31       3   5    7  ...              7.43             51.34            8
+32       3   5    7  ...              6.27             252.3           24
+
+[33 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+22       3   5    7  ...              7.14            327.81           16
+23       3   5    7  ...              7.48             33.85            8
+24       3   5    7  ...              7.59             81.44            8
+25       3   5    7  ...              7.01             87.59           24
+26       3   5    7  ...              7.24             98.02           16
+27       3   5    7  ...              7.14            204.83           16
+28       3   5    7  ...              6.82              66.0           16
+29       3   5    7  ...              5.72            167.33           24
+30       3   5    7  ...              6.65            319.99           16
+31       3   5    7  ...              7.43             51.34            8
+32       3   5    7  ...              6.27             252.3           24
+33       3   5    7  ...              6.98            155.07           24
+
+[34 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+22       3   5    7  ...              7.14            327.81           16
+23       3   5    7  ...              7.48             33.85            8
+24       3   5    7  ...              7.59             81.44            8
+25       3   5    7  ...              7.01             87.59           24
+26       3   5    7  ...              7.24             98.02           16
+27       3   5    7  ...              7.14            204.83           16
+28       3   5    7  ...              6.82              66.0           16
+29       3   5    7  ...              5.72            167.33           24
+30       3   5    7  ...              6.65            319.99           16
+31       3   5    7  ...              7.43             51.34            8
+32       3   5    7  ...              6.27             252.3           24
+33       3   5    7  ...              6.98            155.07           24
+34       3   5    7  ...              7.22            189.89           16
+
+[35 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+22       3   5    7  ...              7.14            327.81           16
+23       3   5    7  ...              7.48             33.85            8
+24       3   5    7  ...              7.59             81.44            8
+25       3   5    7  ...              7.01             87.59           24
+26       3   5    7  ...              7.24             98.02           16
+27       3   5    7  ...              7.14            204.83           16
+28       3   5    7  ...              6.82              66.0           16
+29       3   5    7  ...              5.72            167.33           24
+30       3   5    7  ...              6.65            319.99           16
+31       3   5    7  ...              7.43             51.34            8
+32       3   5    7  ...              6.27             252.3           24
+33       3   5    7  ...              6.98            155.07           24
+34       3   5    7  ...              7.22            189.89           16
+35       3   5    7  ...               7.3            384.32           16
+
+[36 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+22       3   5    7  ...              7.14            327.81           16
+23       3   5    7  ...              7.48             33.85            8
+24       3   5    7  ...              7.59             81.44            8
+25       3   5    7  ...              7.01             87.59           24
+26       3   5    7  ...              7.24             98.02           16
+27       3   5    7  ...              7.14            204.83           16
+28       3   5    7  ...              6.82              66.0           16
+29       3   5    7  ...              5.72            167.33           24
+30       3   5    7  ...              6.65            319.99           16
+31       3   5    7  ...              7.43             51.34            8
+32       3   5    7  ...              6.27             252.3           24
+33       3   5    7  ...              6.98            155.07           24
+34       3   5    7  ...              7.22            189.89           16
+35       3   5    7  ...               7.3            384.32           16
+36       3   5    7  ...              6.46            271.09           16
+
+[37 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+22       3   5    7  ...              7.14            327.81           16
+23       3   5    7  ...              7.48             33.85            8
+24       3   5    7  ...              7.59             81.44            8
+25       3   5    7  ...              7.01             87.59           24
+26       3   5    7  ...              7.24             98.02           16
+27       3   5    7  ...              7.14            204.83           16
+28       3   5    7  ...              6.82              66.0           16
+29       3   5    7  ...              5.72            167.33           24
+30       3   5    7  ...              6.65            319.99           16
+31       3   5    7  ...              7.43             51.34            8
+32       3   5    7  ...              6.27             252.3           24
+33       3   5    7  ...              6.98            155.07           24
+34       3   5    7  ...              7.22            189.89           16
+35       3   5    7  ...               7.3            384.32           16
+36       3   5    7  ...              6.46            271.09           16
+37       3   5    7  ...              8.06             49.37            8
+
+[38 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+22       3   5    7  ...              7.14            327.81           16
+23       3   5    7  ...              7.48             33.85            8
+24       3   5    7  ...              7.59             81.44            8
+25       3   5    7  ...              7.01             87.59           24
+26       3   5    7  ...              7.24             98.02           16
+27       3   5    7  ...              7.14            204.83           16
+28       3   5    7  ...              6.82              66.0           16
+29       3   5    7  ...              5.72            167.33           24
+30       3   5    7  ...              6.65            319.99           16
+31       3   5    7  ...              7.43             51.34            8
+32       3   5    7  ...              6.27             252.3           24
+33       3   5    7  ...              6.98            155.07           24
+34       3   5    7  ...              7.22            189.89           16
+35       3   5    7  ...               7.3            384.32           16
+36       3   5    7  ...              6.46            271.09           16
+37       3   5    7  ...              8.06             49.37            8
+38       3   5    7  ...              6.56            281.02           16
+
+[39 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+22       3   5    7  ...              7.14            327.81           16
+23       3   5    7  ...              7.48             33.85            8
+24       3   5    7  ...              7.59             81.44            8
+25       3   5    7  ...              7.01             87.59           24
+26       3   5    7  ...              7.24             98.02           16
+27       3   5    7  ...              7.14            204.83           16
+28       3   5    7  ...              6.82              66.0           16
+29       3   5    7  ...              5.72            167.33           24
+30       3   5    7  ...              6.65            319.99           16
+31       3   5    7  ...              7.43             51.34            8
+32       3   5    7  ...              6.27             252.3           24
+33       3   5    7  ...              6.98            155.07           24
+34       3   5    7  ...              7.22            189.89           16
+35       3   5    7  ...               7.3            384.32           16
+36       3   5    7  ...              6.46            271.09           16
+37       3   5    7  ...              8.06             49.37            8
+38       3   5    7  ...              6.56            281.02           16
+39       3   5    7  ...              7.08            186.45           24
+
+[40 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+22       3   5    7  ...              7.14            327.81           16
+23       3   5    7  ...              7.48             33.85            8
+24       3   5    7  ...              7.59             81.44            8
+25       3   5    7  ...              7.01             87.59           24
+26       3   5    7  ...              7.24             98.02           16
+27       3   5    7  ...              7.14            204.83           16
+28       3   5    7  ...              6.82              66.0           16
+29       3   5    7  ...              5.72            167.33           24
+30       3   5    7  ...              6.65            319.99           16
+31       3   5    7  ...              7.43             51.34            8
+32       3   5    7  ...              6.27             252.3           24
+33       3   5    7  ...              6.98            155.07           24
+34       3   5    7  ...              7.22            189.89           16
+35       3   5    7  ...               7.3            384.32           16
+36       3   5    7  ...              6.46            271.09           16
+37       3   5    7  ...              8.06             49.37            8
+38       3   5    7  ...              6.56            281.02           16
+39       3   5    7  ...              7.08            186.45           24
+40       3   5    7  ...              6.67            176.13           16
+
+[41 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+22       3   5    7  ...              7.14            327.81           16
+23       3   5    7  ...              7.48             33.85            8
+24       3   5    7  ...              7.59             81.44            8
+25       3   5    7  ...              7.01             87.59           24
+26       3   5    7  ...              7.24             98.02           16
+27       3   5    7  ...              7.14            204.83           16
+28       3   5    7  ...              6.82              66.0           16
+29       3   5    7  ...              5.72            167.33           24
+30       3   5    7  ...              6.65            319.99           16
+31       3   5    7  ...              7.43             51.34            8
+32       3   5    7  ...              6.27             252.3           24
+33       3   5    7  ...              6.98            155.07           24
+34       3   5    7  ...              7.22            189.89           16
+35       3   5    7  ...               7.3            384.32           16
+36       3   5    7  ...              6.46            271.09           16
+37       3   5    7  ...              8.06             49.37            8
+38       3   5    7  ...              6.56            281.02           16
+39       3   5    7  ...              7.08            186.45           24
+40       3   5    7  ...              6.67            176.13           16
+41       3   5    7  ...              6.68            121.69           16
+
+[42 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+22       3   5    7  ...              7.14            327.81           16
+23       3   5    7  ...              7.48             33.85            8
+24       3   5    7  ...              7.59             81.44            8
+25       3   5    7  ...              7.01             87.59           24
+26       3   5    7  ...              7.24             98.02           16
+27       3   5    7  ...              7.14            204.83           16
+28       3   5    7  ...              6.82              66.0           16
+29       3   5    7  ...              5.72            167.33           24
+30       3   5    7  ...              6.65            319.99           16
+31       3   5    7  ...              7.43             51.34            8
+32       3   5    7  ...              6.27             252.3           24
+33       3   5    7  ...              6.98            155.07           24
+34       3   5    7  ...              7.22            189.89           16
+35       3   5    7  ...               7.3            384.32           16
+36       3   5    7  ...              6.46            271.09           16
+37       3   5    7  ...              8.06             49.37            8
+38       3   5    7  ...              6.56            281.02           16
+39       3   5    7  ...              7.08            186.45           24
+40       3   5    7  ...              6.67            176.13           16
+41       3   5    7  ...              6.68            121.69           16
+42       3   5    7  ...              6.73             92.42           16
+
+[43 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull
+   replica cpu heap  ... min_response_time max_response_time expected_tps
+0        3   5    7  ...              7.33            190.55           24
+1        3   5    7  ...              6.69            270.11           24
+2        3   5    7  ...              7.41             81.93            8
+3        3   5    7  ...              6.55            196.94            8
+4        3   5    7  ...               7.1            138.52           24
+5        3   5    7  ...              8.12            169.96           16
+6        3   5    7  ...              6.81            186.96           16
+7        3   5    7  ...              6.83            276.22           16
+8        3   5    7  ...               6.7            227.33           16
+9        3   5    7  ...              7.06            113.56           16
+10       3   5    7  ...              7.13            320.79            8
+11       3   5    7  ...               7.4            293.46           16
+12       3   5    7  ...              7.06            282.63           16
+13       3   5    7  ...              5.61            288.37           32
+14       3   5    7  ...              7.19            371.48           24
+15       3   5    7  ...              6.84            321.19           24
+16       3   5    7  ...              6.59             186.9           16
+17       3   5    7  ...              7.01             167.8           16
+18       3   5    7  ...              6.48            109.46           24
+19       3   5    7  ...              6.72            280.29           24
+20       3   5    7  ...              6.77            241.56           16
+21       3   5    7  ...              6.76            103.04           24
+22       3   5    7  ...              7.14            327.81           16
+23       3   5    7  ...              7.48             33.85            8
+24       3   5    7  ...              7.59             81.44            8
+25       3   5    7  ...              7.01             87.59           24
+26       3   5    7  ...              7.24             98.02           16
+27       3   5    7  ...              7.14            204.83           16
+28       3   5    7  ...              6.82              66.0           16
+29       3   5    7  ...              5.72            167.33           24
+30       3   5    7  ...              6.65            319.99           16
+31       3   5    7  ...              7.43             51.34            8
+32       3   5    7  ...              6.27             252.3           24
+33       3   5    7  ...              6.98            155.07           24
+34       3   5    7  ...              7.22            189.89           16
+35       3   5    7  ...               7.3            384.32           16
+36       3   5    7  ...              6.46            271.09           16
+37       3   5    7  ...              8.06             49.37            8
+38       3   5    7  ...              6.56            281.02           16
+39       3   5    7  ...              7.08            186.45           24
+40       3   5    7  ...              6.67            176.13           16
+41       3   5    7  ...              6.68            121.69           16
+42       3   5    7  ...              6.73             92.42           16
+43       3   5    7  ...              6.57            257.67           16
+
+[44 rows x 15 columns]
+İnitial running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+try count for metric collection 0
+collect metric running pods ['teastore-webui-7b8846d7c7-dl5sr', 'teastore-webui-7b8846d7c7-gdmm7', 'teastore-webui-7b8846d7c7-nxfp9']
+metric collection succesfull

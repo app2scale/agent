@@ -16,7 +16,7 @@ from prometheus_api_client import PrometheusConnect
 # logging
 logging.getLogger().setLevel(logging.INFO)
 
-expected_tps = 8
+expected_tps = 1
 class TeaStoreLocust(HttpUser):
     wait_time = constant_throughput(expected_tps)
     host = "http://teastore-test.local.payten.com.tr/tools.descartes.teastore.webui/"
@@ -309,7 +309,7 @@ while True:
   metrics = collect_metrics(env)
   result_df.loc[step,:] =list(metrics.values())
   print(result_df)
-  result_df.to_csv("./load_test_2.csv", index=False)
+  result_df.to_csv("./load_test_3.csv", index=False)
   step = step + 1
 
 
