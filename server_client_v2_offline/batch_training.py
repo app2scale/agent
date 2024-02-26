@@ -41,6 +41,38 @@ def generate_config(train_path, eval_path, hyper_params):
     )
     return config
 
+
+def generate_config_v2(train_path, eval_path, hyper_params):
+    learning_rate = hyper_params[0]
+    fcnet_hiddens = hyper_params[1]
+    config = (
+        DQNConfig()
+        .environment(env=None,
+                    action_space=Discrete(108), 
+                    observation_space=Box(low=np.array([1, 4, 4]), high=np.array([3, 9, 9]), dtype=np.float32)
+                    )
+        .training(model={"fcnet_hiddens": fcnet_hiddens},
+                  gamma=0.99,
+                  lr=learning_rate,
+                  train_batch_size=256
+        )
+                
+        .offline_data(input_=train_path)
+        .exploration(explore=False)
+        .evaluation(evaluation_parallel_to_training=False,
+                    evaluation_interval=2,
+                    evaluation_duration=10,
+                    evaluation_duration_unit="episodes",
+                    evaluation_config={"input": eval_path},
+                    off_policy_estimation_methods={"is": {"type": ImportanceSampling},
+                                                   "wis": {"type": WeightedImportanceSampling}
+                    }
+        )
+                    
+
+    )
+    return config
+
 # Burada eval duration ve interval batch bağlantısı var. aynı eps_id üzerinden tekrar geçmemesi gerekir
 
 
@@ -70,7 +102,7 @@ eval_path = "/tmp/eval-out"
 epoch_number = 10000
 
 for comb in parameter_combinations:
-    config = generate_config(train_path, eval_path, comb)
+    config = generate_config_v2(train_path, eval_path, comb)
     print(f"Started training with lr: {comb[0]} and fcnet: {comb[1]}")
     mean_q_list = []
     is_v_gain_list = []
