@@ -38,11 +38,15 @@ def convert_data_to_batch(df, writer, eps_id_list):
             action = np.where(equal_rows)[0][0]
             new_obs = np.array([selected_row['replica'], selected_row['cpu'], selected_row['heap'], selected_row['previous_tps'], selected_row['instant_tps']], dtype=np.float32)
             rew = selected_row["reward"]
+            obs = obs/np.array([3,9,9,168,168])
+            new_obs = new_obs/np.array([3,9,9,168,168])
+
             batch_builder.add_values(
                 t=i,
                 eps_id=eps_id,
                 agent_index=0,
-                obs=prep.transform(obs),
+                # obs=prep.transform(obs),
+                obs = obs,
                 actions=action,
                 action_prob=1.0, 
                 action_logp=0.0,
@@ -52,7 +56,8 @@ def convert_data_to_batch(df, writer, eps_id_list):
                 terminateds=terminated,
                 truncateds=truncated,
                 infos=info,
-                new_obs=prep.transform(new_obs),
+                # new_obs=prep.transform(new_obs),
+                new_obs = new_obs,
 
             )
             obs = new_obs
@@ -88,6 +93,7 @@ def convert_data_to_batch_v2(df, writer, eps_id_list):
             equal_rows = np.all(POSSIBLE_STATES == possible_state_value, axis=1)
             action = np.where(equal_rows)[0][0]
             new_obs = np.array([selected_row['replica'], selected_row['cpu'], selected_row['heap']], dtype=np.float32)
+            
             rew = selected_row["reward"]
             batch_builder.add_values(
                 t=i,
@@ -158,8 +164,8 @@ if __name__ == "__main__":
         
     eps_id_training = list(range(number_episodes_training))
     eps_id_eval = list(range(len(eps_id_training), number_episodes_eval+ len(eps_id_training)))
-    convert_data_to_batch_v2(train_df, training_writer, eps_id_training)
-    convert_data_to_batch_v2(eval_df, eval_writer, eps_id_eval)
+    convert_data_to_batch(train_df, training_writer, eps_id_training)
+    convert_data_to_batch(eval_df, eval_writer, eps_id_eval)
     # convert_data_to_batch_v2(train_df, training_writer)
     # convert_data_to_batch_v2(eval_df, eval_writer)
     # !!!! When we create batch as train_df and eval_df, eps_id is repeated and it will raise error like ValueError: eps_id 0 was already passed to the peek function. Make sure dataset contains only unique episodes with unique ids.
