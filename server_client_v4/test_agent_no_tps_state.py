@@ -37,7 +37,7 @@ METRIC_DICT = {
     "container_memory_working_set_bytes": "memory_usage"
 }
 
-WARM_UP_PERIOD = 300
+WARM_UP_PERIOD = 5
 # How many seconds to wait for transition
 COOLDOWN_PERIOD = 0
 # How many seconds to wait for metric collection
@@ -57,7 +57,7 @@ ALPHA = 0.8
 DEPLOYMENT_NAME = "teastore-webui"
 NAMESPACE = "app2scale-test"
 
-OBSERVATION_SPACE = Box(low=np.array([1, 4, 4]), high=np.array([3, 9, 9]), dtype=np.float32)
+OBSERVATION_SPACE = Box(low=np.array([1, 4, 4, 0,0,0,0]), high=np.array([3, 9, 9, 2,2, 1000,1000]), dtype=np.float32)
 
 """
     # replica : 1,2,3,4,5,6 -> 0,1,2,3,4,5 + 1
@@ -195,7 +195,7 @@ class TeaStoreLocust(HttpUser):
 
 class CustomLoad(LoadTestShape):
 
-    trx_load_data = pd.read_csv("./transactions.csv")
+    trx_load_data = pd.read_csv("./server_client_v4/transactions.csv")
     trx_load = trx_load_data["transactions"].values.tolist()
     trx_load = (trx_load/np.max(trx_load)*20).astype(int)+1
     indexes = [(177, 184), (661, 685), (1143, 1152), (1498, 1524), (1858, 1900)]
@@ -352,6 +352,9 @@ def step(action, state, env):
     print('entering metric collection...')
     # new_state[3] = previous_tps
     metrics = collect_metrics(env)
+    new_state = np.append(new_state, [metrics["cpu_usage"],metrics["memory_usage"],metrics["response_time"],metrics["expected_tps"]])
+
+
     # new_state[4] = metrics["num_requests"]
     # previous_tps = metrics["num_requests"]  
     print('updated_state', new_state)
@@ -392,13 +395,15 @@ output_columns = ["replica", "cpu", "heap",
 
 output = pd.DataFrame(columns=output_columns)
 _, obs = get_deployment_info()
+obs = np.append(obs, [0.5,0.5,50,50])
+
 
 
 done = False
 truncated = False
 sum_reward = 0
 
-path_to_checkpoint = "./checkpoint_hybrid_2"
+path_to_checkpoint = "./server_client_v4/checkpoint_hybrid_gamma_0"
 algo.restore(path_to_checkpoint)
 step_count = 1
 
@@ -413,6 +418,6 @@ for _ in range(0,120):
                    info["num_failures"],info["expected_tps"], timestamp]
     output.loc[step_count,:] = temp_output
     print(output)
-    output.to_csv("./test_results_hybrid_2.csv", index=False)
+    output.to_csv("./aaa.csv", index=False)
     obs = next_obs
     step_count += 1
