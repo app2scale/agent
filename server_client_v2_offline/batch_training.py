@@ -99,16 +99,16 @@ parameter_combinations = list(product(*hyperparameters.values())) # This variabl
 
 train_path = "/tmp/training-out"
 eval_path = "/tmp/eval-out"
-epoch_number = 10000
+epoch_number = 4500
 
 for comb in parameter_combinations:
-    config = generate_config_v2(train_path, eval_path, comb)
+    config = generate_config(train_path, eval_path, comb)
     print(f"Started training with lr: {comb[0]} and fcnet: {comb[1]}")
     mean_q_list = []
     is_v_gain_list = []
     wis_v_gain_list = []
 
-
+    # config['observation_filter'] = "MeanStdFilter"
     algo = config.build()
     debug_dir = "{}checkpoints/".format(algo.logdir)
     filename = f"./server_client_v2_offline/results/{algo.logdir.split('/')[-2]}_lr_{comb[0]}_fcnet_{comb[1][0]}_{comb[1][1]}.pdf"
