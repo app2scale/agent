@@ -37,7 +37,7 @@ METRIC_DICT = {
     "container_memory_working_set_bytes": "memory_usage"
 }
 
-WARM_UP_PERIOD = 5
+WARM_UP_PERIOD = 300
 # How many seconds to wait for transition
 COOLDOWN_PERIOD = 0
 # How many seconds to wait for metric collection
@@ -195,7 +195,7 @@ class TeaStoreLocust(HttpUser):
 
 class CustomLoad(LoadTestShape):
 
-    trx_load_data = pd.read_csv("./server_client_v4/transactions.csv")
+    trx_load_data = pd.read_csv("./transactions.csv")
     trx_load = trx_load_data["transactions"].values.tolist()
     trx_load = (trx_load/np.max(trx_load)*20).astype(int)+1
     indexes = [(177, 184), (661, 685), (1143, 1152), (1498, 1524), (1858, 1900)]
@@ -403,7 +403,7 @@ done = False
 truncated = False
 sum_reward = 0
 
-path_to_checkpoint = "./server_client_v4/checkpoint_hybrid_gamma_0"
+path_to_checkpoint = "./checkpoint_hybrid_gamma_0"
 algo.restore(path_to_checkpoint)
 step_count = 1
 
@@ -418,6 +418,6 @@ for _ in range(0,120):
                    info["num_failures"],info["expected_tps"], timestamp]
     output.loc[step_count,:] = temp_output
     print(output)
-    output.to_csv("./aaa.csv", index=False)
+    output.to_csv("./test_results_gamma_0.csv", index=False)
     obs = next_obs
     step_count += 1
