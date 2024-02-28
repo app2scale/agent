@@ -57,8 +57,7 @@ ALPHA = 0.8
 DEPLOYMENT_NAME = "teastore-webui"
 NAMESPACE = "app2scale-test"
 
-OBSERVATION_SPACE = Box(low=np.array([1, 4, 4, 0, 0]), high=np.array([3, 9, 9, 500, 500]), dtype=np.float32)
-
+OBSERVATION_SPACE =Box(low=np.array([1, 4, 4, 0,0,0,0]), high=np.array([3, 9, 9, 2,2, 1000,1000]), dtype=np.float32)
 """
     # replica : 1,2,3,4,5,6 -> 0,1,2,3,4,5 + 1
     # cpu : 4,5,6,7,8,9 -> 0,1,2,3,4,5   +   4
@@ -205,7 +204,7 @@ class CustomLoad(LoadTestShape):
         clipped_data.extend(trx_load[start:end+1])
     ct = 0
 
-    clipped_data = (np.linspace(20, 150, 27, dtype=np.int32)/5).astype(int) 
+    #clipped_data = (np.linspace(20, 150, 27, dtype=np.int32)/5).astype(int) 
     def tick(self):
         if self.ct >= len(self.clipped_data):
             self.ct = 0
@@ -339,7 +338,7 @@ def step(action, state, env):
     temp_state = state.copy()
     temp_state = POSSIBLE_STATES[action]
     updated_state = temp_state
-    temp_updated_state = np.array([temp_state[0], temp_state[1], temp_state[2], 50, 50])
+    temp_updated_state = np.array([temp_state[0], temp_state[1], temp_state[2],0.5,0.5, 50, 50])
 
     print('applying the state...')
     print("updated state", updated_state)

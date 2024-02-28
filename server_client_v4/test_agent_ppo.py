@@ -366,25 +366,27 @@ def step(action, state, env):
     return new_state, reward, metrics, deployment_time
 
 
-config_dqn = (DQNConfig()
+
+config_ppo = (PPOConfig()
           .environment(
               env=None,
-              action_space=ACTION_SPACE,
-              observation_space=OBSERVATION_SPACE)
+              action_space=Discrete(108),
+              observation_space=Box(low=np.array([1, 4, 4, 0, 0]), high=np.array([3, 9, 9, 500, 500]), dtype=np.float32))
 
-          .training(model={"fcnet_hiddens": [64,64]},
-              gamma=0.99,
-              lr=1e-05,
-              train_batch_size=256)
           .debugging(log_level="INFO")
+          .rollouts(num_rollout_workers=0, enable_connectors=False)
+            .training(train_batch_size=32,sgd_minibatch_size=16,
+                      model ={"fcnet_hiddens": [64, 64]}, lr=1e-05)
           .evaluation(off_policy_estimation_methods={})
-          
           )
 
+config_ppo.rl_module(_enable_rl_module_api=False)
+config_ppo.training(_enable_learner_api=False)
+algo = config_ppo.build() 
 
-config_dqn.rl_module(_enable_rl_module_api=False)
-config_dqn.training(_enable_learner_api=False)
-algo = config_dqn.build() 
+
+
+
 
 output_columns = ["replica", "cpu", "heap", "previous_tps", "instant_tps", 
            "cpu_usage", "memory_usage", "reward", "sum_reward", 
