@@ -196,7 +196,7 @@ class CustomLoad(LoadTestShape):
         clipped_data.extend(trx_load[start:end+1])
     ct = 0
 
-    
+    clipped_data = np.linspace(3, 56, 54, dtype=np.int32)
     def tick(self):
         if self.ct >= len(self.clipped_data):
             self.ct = 0
@@ -395,6 +395,6 @@ while True:
                    info["num_failures"],info["expected_tps"], deployment_time]
         
     output.loc[step_count-1,:] = temp_output
-    output.to_csv("output_browse_300_data_3.csv", index=False)
+    output.to_csv("output_browse_300_data_4.csv", index=False)
     print(output,flush=True)
     step_count += 1
