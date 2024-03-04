@@ -57,7 +57,7 @@ ALPHA = 0.8
 DEPLOYMENT_NAME = "teastore-webui"
 NAMESPACE = "app2scale-test"
 
-OBSERVATION_SPACE =Box(low=np.array([1, 4, 4, 0,0,0,0]), high=np.array([3, 9, 9, 2,2, 1000,1000]), dtype=np.float32)
+OBSERVATION_SPACE =Box(low=np.array([1, 4, 4, 0]), high=np.array([3, 9, 9, 1000]), dtype=np.float32)
 """
     # replica : 1,2,3,4,5,6 -> 0,1,2,3,4,5 + 1
     # cpu : 4,5,6,7,8,9 -> 0,1,2,3,4,5   +   4
@@ -338,7 +338,7 @@ def step(action, state, env):
     temp_state = state.copy()
     temp_state = POSSIBLE_STATES[action]
     updated_state = temp_state
-    temp_updated_state = np.array([temp_state[0], temp_state[1], temp_state[2],0.5,0.5, 50, 50])
+    temp_updated_state = np.array([temp_state[0], temp_state[1], temp_state[2], 50])
 
     print('applying the state...')
     print("updated state", updated_state)
@@ -349,10 +349,8 @@ def step(action, state, env):
     time.sleep(WARM_UP_PERIOD)
     print('cooldown period ended...')
     print('entering metric collection...')
-    new_state[3] = previous_tps
     metrics = collect_metrics(env)
-    new_state[4] = metrics["num_requests"]
-    previous_tps = metrics["num_requests"]  
+    new_state[3] = metrics["expected_tps"]
     print('updated_state', new_state)
     print('metrics collected',metrics)
     reward = ALPHA*metrics['performance'] + (1-ALPHA)*metrics['utilization']
@@ -372,7 +370,7 @@ config_dqn = (DQNConfig()
               observation_space=OBSERVATION_SPACE)
 
           .training(model={"fcnet_hiddens": [64,64]},
-              gamma=0.99,
+              gamma=0,
               lr=1e-05,
               train_batch_size=256)
           .debugging(log_level="INFO")
@@ -391,7 +389,7 @@ output_columns = ["replica", "cpu", "heap", "previous_tps", "instant_tps",
 
 output = pd.DataFrame(columns=output_columns)
 _, obs = get_deployment_info()
-obs = np.append(obs, [50,50])
+obs = np.append(obs, [50])
 
 done = False
 truncated = False
@@ -413,6 +411,6 @@ for _ in range(0,120):
                    info["num_failures"],info["expected_tps"], timestamp]
     output.loc[step_count,:] = temp_output
     print(output)
-    output.to_csv("./test_results_ppo_1.csv", index=False)
+    output.to_csv("./test_results_gamma_0_tps.csv", index=False)
     obs = next_obs
     step_count += 1
