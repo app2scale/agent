@@ -196,7 +196,10 @@ class CustomLoad(LoadTestShape):
         clipped_data.extend(trx_load[start:end+1])
     ct = 0
 
-    clipped_data = np.linspace(3, 56, 54, dtype=np.int32)
+    array1 = np.linspace(24, 144, 6, dtype=np.int32)
+    array2 = np.linspace(120, 24, 6, dtype=np.int32)
+
+    clipped_data = np.concatenate([array1, array2])
     def tick(self):
         if self.ct >= len(self.clipped_data):
             self.ct = 0
