@@ -49,7 +49,7 @@ ALPHA = 0.8
 DEPLOYMENT_NAME = "teastore-webui"
 NAMESPACE = "app2scale"
 
-OBSERVATION_SPACE = Box(low=np.array([1, 4, 4, 0, 0]), high=np.array([3, 9, 9, 500, 500]), dtype=np.float32)
+OBSERVATION_SPACE = Box(low=np.array([1, 4, 7, 0, 0]), high=np.array([3, 9, 7, 500, 500]), dtype=np.float32)
 
 """
     # replica : 1,2,3,4,5,6 -> 0,1,2,3,4,5 + 1
@@ -57,10 +57,10 @@ OBSERVATION_SPACE = Box(low=np.array([1, 4, 4, 0, 0]), high=np.array([3, 9, 9, 5
     # heap : 4,5,6,7,8,9 -> 0,1,2,3,4,5   +   4
 """
 
-ACTION_SPACE = Discrete(108) # index of the possible states
+ACTION_SPACE = Discrete(18) # index of the possible states
 replica = [1, 2, 3]
 cpu = [4, 5, 6, 7, 8, 9]
-heap = [4, 5, 6, 7, 8, 9]
+heap = [7]
 
 POSSIBLE_STATES = np.array(list(product(replica, cpu, heap)))
 
@@ -196,8 +196,8 @@ class CustomLoad(LoadTestShape):
         clipped_data.extend(trx_load[start:end+1])
     ct = 0
 
-    array1 = np.linspace(24, 144, 6, dtype=np.int32)
-    array2 = np.linspace(120, 24, 6, dtype=np.int32)
+    array1 = np.linspace(24, 144, 6, dtype=np.int32)/8
+    array2 = np.linspace(120, 24, 5, dtype=np.int32)/8
 
     clipped_data = np.concatenate([array1, array2])
     def tick(self):
@@ -398,6 +398,6 @@ while True:
                    info["num_failures"],info["expected_tps"], deployment_time]
         
     output.loc[step_count-1,:] = temp_output
-    output.to_csv("output_browse_300_data_5.csv", index=False)
+    output.to_csv("output_browse_300_data_constant_heap_2.csv", index=False)
     print(output,flush=True)
     step_count += 1
